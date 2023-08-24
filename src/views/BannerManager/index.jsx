@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import styles from './BannerList.module.css'
 import BannerLeftWrapper from "./BannerLeftWrapper";
 import BannerRightWrapper from "./BannerRightWrapper";
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,9 +26,9 @@ function BannerList() {
 
 
     return (
-        <div className={styles['banner-container']}>
-            <BannerRightWrapper styles={styles} />
-            <BannerLeftWrapper styles={styles} />
+        <div className={'manager-container'}>
+            <BannerRightWrapper />
+            <BannerLeftWrapper />
         </div >
 
     );

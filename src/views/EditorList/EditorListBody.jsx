@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CardBody from '@components/Card/CardBody.jsx';
 import { useSelector } from 'react-redux';
 import MediaModal from '../../components/Modal/MediaModal';

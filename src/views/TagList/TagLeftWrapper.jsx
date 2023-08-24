@@ -8,7 +8,6 @@ import CardBody from '@components/Card/CardBody.jsx';
 import CardHeader from '@components/Card/CardHeader.jsx';
 import GridContainer from '@components/Grid/GridContainer.jsx';
 import GridItem from '@components/Grid/GridItem.jsx';
-import styles from './TagList.module.css'
 import usePressEnterEventHandler from '../../hook/usePressEnterEventHandler';
 import useModalResult from '../../hook/useModalResult';
 
@@ -161,7 +160,7 @@ export default function TagLeftWrapper() {
         onReset()
     }, [])
 
-    return <div className={styles['tag-left-wrapper']}>
+    return <div className={'left-wrapper'}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
                 <Card>

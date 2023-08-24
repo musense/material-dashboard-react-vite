@@ -26,7 +26,7 @@ import {
 import SingleBannerStatusSelector from '@components/Select/SingleBannerStatusSelect'
 import { Checkbox, FormControlLabel } from '@mui/material';
 
-export default function BannerLeftWrapper({ styles }) {
+export default function BannerLeftWrapper() {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
@@ -208,7 +208,7 @@ export default function BannerLeftWrapper({ styles }) {
     }
     const statusString = selectedBanner.status === '下架' ? '已下架' : selectedBanner.status
     const checkboxString = selectedBanner.status === '下架' ? "上架" : "下架"
-    return <div className={styles['banner-left-wrapper']}>
+    return <div className={'left-wrapper'}>
         <Card>
             <CardHeader color="primary">
                 <h4>{isEditing ? '編輯' : '新增'}</h4>
@@ -219,7 +219,7 @@ export default function BannerLeftWrapper({ styles }) {
                         <div>
                             <input type="hidden" name='_id' value={selectedBanner._id} />
                         </div>
-                        <div className={styles['banner-status']}>
+                        <div className={'banner-status'}>
                             <span style={statusStyle}>{statusString}</span>
 
                             {selectedBanner.status !== '' && <FormControlLabel control={<Checkbox />} label={checkboxString} />}
@@ -237,7 +237,6 @@ export default function BannerLeftWrapper({ styles }) {
                             <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink', 'media')} />
                         </div>
                         <Media
-                            styles={styles}
                             onPropertyChange={onPropertyChange}
                             onShowUrlChange={onShowUrlChange}
                             showUrl={showUrl}

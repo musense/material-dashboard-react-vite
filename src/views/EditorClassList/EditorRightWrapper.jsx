@@ -18,7 +18,7 @@ import useModalResult from '../../hook/useModalResult';
 import useDeleteSelectedRow from '@hook/useDeleteSelectedRow';
 import getErrorMessage from '@utils/getErrorMessage';
 import { getClassErrorMessage, getClassShowList, getCurrentPage, getSelectedPatchKey, getTotalCount, getTotalPage } from '@reducers/GetClassReducer';
-import { maxSizeStyle } from '@reducers/GetConfigReducer';
+import { getMaxSizeClassName } from '../../reducers/GetConfigReducer';
 
 const headerMap = {
     headerRow: [
@@ -30,9 +30,9 @@ const headerMap = {
     reducerName: 'getClassReducer',
 };
 
-export default function EditorRightWrapper({ styles }) {
+export default function EditorRightWrapper() {
 
-    const maxSize = useSelector(state => maxSizeStyle(state, styles));
+    const maxSize = useSelector(getMaxSizeClassName);
 
     const currentPage = useSelector(getCurrentPage);
     const showList = useSelector(getClassShowList);
@@ -74,7 +74,7 @@ export default function EditorRightWrapper({ styles }) {
     } = useModal(title)
 
     return (
-        <div className={`${styles['editor-right-wrapper']} ${maxSize}`}>
+        <div className={`right-wrapper ${maxSize}`}>
             <GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>

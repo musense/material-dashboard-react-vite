@@ -3,13 +3,13 @@ import Card from '@components/Card/Card.jsx';
 import BannerRightHeader from './BannerRightHeader';
 import BannerRightBody from './BannerRightBody';
 import { useSelector } from 'react-redux';
-import { maxSizeStyle } from '../../reducers/GetConfigReducer';
+import { getMaxSizeClassName } from '../../reducers/GetConfigReducer';
 
-export default function BannerRightWrapper({ styles }) {
+export default function BannerRightWrapper() {
 
-    const maxSize = useSelector(state => maxSizeStyle(state, styles));
+    const maxSize = useSelector(getMaxSizeClassName);
 
-    return <div className={`${styles['banner-right-wrapper']} ${maxSize}`}>
+    return <div className={`right-wrapper ${maxSize}`}>
         <Card>
             <BannerRightHeader title={'Banner管理'} />
             <BannerRightBody />

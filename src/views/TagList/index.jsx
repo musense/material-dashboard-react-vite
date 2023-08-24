@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import styles from './TagList.module.css'
+import React, { useEffect } from 'react';
 import TagLeftWrapper from "./TagLeftWrapper";
 import TagRightWrapper from "./TagRightWrapper";
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,7 +21,7 @@ function TagList() {
 
 
     return (
-        <div className={styles['tag-container']}>
+        <div className={'manager-container'}>
             <TagRightWrapper />
             <TagLeftWrapper />
         </div >

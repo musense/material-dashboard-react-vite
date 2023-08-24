@@ -17,7 +17,7 @@ import FormButtonList from '@components/FormButtonList/FormButtonList';
 import getErrorMessage from '@utils/getErrorMessage';
 import useClearForm from '@hook/useClearForm';
 
-export default function EditorLeftWrapper({ styles }) {
+export default function EditorLeftWrapper() {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
@@ -133,7 +133,7 @@ export default function EditorLeftWrapper({ styles }) {
         onReset()
     }, [onReset, handleClose])
 
-    return <div className={styles['editor-left-wrapper']}>
+    return <div className={'left-wrapper'}>
         <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
                 <Card>

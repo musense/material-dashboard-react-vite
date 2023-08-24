@@ -78,6 +78,43 @@ input {
   background-color: white;
 }
 
+.manager-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.left-wrapper,
+.right-wrapper {
+  height: auto;
+  /* background-color: azure; */
+}
+
+.left-wrapper {
+  min-width: 400px;
+  width: fit-content;
+}
+
+.right-wrapper {
+  width: 1200px;
+  transition: all 225ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+}
+
+.right-wrapper.main-panel-max-size {
+  width: 1500px;
+}
+
+.banner-status {
+  position: relative;
+}
+
+.banner-status>label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .wrapper {
   position: inherit;
   padding: 1rem 0;

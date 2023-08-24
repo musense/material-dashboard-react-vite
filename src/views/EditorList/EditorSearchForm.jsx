@@ -131,9 +131,8 @@ export default function EditorSearchForm() {
                 <label htmlFor="classification">分類</label>
                 <SingleClassificationSelect
                     defaultSelected={categories}
-                    // classRef={classRef}
                     width={'180px'}
-                    height={'40px'}
+                    height={'34px'}
                     setState={onClassificationChange}
                 />
             </div>
@@ -142,7 +141,7 @@ export default function EditorSearchForm() {
                 <SingleStatusSelect
                     defaultSelected={status}
                     width={'180px'}
-                    height={'40px'}
+                    height={'34px'}
                     setState={onStatusChange}
                 />
             </div>

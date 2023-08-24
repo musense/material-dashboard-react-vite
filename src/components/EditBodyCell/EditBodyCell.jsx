@@ -13,8 +13,6 @@ export default function EditBodyCell({
     className,
     callback = null
 }) {
-    console.log("🚀 ~ file: EditBodyCell.jsx:16 ~ name:", name)
-    console.log("🚀 ~ file: EditBodyCell.jsx:16 ~ id:", id)
     const {
         onCopy,
         onDelete,

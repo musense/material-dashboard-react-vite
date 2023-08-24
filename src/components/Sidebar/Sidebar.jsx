@@ -61,9 +61,10 @@ const Sidebar = ({ ...props }) => {
       })}
     </List>
   );
+  const mainSiteUrl = import.meta.env.VITE_MAIN_URL
   const brand = (
     <div className={classes.logo}>
-      <a href='' className={classNames(classes.logoLink)}>
+      <a href={mainSiteUrl} target="_blank" className={classNames(classes.logoLink)}>
         <div className={classes.logoImage}>
           <Suspense fallback={<div>Loading...</div>}>
             <LazyLogoImage className={classes.img} />

@@ -1,0 +1,328 @@
+html,
+body {
+  margin: 0;
+}
+
+h4 {
+  text-align: center;
+}
+
+label {
+  font-size: 1rem;
+}
+
+:where(input[type='submit'] input[type='reset'],
+  input[type='button'], .submit-btn) {
+  padding: 0;
+  display: block;
+  width: min(10rem, 100%);
+  cursor: pointer;
+  /* cursor: pointer; */
+}
+
+div>input[type='submit'],
+div>.submit-btn,
+div>input[type='reset'],
+div>input[type='button'] {
+  padding: 0;
+  cursor: pointer;
+}
+
+input[type='submit'],
+.submit-btn {
+  text-align: center;
+  background-color: darkviolet;
+  color: white;
+  border: none;
+  width: 180px;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  height: 1.8rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+input[type='submit']:hover,
+.submit-btn:hover {
+  background-color: violet;
+}
+
+input[type='checkbox'] {
+  padding: 0;
+  margin: 0;
+  height: 1rem;
+}
+
+input[type='file'] {
+  padding: 0;
+  margin: 0;
+}
+
+input {
+  display: block;
+  width: 100%;
+  height: 1.8rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+.container {
+  position: inherit;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.wrapper {
+  position: inherit;
+  padding: 1rem 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.wrapper>div {
+  height: 100%;
+  padding: 0 1rem;
+  ;
+}
+
+.left-side {
+  width: 70%;
+  /* background-color: lightgrey; */
+}
+
+.left-side>form {
+  position: inherit;
+  height: 100%;
+}
+
+.right-side {
+  width: 30%;
+  overflow: auto;
+  /* background-color: lightblue; */
+}
+
+.view-header {
+  position: relative;
+  background-color: #ccc;
+}
+
+.view-search-form {
+  position: sticky;
+}
+
+.view-header>div,
+.view-body>div {
+  display: flex;
+  flex-direction: row;
+  height: fit-content;
+}
+
+.view-header>div>div,
+.view-body>div>div {
+  position: relative;
+  text-align: center;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border: 1px solid #999;
+  flex: 1;
+}
+
+.view-list-form .image-container>img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  aspect-ratio: 16/9;
+  cursor: pointer;
+}
+
+.view-list-form .flex-1 {
+  flex-grow: 1;
+}
+
+.view-list-form .flex-2 {
+  flex-grow: 2;
+}
+
+.view-list-form .flex-3 {
+  flex-grow: 3;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+.view-list-form .is-popular-tag {
+  font-weight: bolder;
+  color: red;
+}
+
+.view-list-form .not-popular-tag {
+  font-weight: bolder;
+  color: green;
+}
+
+.view-body {
+  position: relative;
+  height: fit-content;
+  overflow: hidden auto;
+}
+
+.view-body>div>div {
+  min-height: 100px;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+}
+
+.view-body>div:nth-child(2n-1) {
+  background-color: #eee;
+}
+
+.view-body>div:nth-child(2n) {
+  background-color: #ccc;
+}
+
+.edit-icon-wrapper {
+  --edit-icon-size: 35px;
+  position: relative;
+  width: var(--edit-icon-size);
+  height: var(--edit-icon-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+.edit-icon-wrapper:hover {
+  background-color: #bbb;
+}
+
+.edit-icon-wrapper:hover>span {
+  color: #eee;
+}
+
+.edit-icon-input {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border: unset;
+  margin: unset !important;
+  background-color: transparent;
+}
+
+.tag-list-form,
+.banner-list-form,
+.editor-list-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  color: black;
+  width: fit-content;
+  margin-right: auto;
+  align-items: flex-end;
+  column-gap: 40px;
+  row-gap: 20px;
+}
+
+/* .tag-list-form,
+.banner-list-form {
+  width: 1000px;
+} */
+
+.tag-list-form .title>input,
+.banner-list-form .title>input,
+.editor-list-form .title>input {
+  height: 40px;
+  width: 150px;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.tag-list-form .button-list,
+.banner-list-form .button-list,
+.editor-list-form .button-list {
+  width: 300px;
+  display: flex;
+  gap: 40px;
+}
+
+.tag-list-form .button-list>input,
+.banner-list-form .button-list>input,
+.editor-list-form .button-list>input {
+  flex: 1;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 5rem;
+}
+
+.button-wrapper>input {
+  flex: 1;
+}
+
+@media (max-width: 1500px) {
+  .button-wrapper {
+    flex-direction: column;
+    align-content: center;
+    gap: 1rem;
+  }
+
+  .button-wrapper>input.submit-btn {
+    width: 100%;
+  }
+}
+
+.ieditor-detail-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+}
+
+.banner-submit-form {
+  height: fit-content;
+  /* padding-right: 10px; */
+}
+
+.banner-submit-form textarea {
+  min-height: 100px;
+  height: fit-content;
+  padding: 10px;
+  width: 100%;
+  resize: none;
+}
+
+::placeholder {
+  /* CSS 3 標準 */
+  color: #ccc;
+
+}
+
+::-webkit-input-placeholder {
+  /* Chrome, Safari */
+  color: #ccc;
+}
+
+:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #ccc;
+}
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #ccc;
+  opacity: 1;
+}

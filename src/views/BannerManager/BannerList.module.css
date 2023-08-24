@@ -1,0 +1,71 @@
+.banner-container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.banner-left-wrapper,
+.banner-right-wrapper {
+  height: 100%;
+  /* background-color: azure; */
+}
+
+.banner-left-wrapper {
+  width: 400px;
+}
+
+.banner-right-wrapper {
+  width: 1200px;
+}
+
+.banner-right-wrapper.main-panel-max-size {
+  width: 1500px;
+}
+
+
+.view-form>div {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  height: 2.5rem;
+}
+
+.banner-table-body>div {
+  cursor: pointer;
+}
+
+.banner-table-body>div:nth-child(even) {
+  background-color: #ddd;
+}
+
+.banner-table-body>div:hover {
+  background-color: #eee;
+}
+
+.banner-table-header {
+  background-color: #ddd;
+  color: #333;
+  font-weight: bold;
+}
+
+.view-form>div>div {
+  text-align: center;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex: 1 1;
+}
+
+.banner-status {
+  position: relative;
+}
+
+.banner-status>label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}

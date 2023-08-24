@@ -66,7 +66,7 @@ export default function BannerSearchForm() {
                 height={'40px'}
             />
             <div className="button-list">
-                <input type='button' value='清空' onClick={reset} />
+                <input type='button' value='重設' onClick={reset} />
                 <input ref={submitRef} type="submit" value="查詢" />
             </div>
         </form>

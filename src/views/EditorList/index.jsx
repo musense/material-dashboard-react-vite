@@ -28,16 +28,6 @@ function EditorList() {
     dispatch({ type: GetEditorAction.REQUEST_EDITOR });
   }, [])
 
-  const [isModalOpen, setIsModalOpen] = useState(true);
-
-
-
-  function openModal() {
-    setIsModalOpen(true);
-  }
-  function closeModal() {
-    setIsModalOpen(false);
-  }
   return (
     <div className={'container'}>
       {/* <div className={'wrapper'}> */}

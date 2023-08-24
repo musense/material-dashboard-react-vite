@@ -5,9 +5,10 @@ import Interweave from 'interweave'
 import { Transforms } from 'slate';
 import { useSlateStatic } from 'slate-react';
 import { useSelector } from 'react-redux';
+import { getMaxSizeClassName } from '../../../reducers/GetConfigReducer';
 const CodeToText = (props) => {
 
-    const maxSizeClassName = useSelector((state) => state.getConfigReducer.maxSizeClassName);
+    const maxSize = useSelector(getMaxSizeClassName);
 
     const { html, action, location, handleCodeToText } = props
     const codeToTextRef = useRef();
@@ -70,7 +71,7 @@ const CodeToText = (props) => {
     }
     return (
 
-        <div className={`code-wrapper ${maxSizeClassName}`} ref={wrapperRef}>
+        <div className={`code-wrapper ${maxSize}`} ref={wrapperRef}>
             <div ref={codeToTextRef} className='codeToTextWrapper'>
                 <div className='codeToText'>
                     <textarea name="" id="" value={html} onChange={codeOnChange} placeholder='Write html here...'></textarea>

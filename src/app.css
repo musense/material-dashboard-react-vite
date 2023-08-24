@@ -235,11 +235,6 @@ input {
   row-gap: 20px;
 }
 
-/* .tag-list-form,
-.banner-list-form {
-  width: 1000px;
-} */
-
 .tag-list-form .title>input,
 .banner-list-form .title>input,
 .editor-list-form .title>input {

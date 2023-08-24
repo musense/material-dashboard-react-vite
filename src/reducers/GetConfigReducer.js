@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 import * as GetConfigAction from './../actions/GetConfigAction';
 
 const initialState = {
@@ -24,7 +25,17 @@ const getConfigReducer = (state = initialState, action) => {
 export default getConfigReducer
 
 const getMaxSizeClassName = state => state.getConfigReducer.maxSizeClassName
+const setStylePros = (_, styles) => styles
+
+const maxSizeStyle = createSelector(
+    [getMaxSizeClassName, setStylePros],
+    (maxSizeClassName, styles) => {
+        if (maxSizeClassName === '') return ''
+        return styles[maxSizeClassName]
+    }
+)
 
 export {
-    getMaxSizeClassName
+    getMaxSizeClassName,
+    maxSizeStyle
 }

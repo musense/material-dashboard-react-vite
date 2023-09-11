@@ -236,7 +236,7 @@ function* DeleteEditor(payload) {
 
 function* AuthUser(patchSuccessType, patchFailType) {
     try {
-        const authResponse = yield instance.post(`/editor/verifyUser`);;
+        const authResponse = yield instance.post(`/editor/verifyUser`)
         const message = yield authResponse.data.message;
         yield put({
             type: patchSuccessType,

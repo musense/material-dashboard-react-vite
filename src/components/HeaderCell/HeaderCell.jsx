@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from '@views/Icons/Icon';
-import styles from './HeaderCell.module.css'
 
 export default function HeaderCell({
   name,
   selectedPatchKey = '',
   patchKey = '',
+  dataType = '',
   patchType = '',
   className = '',
   reducerName = ''
@@ -26,13 +26,14 @@ export default function HeaderCell({
     })
   }
   let inputProps = {
-    value: name,
+    value: dataType === '__edit_cell__' ? '編輯' : name,
   }
 
   if (patchKey) {
     inputProps = {
       ...inputProps,
-      onClick: () => onSortingClick(patchType, patchKey)
+      onClick: () => onSortingClick(patchType, patchKey),
+      style: { cursor: 'pointer' },
     }
   }
 
@@ -43,8 +44,8 @@ export default function HeaderCell({
     return < Icon icon={iconName} />
   };
 
-  const activeClassName = patchKey === selectedPatchKey ? styles['active'] : ''
-  return <div className={`${styles['header-cell']} ${activeClassName} ${className}`}>
+  const activeClassName = patchKey === selectedPatchKey ? 'active' : ''
+  return <div className={`header-cell ${activeClassName} ${className}`}>
     <span {...inputProps}> {inputProps.value}</span>
     {icon(patchKey)}
   </div>;

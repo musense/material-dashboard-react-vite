@@ -155,15 +155,15 @@ input {
   position: sticky;
 }
 
-.view-header>div,
-.view-body>div {
+.header-row,
+.body-row {
   display: flex;
   flex-direction: row;
   height: fit-content;
 }
 
-.view-header>div>div,
-.view-body>div>div {
+.header-cell,
+.body-cell {
   position: relative;
   text-align: center;
   overflow-x: hidden;
@@ -171,6 +171,33 @@ input {
   text-overflow: ellipsis;
   border: 1px solid #999;
   flex: 1;
+}
+
+.header-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  user-select: none;
+}
+
+.header-cell>span {
+  z-index: 1;
+}
+
+.header-cell>svg {
+  position: absolute;
+  left: 10px;
+  opacity: 0;
+  transition: opacity ease-in-out 0.2s;
+}
+
+.header-cell>span:hover+svg {
+  opacity: 1;
+}
+
+.header-cell.active>svg {
+  opacity: 1;
 }
 
 .view-list-form .image-container>img {
@@ -211,20 +238,22 @@ input {
   overflow: hidden auto;
 }
 
-.view-body>div>div {
+.body-cell {
   min-height: 100px;
   height: auto;
   display: flex;
   flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.view-body>div:nth-child(2n-1) {
+.body-row:nth-child(2n-1) {
   background-color: #eee;
 }
 
-.view-body>div:nth-child(2n) {
+.body-row:nth-child(2n) {
   background-color: #ccc;
 }
 

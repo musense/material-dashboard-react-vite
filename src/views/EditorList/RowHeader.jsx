@@ -18,13 +18,14 @@ function Header({
     reducerName,
     selectedPatchKey
 }) {
-    return <div data-attr="data-header-row">
+    return <div className="header-row">
         {headerMap.map((cell, index) => {
             return <HeaderCell
                 key={index}
                 className={cell.className}
                 name={cell.name}
                 patchKey={cell.patchKey}
+                dataType={cell.type}
                 patchType={patchType}
                 reducerName={reducerName}
                 selectedPatchKey={selectedPatchKey}

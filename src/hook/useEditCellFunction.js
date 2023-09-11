@@ -51,7 +51,7 @@ export default function useEditCellFunction({
             },
         });
         callback && callback()
-    }, [dispatch, callback, editType, editData, selectedID])
+    }, [dispatch, callback, editType, editData])
 
     return {
         onCopy,

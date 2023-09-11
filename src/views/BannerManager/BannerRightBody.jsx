@@ -5,7 +5,8 @@ import CardBody from '@components/Card/CardBody.jsx';
 import BannerSearchForm from './BannerSearchForm';
 import MessageDialog from '../../components/Modal/MessageDialog';
 import RowHeader from '../EditorList/RowHeader';
-import RowBody from './RowBody';
+import RowBody from './../../components/RowBody/Rowbody';
+// import RowBody from './RowBody';
 import BannerButtonList from './BannerButtonList';
 import useModal from "../../hook/useModal";
 import useModalResult from "../../hook/useModalResult";
@@ -20,25 +21,9 @@ import {
     getTotalPage
 } from "@reducers/GetBannerReducer";
 import MediaModal from "@components/Modal/MediaModal";
+import { useCallback } from "react";
 
-
-const headerMap = {
-    headerRow: [
-        { name: "序號", patchKey: "serialNumber", className: "flex-1" },
-        { name: "Banner名稱", patchKey: "name", className: "flex-2" },
-        { name: "圖片/影片", className: "flex-2 image-container" },
-        { name: "排序", patchKey: "sort", className: "flex-1" },
-        { name: "超連結", patchKey: "hyperlink", className: "flex-2" },
-        { name: "排程時間", patchKey: "startDate", className: "flex-2" },
-        { name: "狀態", patchKey: "status" },
-        { name: "編輯", className: "flex-1" }
-    ],
-    patchType: GetBannerAction.SHOW_BANNER_LIST_SORTING,
-    reducerName: 'getBannerReducer'
-}
-
-export default function BannerRightBody() {
-
+export default function BannerRightBody({ headerMap }) {
 
     const selectedPatchKey = useSelector(getSelectedPatchKey);
     const currentPage = useSelector(getCurrentPage);
@@ -86,6 +71,12 @@ export default function BannerRightBody() {
 
     const [mediaInfo, setMediaInfo] = useState(null);
 
+    const onPreviewMedia = useCallback((e, item) => {
+        e.stopPropagation();
+        handleOpen();
+        setMediaInfo(item);
+    }, [handleOpen, setMediaInfo])
+
     return <CardBody>
         <BannerSearchForm />
         <BannerButtonList
@@ -101,7 +92,7 @@ export default function BannerRightBody() {
                 headerConfig={headerMap}
                 showList={showList}
                 handleOpen={handleOpen}
-                setMediaInfo={setMediaInfo}
+                setMediaInfo={onPreviewMedia}
                 className={'Banner'}
             />
 

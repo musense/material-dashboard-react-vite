@@ -5,7 +5,8 @@ import CardBody from '@components/Card/CardBody.jsx';
 import TagSearchForm from './TagSearchForm';
 import MessageDialog from '../../components/Modal/MessageDialog';
 import RowHeader from '../EditorList/RowHeader';
-import RowBody from './RowBody';
+// import RowBody from './RowBody';
+import RowBody from './../../components/RowBody/Rowbody';
 import TagButtonList from './TagButtonList';
 import useModal from "../../hook/useModal";
 import useModalResult from "@hook/useModalResult";
@@ -20,19 +21,7 @@ import {
     getSelectedPatchKey
 } from "@reducers/GetTagsReducer";
 
-const headerMap = {
-    headerRow: [
-        { name: "標籤名稱", patchKey: "name", type: "string" },
-        { name: "創建日期", patchKey: "createDate", type: "date" },
-        { name: "標籤觸及次數", patchKey: "pageView", type: "number" },
-        { name: "熱門標籤排序", patchKey: "sorting", type: "number" },
-        { name: "編輯" }
-    ],
-    patchType: GetTagsAction.SHOW_TAG_LIST_SORTING,
-    reducerName: 'getTagsReducer'
-}
-
-export default function TagRightBody() {
+export default function TagRightBody({ headerMap }) {
 
     const currentPage = useSelector(getCurrentPage);
     const showList = useSelector(getTagShowList);
@@ -89,7 +78,6 @@ export default function TagRightBody() {
                 handleOpenDialog={handleOpenDialog}
                 className={'tag'}
             />
-
         </form>
         <MessageDialog
             dialogTitle={title}

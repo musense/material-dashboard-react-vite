@@ -11,6 +11,33 @@ const BannerDispatchMessage = [
     errorMessage.addSuccess
 ]
 
+const headerMap = {
+    headerRow: [
+        { name: "序號", patchKey: "serialNumber", type: "number", className: "flex-1" },
+        { name: "Banner名稱", patchKey: "name", type: "string", className: "flex-2" },
+        {
+            name: "圖片/影片",
+            src: "homeImagePath",
+            checkKey: "contentImagePath",
+            alt: "hyperlink",
+            type: "image",
+            className: "flex-2 image-container"
+        },
+        { name: "排序", patchKey: "sort", type: "number", className: "flex-1" },
+        { name: "超連結", patchKey: "hyperlink", type: "string", className: "flex-2" },
+        { name: "排程時間", patchKey: "startDate", type: "date", className: "flex-2" },
+        { name: "狀態", patchKey: "status", type: "string", className: "flex-1" },
+        {
+            type: "__edit_cell__",
+            copyText: "hyperlink",
+            editType: GetBannerAction.EDITING_BANNER,
+            className: "flex-1"
+        }
+    ],
+    patchType: GetBannerAction.SHOW_BANNER_LIST_SORTING,
+    reducerName: 'getBannerReducer'
+}
+
 function BannerList() {
     const dispatch = useDispatch();
     const returnMessage = useSelector(state => state.getBannerReducer.errorMessage);
@@ -24,10 +51,9 @@ function BannerList() {
         }
     }, [returnMessage]);
 
-
     return (
         <div className={'manager-container'}>
-            <BannerRightWrapper />
+            <BannerRightWrapper headerMap={headerMap} />
             <BannerLeftWrapper />
         </div >
 

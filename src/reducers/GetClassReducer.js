@@ -71,7 +71,7 @@ const getClassReducer = (state = initialState, action) => {
                 ...state,
                 currentPage: action.payload,
             }
-        case GetClassAction.SHOW_CLASS_LIST_SORTING:
+        case GetClassAction.SHOW_CLASS_LIST_SORTING: {
             const { key } = action.payload;
             return {
                 ...state,
@@ -83,6 +83,7 @@ const getClassReducer = (state = initialState, action) => {
                 selectedPatchKey: key,
                 currentPage: 1
             }
+        }
         case GetClassAction.REQUEST_CLASS:
             return {
                 ...state,

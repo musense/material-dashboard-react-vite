@@ -5,14 +5,14 @@ import BannerRightBody from './BannerRightBody';
 import { useSelector } from 'react-redux';
 import { getMaxSizeClassName } from '../../reducers/GetConfigReducer';
 
-export default function BannerRightWrapper() {
+export default function BannerRightWrapper({ headerMap }) {
 
     const maxSize = useSelector(getMaxSizeClassName);
 
     return <div className={`right-wrapper ${maxSize}`}>
         <Card>
             <BannerRightHeader title={'Banner管理'} />
-            <BannerRightBody />
+            <BannerRightBody headerMap={headerMap} />
         </Card>
     </div>;
 }

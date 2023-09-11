@@ -12,7 +12,8 @@ import EditorHeader from './EditorHeader';
 
 import MessageDialog from '@components/Modal/MessageDialog';
 import RowHeader from '../EditorList/RowHeader';
-import RowBody from './RowBody';
+// import RowBody from './RowBody';
+import RowBody from './../../components/RowBody/Rowbody';
 import useModal from '../../hook/useModal';
 import useModalResult from '../../hook/useModalResult';
 import useDeleteSelectedRow from '@hook/useDeleteSelectedRow';
@@ -20,17 +21,7 @@ import getErrorMessage from '@utils/getErrorMessage';
 import { getClassErrorMessage, getClassShowList, getCurrentPage, getSelectedPatchKey, getTotalCount, getTotalPage } from '@reducers/GetClassReducer';
 import { getMaxSizeClassName } from '../../reducers/GetConfigReducer';
 
-const headerMap = {
-    headerRow: [
-        { name: '分類名稱', patchKey: 'name', type: "string" },
-        { name: '英文名稱', patchKey: 'keyName', type: "string" },
-        { name: '編輯' },
-    ],
-    patchType: GetClassAction.SHOW_CLASS_LIST_SORTING,
-    reducerName: 'getClassReducer',
-};
-
-export default function EditorRightWrapper() {
+export default function EditorRightWrapper({ headerMap }) {
 
     const maxSize = useSelector(getMaxSizeClassName);
 

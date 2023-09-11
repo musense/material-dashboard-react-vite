@@ -22,7 +22,7 @@ export default function RowBody({
             <div className={`view-body ${className}`}>
                 {showList && showList.length > 0 && showList.map((titleView, index) => {
                     return (
-                        <div key={index}>
+                        <div className="body-row" key={index}>
                             {headerRow.map((rowItem, index) => {
                                 if (rowItem.patchKey && rowItem.patchKey.includes(".")) {
                                     const patchKeys = rowItem.patchKey.split(".");
@@ -60,6 +60,7 @@ export default function RowBody({
                                     </Stack>} />
                                 }
                                 if (rowItem.name === '圖片/影片') {
+
                                     return <BodyCell key={index} children={titleView.media.contentImagePath !== ''
                                         ? (
                                             <img

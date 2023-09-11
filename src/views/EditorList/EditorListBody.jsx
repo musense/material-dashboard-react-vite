@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CardBody from '@components/Card/CardBody.jsx';
 import { useSelector } from 'react-redux';
 import MediaModal from '../../components/Modal/MediaModal';
@@ -7,12 +7,14 @@ import * as GetEditorAction from '../../actions/GetEditorAction';
 import EditorSearchForm from './EditorSearchForm';
 import EditorListButtonList from './EditorListButtonList';
 import RowHeader from './RowHeader';
-import RowBody from './RowBody';
+import RowBody from './../../components/RowBody/Rowbody';
+// import RowBody from './RowBody';
 import MessageDialog from '../../components/Modal/MessageDialog';
 import useModalResult from '../../hook/useModalResult';
 import useModal from '../../hook/useModal';
 import useDeleteSelectedRow from '@hook/useDeleteSelectedRow';
 import getErrorMessage from '@utils/getErrorMessage';
+import { useNavigate } from 'react-router-dom';
 
 import {
     getTotalPage,
@@ -23,22 +25,9 @@ import {
     getSelectedPatchKey
 } from '@reducers/GetEditorReducer'
 
-const headerMap = {
-    headerRow: [
-        { name: "序號", patchKey: "serialNumber", type: "number" },
-        { name: "圖片/影片", className: "flex-2 image-container" },
-        { name: "分類", patchKey: "categories.name", className: "flex-2", type: "string" },
-        { name: "標題", patchKey: "content.title", className: "flex-3", type: "string" },
-        { name: "瀏覽數", patchKey: "pageView", type: "number" },
-        { name: "狀態", patchKey: "status", className: "flex-2", type: "string" },
-        { name: "更新日期", patchKey: "updateDate", className: "flex-2", type: "date" },
-        { name: "編輯", className: "flex-2" }
-    ],
-    patchType: GetEditorAction.SHOW_EDITOR_LIST_SORTING,
-    reducerName: 'getEditorReducer'
-}
 
-export default function EditorListBody() {
+
+export default function EditorListBody({ headerMap }) {
 
     const showList = useSelector(getEditorShowList);
     const currentPage = useSelector(getCurrentPage);
@@ -56,6 +45,16 @@ export default function EditorListBody() {
     const dialogMessage = useSelector((state) => state.getDialogReducer.message);
 
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
+    console.log("🚀 ~ file: EditorListBody.jsx:45 ~ EditorListBody ~ errorMessage:", errorMessage)
+
+    const navigateCheckArray = ['User is verified', 'get successfully']
+
+    useEffect(() => {
+        if (navigateCheckArray.length === 0) {
+            navigate(`/admin/editorList/${titleView._id}`)
+        }
+        if (errorMessage === navigateCheckArray[0]) navigateCheckArray.shift()
+    }, [errorMessage]);
 
     useDeleteSelectedRow(messageDialogReturnValue, {
         deleteType: GetEditorAction.BUNCH_DELETE_EDITOR
@@ -86,6 +85,12 @@ export default function EditorListBody() {
 
     const [mediaInfo, setMediaInfo] = useState(null);
 
+    const onPreviewMedia = useCallback((e, item) => {
+        e.stopPropagation();
+        handleOpen();
+        setMediaInfo(item);
+    }, [handleOpen, setMediaInfo])
+
     return <CardBody>
         <EditorSearchForm />
         <EditorListButtonList
@@ -101,7 +106,7 @@ export default function EditorListBody() {
                 headerConfig={headerMap}
                 showList={showList}
                 handleOpen={handleOpen}
-                setMediaInfo={setMediaInfo}
+                setMediaInfo={onPreviewMedia}
             />
         </form>
         <MediaModal

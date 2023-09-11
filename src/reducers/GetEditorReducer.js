@@ -70,7 +70,7 @@ const getEditorReducer = (state = initialState, action) => {
         ...state,
         currentPage: action.payload,
       }
-    case GetEditorAction.SHOW_EDITOR_LIST_SORTING:
+    case GetEditorAction.SHOW_EDITOR_LIST_SORTING: {
       const { key } = action.payload;
       return {
         ...state,
@@ -82,6 +82,7 @@ const getEditorReducer = (state = initialState, action) => {
         selectedPatchKey: key,
         currentPage: 1
       }
+    }
     case GetEditorAction.REQUEST_EDITOR_FAIL:
     case GetEditorAction.REQUEST_EDITOR_TITLE_LIST_FAIL: {
       return {
@@ -109,6 +110,11 @@ const getEditorReducer = (state = initialState, action) => {
       return {
         ...state,
         errorMessage: action.payload.message
+      }
+    case GetEditorAction.REQUEST_EDITOR_BY_ID:
+      return {
+        ...state,
+        errorMessage: null
       }
     case GetSlateAction.CHECK_BEFORE_SUBMIT:
       return {

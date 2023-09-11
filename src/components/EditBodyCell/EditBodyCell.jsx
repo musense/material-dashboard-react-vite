@@ -2,7 +2,7 @@ import React from "react";
 import BodyCell from "./../BodyCell/BodyCell";
 import { Stack } from '@mui/material';
 import IconCell from "./IconCell";
-import useEditCellFunction from "@hook/useEditCellFunction";
+import useEditCellFunction from "./../../hook/useEditCellFunction"
 
 export default function EditBodyCell({
     copyText,
@@ -10,7 +10,7 @@ export default function EditBodyCell({
     name,
     editType,
     editData,
-    className,
+    className = '',
     callback = null
 }) {
     const {

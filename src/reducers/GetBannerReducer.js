@@ -169,13 +169,11 @@ const getBannerReducer = (state = initialState, action) => {
                 errorMessage: errorMessage.getFinish
             }
         case GetBannerAction.REQUEST_BANNER_PAGE:
-            const start = (action.payload - 1) * 10;
-            const end = start + 10
             return {
                 ...state,
                 currentPage: action.payload
             }
-        case GetBannerAction.SHOW_BANNER_LIST_SORTING:
+        case GetBannerAction.SHOW_BANNER_LIST_SORTING: {
             const { key } = action.payload;
             return {
                 ...state,
@@ -187,6 +185,7 @@ const getBannerReducer = (state = initialState, action) => {
                 selectedPatchKey: key,
                 currentPage: 1
             }
+        }
         case GetBannerAction.GET_BANNER_SUCCESS:
             return {
                 ...state,

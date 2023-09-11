@@ -5,14 +5,14 @@ import TagRightBody from './TagRightBody';
 import { useSelector } from 'react-redux';
 import { getMaxSizeClassName } from '../../reducers/GetConfigReducer';
 
-export default function TagRightWrapper() {
+export default function TagRightWrapper({ headerMap }) {
 
     const maxSize = useSelector(getMaxSizeClassName);
 
     return <div className={`right-wrapper ${maxSize}`}>
         <Card>
             <TagRightHeader />
-            <TagRightBody />
+            <TagRightBody headerMap={headerMap} />
         </Card>
     </div>;
 }

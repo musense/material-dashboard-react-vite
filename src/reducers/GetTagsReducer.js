@@ -130,7 +130,7 @@ const getTagsReducer = (state = initialState, action) => {
                 ...state,
                 currentPage: action.payload
             }
-        case GetTagsAction.SHOW_TAG_LIST_SORTING:
+        case GetTagsAction.SHOW_TAG_LIST_SORTING: {
             const { key } = action.payload;
             return {
                 ...state,
@@ -142,6 +142,7 @@ const getTagsReducer = (state = initialState, action) => {
                 selectedPatchKey: key,
                 currentPage: 1
             }
+        }
         case GetTagsAction.GET_TAG_FAIL:
         case GetTagsAction.REQUEST_POPULAR_TAG_FAIL: {
             return {

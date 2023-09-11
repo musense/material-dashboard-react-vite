@@ -17,16 +17,6 @@ import { useDispatch } from 'react-redux';
 
 
 function App() {
-    const dispatch = useDispatch();
-
-    const requestEditorByID = (id) => {
-        dispatch({
-            type: GetEditorAction.REQUEST_EDITOR_BY_ID,
-            payload: {
-                data: id
-            },
-        });
-    }
     useRefreshStayCurrentPage()
     return (
         <div className='App'>

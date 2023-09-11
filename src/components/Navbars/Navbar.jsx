@@ -10,11 +10,18 @@ import AdminNavbarLinks from "./AdminNavbarLinks.jsx";
 import Button from "@components/CustomButtons/Button.jsx";
 import headerStyle from "@assets/jss/material-dashboard-react/components/headerStyle.jsx";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getSelectedRoutesKeys } from "../../reducers/GetConfigReducer.js";
 
 function Header({ ...props }) {
+  const routesWithPath = useSelector(getSelectedRoutesKeys);
   const location = useLocation()
   function makeBrand() {
     let name;
+    routesWithPath.map(route => {
+
+      console.log("🚀 ~ file: Navbar.jsx:24 ~ makeBrand ~ route:", route)
+    })
     props.routes.map((prop) => {
       if (prop.layout + prop.path === location.pathname) {
         name = prop.name;

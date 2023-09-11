@@ -14,36 +14,68 @@ import { useDispatch } from "react-redux";
 import bannerListGetter from "@utils/bannerListGetter";
 import { RouterProvider } from "react-router-dom";
 import React from "react";
+import getRouterChildren from "./utils/getRouterChildren";
 
 function RouterIndex() {
 
     const dispatch = useDispatch();
+
     const router = createBrowserRouter([
         {
-            path: "/",
+            path: "",
+            name: "AuthPage",
             element: <Auth />,
             children: [
-                { path: "login", element: <LoginPage />, },
-                { path: "register", element: <RegisterPage />, },
+                {
+                    path: "login",
+                    name: "LoginPage",
+                    element: <LoginPage />,
+                },
+                {
+                    path: "register",
+                    name: "RegisterPage",
+                    element: <RegisterPage />,
+                },
             ],
         },
         {
-            path: "/admin",
+            path: "admin",
+            name: "AdminPage",
             element: <Admin />,
             children: [
                 {
                     path: "banner",
+                    name: "Banner管理",
                     element: <BannerManager />,
                     loader: bannerListGetter(dispatch)
                 },
-                { path: "tag", element: <TagList /> },
-                { path: "editorClassList", element: <EditorClassList /> },
                 {
-                    path: "editorList", children: [
-                        { index: true, element: <EditorList /> },
-                        { path: "new", element: <NewIEditor /> },
+                    path: "tag",
+                    name: "標籤管理",
+                    element: <TagList />
+                },
+                {
+                    path: "editorClassList",
+                    name: "文章分類管理",
+                    element: <EditorClassList />
+                },
+                {
+                    path: "editorList",
+                    name: "文章列表",
+                    children: [
                         {
-                            path: ":id", element: <IEditor />,
+                            index: true,
+                            element: <EditorList />
+                        },
+                        {
+                            path: "new",
+                            name: "新增文章",
+                            element: <NewIEditor />
+                        },
+                        {
+                            path: ":id",
+                            name: "編輯文章",
+                            element: <IEditor />,
                             loader: async ({ params, request: { signal } }) => {
                                 const res = await instance.get(`/editor/${params.id}`, { signal })
 
@@ -57,8 +89,13 @@ function RouterIndex() {
         }
     ]);
 
-    return <RouterProvider router={router} />;
+    dispatch({
+        type: "SET_ROUTER",
+        payload: {
+            router: getRouterChildren(router.routes, undefined)
+        }
+    })
+    return <RouterProvider router={router} />
 }
-
 
 export default RouterIndex

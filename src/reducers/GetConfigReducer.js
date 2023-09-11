@@ -5,6 +5,7 @@ const initialState = {
     sidebarOpen: true,
     maxSizeClassName: '',
     errorMessage: null,
+    router: null
 }
 
 const getConfigReducer = (state = initialState, action) => {
@@ -16,6 +17,11 @@ const getConfigReducer = (state = initialState, action) => {
                 maxSizeClassName: state.sidebarOpen ? 'main-panel-max-size' : ''
             }
         }
+        case GetConfigAction.SET_ROUTER:
+            return {
+                ...state,
+                router: action.payload.router
+            }
         default:
             return { ...state }
     }
@@ -35,7 +41,20 @@ const maxSizeStyle = createSelector(
     }
 )
 
+const getRoutes = state => state.getConfigReducer.router
+
+
+
+const getSelectedRoutesKeys = createSelector(
+    [getRoutes],
+    (router) => {
+        return router.flat()
+
+    }
+)
+
 export {
     getMaxSizeClassName,
-    maxSizeStyle
+    maxSizeStyle,
+    getSelectedRoutesKeys
 }

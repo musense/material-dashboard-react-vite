@@ -23,6 +23,7 @@ import MessageDialog from '../../components/Modal/MessageDialog';
 import * as GetUserAction from '@actions/GetUserAction';
 import useModalResult from '@hook/useModalResult';
 import useRememberMe from '@hook/useRememberMe';
+import { getSelectedRoutesKeys } from '../../reducers/GetConfigReducer';
 
 function LoginPage(props) {
   const { classes } = props;
@@ -33,6 +34,8 @@ function LoginPage(props) {
   const navigate = useNavigate()
   const dispatch = new useDispatch();
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
+  const routesWithPath = useSelector(getSelectedRoutesKeys);
+  console.log("🚀 ~ file: LoginPage.jsx:38 ~ LoginPage ~ routesWithPath:", routesWithPath)
 
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);

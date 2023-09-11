@@ -85,7 +85,7 @@ function LoginPage(props) {
 
   return (
     <div className={classes.container}>
-      <GridContainer justify='center'>
+      <GridContainer justifyContent='center'>
         <GridItem xs={12} sm={6} md={4}>
           <form ref={loginFormRef} onSubmit={login}>
             <Card className={classes.cardAnimaton}>

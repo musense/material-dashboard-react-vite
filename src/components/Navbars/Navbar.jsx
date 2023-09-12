@@ -19,18 +19,10 @@ function Header({ ...props }) {
   function makeBrand() {
     let name;
     routesWithPath.map(route => {
-
-      console.log("🚀 ~ file: Navbar.jsx:24 ~ makeBrand ~ route:", route)
-    })
-    props.routes.map((prop) => {
-      if (prop.layout + prop.path === location.pathname) {
-        name = prop.name;
-      } else if (location.pathname.includes('/admin/editorList/')) {
-        name = '編輯文章'
-      } else {
-        return null;
+      if (route.path === location.pathname) {
+        name = route.name;
       }
-    });
+    })
     return name;
   }
   const { classes, color } = props;

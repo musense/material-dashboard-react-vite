@@ -9,6 +9,8 @@ const getRouterChildren = (router, path) => {
                 path: inheritedPath,
                 name: router[i].name,
                 index: router[i].index,
+                needAuth: router[i].needAuth,
+                showOnSideBar: router[i].showOnSideBar,
             }
             routes.push(route)
             routes.push(getRouterChildren(router[i].children, inheritedPath).flat())
@@ -18,6 +20,8 @@ const getRouterChildren = (router, path) => {
                 path: inheritedPath,
                 name: router[i].name,
                 index: router[i].index,
+                needAuth: router[i].needAuth,
+                showOnSideBar: router[i].showOnSideBar,
             }
         }
         routes.push(route)

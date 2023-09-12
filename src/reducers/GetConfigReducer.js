@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
 import * as GetConfigAction from './../actions/GetConfigAction';
+const disableRouteNameArray = import.meta.env.VITE_DISABLE_ROUTE_NAME.split(',')
+console.log("🚀 ~ file: GetConfigReducer.js:4 ~ disableRouteNameArray:", disableRouteNameArray)
 
 const initialState = {
     sidebarOpen: true,
@@ -43,18 +45,35 @@ const maxSizeStyle = createSelector(
 
 const getRoutes = state => state.getConfigReducer.router
 
-
-
 const getSelectedRoutesKeys = createSelector(
     [getRoutes],
     (router) => {
         return router.flat()
+    }
+)
 
+const getAuthRoutes = createSelector(
+    [getSelectedRoutesKeys],
+    (routes) => {
+        console.log("🚀 ~ file: GetConfigReducer.js:62 ~ routes:", routes)
+        return routes
+            .filter(route => route.needAuth)
+    }
+)
+
+const getShowOnSideBarRoutes = createSelector(
+    [getSelectedRoutesKeys],
+    (routes) => {
+        return routes
+            .filter(route => route.showOnSideBar)
+            .filter(route => disableRouteNameArray.includes(route.name) === false)
     }
 )
 
 export {
     getMaxSizeClassName,
     maxSizeStyle,
-    getSelectedRoutesKeys
+    getSelectedRoutesKeys,
+    getAuthRoutes,
+    getShowOnSideBarRoutes
 }

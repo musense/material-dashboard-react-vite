@@ -27,49 +27,56 @@ function RouterIndex() {
             element: <Auth />,
             children: [
                 {
-                    path: "login",
+                    path: "/login",
+                    needAuth: true,
                     name: "LoginPage",
                     element: <LoginPage />,
                 },
                 {
-                    path: "register",
+                    path: "/register",
+                    needAuth: true,
                     name: "RegisterPage",
                     element: <RegisterPage />,
                 },
             ],
         },
         {
-            path: "admin",
+            path: "/admin",
             name: "AdminPage",
             element: <Admin />,
             children: [
                 {
                     path: "banner",
                     name: "Banner管理",
+                    showOnSideBar: true,
                     element: <BannerManager />,
                     loader: bannerListGetter(dispatch)
                 },
                 {
                     path: "tag",
                     name: "標籤管理",
+                    showOnSideBar: true,
                     element: <TagList />
                 },
                 {
                     path: "editorClassList",
                     name: "文章分類管理",
+                    showOnSideBar: true,
                     element: <EditorClassList />
                 },
                 {
                     path: "editorList",
-                    name: "文章列表",
                     children: [
                         {
                             index: true,
+                            name: "文章列表",
+                            showOnSideBar: true,
                             element: <EditorList />
                         },
                         {
                             path: "new",
                             name: "新增文章",
+                            showOnSideBar: true,
                             element: <NewIEditor />
                         },
                         {

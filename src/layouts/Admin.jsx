@@ -7,7 +7,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import Navbar from '@components/Navbars/Navbar.jsx';
 import Sidebar from '@components/Sidebar/Sidebar.jsx';
-import routes from './../routes.js';
 import dashboardStyle from '@assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 
 
@@ -74,7 +73,6 @@ function Admin({ ...props }) {
     <>
       <div className={classes.wrapper}>
         <Sidebar
-          routes={routes}
           image={image}
           handleDrawerToggle={handleDrawerToggle}
           open={sidebarOpen}
@@ -83,7 +81,6 @@ function Admin({ ...props }) {
         />
         <div className={`${classes.mainPanel} ${sidebarOpen ? '' : 'main-panel-max-size'}`} ref={mainPanel}>
           <Navbar
-            routes={routes}
             handleDrawerToggle={handleDrawerToggle}
             color={color}
             {...rest}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck, MdOutlineStickyNote2, MdOutlineEdit, MdOutlineEditOff } from 'react-icons/md'
+import { MdFormatBold, MdFormatItalic, MdStrikethroughS, MdFormatUnderlined, MdFormatQuote, MdFormatAlignLeft, MdFormatAlignCenter, MdFormatAlignRight, MdFormatAlignJustify, MdFormatListNumbered, MdFormatListBulleted, MdInsertLink, MdLinkOff, MdVideoLibrary, MdImage, MdAdd, MdArrowForward, MdSmartButton, MdLogout, MdFormatColorFill, MdFormatColorText, MdCheck, MdOutlineStickyNote2, MdOutlineEdit, MdOutlineEditOff, MdContentPaste } from 'react-icons/md'
 import { BsTypeH1, BsTypeH2, BsTypeH3, BsCameraVideoFill, BsCode, BsArrowUp, BsArrowDown } from 'react-icons/bs'
 import { FaSuperscript, FaSubscript } from 'react-icons/fa'
 import { AiOutlineEdit, AiOutlineTable, AiOutlineInsertRowBelow, AiOutlineInsertRowRight, AiOutlineDelete, AiFillTag, AiOutlineUpload, AiOutlineArrowsAlt, AiOutlineInsertRowAbove, AiOutlineInsertRowLeft, AiFillHtml5, AiOutlineDeleteRow, AiOutlineDeleteColumn } from 'react-icons/ai'
@@ -63,7 +63,9 @@ const iconList = {
     backgroundColorPicker: <MdFormatColorFill size={20} color="inherit" />,
     colorPicker: <MdFormatColorText size={20} color="inherit" />,
     check: <MdCheck size={20} color='inherit' />,
+    contentPaste: <MdContentPaste size={20} color='white' />,
     note: <MdOutlineStickyNote2 size={25} />,
+
 }
 
 const Icon = (props) => {

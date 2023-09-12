@@ -8,16 +8,20 @@ import Drawer from '@mui/material/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Icon from '@material-ui/core/Icon';
+// import Icon from '@material-ui/core/Icon';
+import Icon from '@views/Icons/Icon'
 // core components
 import sidebarStyle from '@assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
+import { useSelector } from "react-redux";
+import { getShowOnSideBarRoutes } from "../../reducers/GetConfigReducer.js";
 
 const LazyLogoImage = React.lazy(() => import(`./LogoImage`));
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
   const location = useLocation();
-
+  const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
+  console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)
   function activeRoute(routeName) {
     return location.pathname === routeName;
   }
@@ -26,39 +30,37 @@ const Sidebar = ({ ...props }) => {
     color,
     image,
     open,
-    routes,
     handleDrawerToggle
   } = props;
+
+  const router = routesOnSideBar.map((route, key) => {
+    const listItemClasses = classNames({
+      [' ' + classes[color]]: activeRoute(route.path),
+    });
+    const whiteFontClasses = classNames({
+      [' ' + classes.whiteFont]: activeRoute(route.path),
+    });
+    return (
+      <NavLink
+        to={route.path}
+        className={({ isActive }) => isActive ? 'active' : ''}
+        key={key}
+      >
+        <ListItem button className={classes.itemLink + listItemClasses}>
+          <Icon icon='contentPaste' />
+          <ListItemText
+            primary={route.name}
+            className={classNames(classes.itemText, whiteFontClasses)}
+            disableTypography={true}
+          />
+        </ListItem>
+      </NavLink>
+    );
+  })
+
   const links = (
     <List className={classes.list}>
-      {routes.map((prop, key) => {
-        var listItemClasses;
-        listItemClasses = classNames({
-          [' ' + classes[color]]: activeRoute(prop.layout + prop.path),
-        });
-        const whiteFontClasses = classNames({
-          [' ' + classes.whiteFont]: activeRoute(prop.layout + prop.path),
-        });
-        const classItemHide = prop.hide === true ? classes.itemHide : classes.item;
-        return (
-          <NavLink
-            to={prop.layout + prop.path}
-            className={({ isActive }) => isActive ? `active ${classItemHide}` : classItemHide}
-            key={key}
-          >
-            <ListItem button className={classes.itemLink + listItemClasses}>
-              <Icon className={classNames(classes.itemIcon, whiteFontClasses)}>
-                {prop.icon}
-              </Icon>
-              <ListItemText
-                primary={prop.name}
-                className={classNames(classes.itemText, whiteFontClasses)}
-                disableTypography={true}
-              />
-            </ListItem>
-          </NavLink>
-        );
-      })}
+      {router}
     </List>
   );
   const mainSiteUrl = import.meta.env.VITE_MAIN_URL

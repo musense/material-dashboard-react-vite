@@ -7,19 +7,20 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 // core components
 import AuthNavbar from '@components/Navbars/AuthNavbar.jsx';
-import routes from '../routes.js';
 import pagesStyle from '@assets/jss/material-dashboard-react/layouts/authStyle.jsx';
 import register from '@assets/img/register.jpeg';
 import login from '@assets/img/login.jpeg';
 import { Outlet, useLocation } from 'react-router-dom';
 import useRefreshStayCurrentPage from '@hook/useRefreshStayCurrentPage';
+import { useSelector } from "react-redux";
+import { getAuthRoutes } from "../reducers/GetConfigReducer.js";
 
 function Auth({ ...props }) {
   useRefreshStayCurrentPage()
   const { classes, ...rest } = props;
 
   const location = useLocation();
-
+  const authRoutes = useSelector(getAuthRoutes);
   useEffect(() => {
     document.body.style.overflow = 'unset';
   }, []);
@@ -36,7 +37,7 @@ function Auth({ ...props }) {
     let activeRoute = import.meta.env.VITE_LOGO_TEXT;
 
     for (let i = 0; i < routes.length; i++) {
-      if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
+      if (location.pathname.indexOf(routes[i].path) !== -1) {
         return routes[i].name;
       }
     }
@@ -44,7 +45,7 @@ function Auth({ ...props }) {
   };
   return (
     <div>
-      <AuthNavbar brandText={getActiveRoute(routes)} {...rest} />
+      <AuthNavbar brandText={getActiveRoute(authRoutes)} {...rest} />
       <div className={classes.wrapper}>
         <div
           className={classes.fullPage}

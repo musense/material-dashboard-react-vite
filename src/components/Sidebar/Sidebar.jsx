@@ -14,8 +14,9 @@ import Icon from '@views/Icons/Icon'
 import sidebarStyle from '@assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
 import { useSelector } from "react-redux";
 import { getShowOnSideBarRoutes } from "../../reducers/GetConfigReducer.js";
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary.jsx';
 
-const LazyLogoImage = React.lazy(() => import(`./LogoImage`));
+const LazyLogoImage = /* @vite-ignore */React.lazy(() => import('./LogoImage'));
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
@@ -68,9 +69,11 @@ const Sidebar = ({ ...props }) => {
     <div className={classes.logo}>
       <a href={mainSiteUrl} target="_blank" className={classNames(classes.logoLink)}>
         <div className={classes.logoImage}>
-          <Suspense fallback={<div>Loading...</div>}>
-            <LazyLogoImage className={classes.img} />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<div>Loading...</div>}>
+              <LazyLogoImage className={classes.img} />
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </a>
     </div>

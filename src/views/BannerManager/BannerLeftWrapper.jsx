@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as GetBannerAction from '@actions/GetBannerAction';
@@ -20,11 +20,12 @@ import {
     getSelectedBanner,
     getSelectedBannerMedia,
     getSelectedBannerPublishInfo,
-    getSelectedBannerPublishInfoSchedulePeriod,
-    getShowUrl
+    getShowUrl,
+    getSubmitState
 } from '@reducers/GetBannerReducer';
 import SingleBannerStatusSelector from '@components/Select/SingleBannerStatusSelect'
 import { Checkbox, FormControlLabel } from '@mui/material';
+import { getEndDate, getStartDate } from '../../reducers/GetBannerReducer';
 
 export default function BannerLeftWrapper() {
 
@@ -32,29 +33,135 @@ export default function BannerLeftWrapper() {
     const dispatch = useDispatch();
 
     const selectedBanner = useSelector(getSelectedBanner)
+    const submitState = useSelector(getSubmitState)
     console.log("🚀 ~ file: BannerLeftWrapper.jsx:35 ~ BannerLeftWrapper ~ selectedBanner:", selectedBanner)
     const selectedBannerMedia = useSelector(getSelectedBannerMedia)
     const selectedBannerPublishInfo = useSelector(getSelectedBannerPublishInfo)
-    const selectedBannerSchedulePeriod = useSelector(getSelectedBannerPublishInfoSchedulePeriod)
 
-    // const id = selectedBanner._id
-    // const name = selectedBanner.name
-    // const sort = selectedBanner.sort
-    // const remark = selectedBanner.remark
-    // const status = selectedBanner.status
-
-    const homeImagePath = selectedBannerMedia.homeImagePath
-    const contentImagePath = selectedBannerMedia.contentImagePath
-    // const hyperlink = selectedBannerMedia.hyperlink
-
-    // const startDate = selectedBannerPublishInfo.startDate
-    // const endDate = selectedBannerPublishInfo.endDate
-
+    const startDate = useSelector(getStartDate)
+    const endDate = useSelector(getEndDate)
 
     const isEditing = useSelector(getIsEditing);
     const showUrl = useSelector(getShowUrl);
     const serverMessage = useSelector(getBannerErrorMessage);
 
+    const onAddNewEditor = useCallback(() => {
+
+        let tempData = {}
+        console.log("🚀 ~ file: BannerLeftWrapper.jsx:69 ~ onAddNewEditor ~ isEditing:", isEditing)
+        if (isEditing === true) {
+            // 編輯
+            console.log("🚀 ~ file: BannerLeftWrapper.jsx:73 ~ onAddNewEditor ~ submitState:", submitState)
+
+            for (const key in submitState) {
+                if (key === 'contentImagePath') {
+                    tempData = {
+                        ...tempData,
+                        media: {
+                            [key]: submitState[key]
+                        }
+                    }
+                } else {
+                    tempData = {
+                        ...tempData,
+                        [key]: submitState[key]
+                    }
+                }
+            }
+            console.log("🚀 ~ file: BannerLeftWrapper.jsx:73 ~ onAddNewEditor ~ tempData:", tempData)
+
+            dispatch({
+                type: GetBannerAction.EDIT_SAVING_BANNER,
+                payload: {
+                    ...tempData,
+                    _id: selectedBanner._id
+                }
+            });
+        } else {
+            // 新增
+
+            console.log("🚀 ~ file: BannerLeftWrapper.jsx:94 ~ onAddNewEditor ~ submitState:", submitState)
+            if (!('name' in submitState)) {
+                dispatch({
+                    type: GetBannerAction.SET_ERROR_MESSAGE,
+                    payload: {
+                        message: 'please add Banner name',
+                    }
+                })
+                return
+            }
+            if (!('contentImagePath' in submitState.media)) {
+                dispatch({
+                    type: GetBannerAction.SET_ERROR_MESSAGE,
+                    payload: {
+                        message: 'please add Banner image',
+                    }
+                })
+                return
+            }
+
+            tempData = {
+                name: submitState?.name,
+                // sort: submitState?.sort,
+                hyperlink: submitState?.media.hyperlink,
+                remark: submitState?.remark,
+
+                eternal: submitState?.publishInfo.eternal,
+                display: submitState?.publishInfo.display,
+
+                startDate: new Date(submitState?.publishInfo.scheduledAt.startDate).getTime(),
+                endDate: new Date(submitState?.publishInfo.scheduledAt.endDate).getTime(),
+                media: {
+                    homeImagePath: submitState?.media.homeImagePath,
+                    contentImagePath: submitState?.media.contentImagePath,
+                }
+
+            }
+
+
+            if ('sort' in submitState) {
+                if (typeof parseInt(selectedBanner.sort) !== 'number') {
+                    dispatch({
+                        type: GetBannerAction.SET_ERROR_MESSAGE,
+                        payload: {
+                            message: 'sorting should be typeof number',
+                        }
+                    })
+                    return
+                }
+                if (parseInt(selectedBanner.sort) < 1) {
+                    dispatch({
+                        type: GetBannerAction.SET_ERROR_MESSAGE,
+                        payload: {
+                            message: 'sorting should be equal or greater than 1',
+                        }
+                    })
+                    return
+                }
+                tempData = {
+                    ...tempData,
+                    sort: submitState?.sort
+                }
+            }
+
+            console.log("🚀 ~ file: BannerLeftWrapper.jsx:94 ~ onAddNewEditor ~ tempData:", tempData)
+            dispatch({
+                type: GetBannerAction.ADD_BANNER,
+                payload: {
+                    data: tempData
+                },
+            });
+        }
+    }, [dispatch, isEditing, selectedBanner._id, selectedBanner.sort, submitState])
+
+    useEffect(() => {
+        if (submitState !== null) {
+            onAddNewEditor()
+            dispatch({
+                type: GetBannerAction.RESET_BANNER_SUBMIT_STATE
+            })
+        }
+    }, [dispatch, onAddNewEditor, submitState]);
 
     usePressEnterEventHandler(formRef)
     const {
@@ -71,90 +178,9 @@ export default function BannerLeftWrapper() {
         handleClose
     } = useModal(title)
 
-    function onAddNewEditor(e) {
-        e.preventDefault()
-
-        if (!selectedBanner.name) {
-            dispatch({
-                type: GetBannerAction.SET_ERROR_MESSAGE,
-                payload: {
-                    message: 'please add Banner name',
-                }
-            })
-            return
-        }
-
-        let tempData = {
-            name: selectedBanner.name,
-            sort: selectedBanner.sort,
-            hyperlink: selectedBannerMedia.hyperlink,
-            remark: selectedBanner.remark,
-            status: selectedBanner.status,
-            // eternal: eternal,
-            // display: display,
-            media: {
-                homeImagePath: selectedBannerMedia.homeImagePath,
-                contentImagePath: selectedBannerMedia.contentImagePath,
-            },
-            publishInfo: {
-                isEternal: false,
-                isDisplay: false,
-                isScheduled: false,
-                scheduledAt: {
-                    startDate: new Date(selectedBannerPublishInfo.startDate).getTime(),
-                    endDate: new Date(selectedBannerPublishInfo.endDate).getTime(),
-                }
-            }
-
-
-        }
-
-        if (selectedBanner.sort) {
-            if (typeof parseInt(selectedBanner.sort) !== 'number') {
-                dispatch({
-                    type: GetBannerAction.SET_ERROR_MESSAGE,
-                    payload: {
-                        message: 'sorting should be typeof number',
-                    }
-                })
-                return
-            }
-            if (parseInt(selectedBanner.sort) < 1) {
-                dispatch({
-                    type: GetBannerAction.SET_ERROR_MESSAGE,
-                    payload: {
-                        message: 'sorting should be equal or greater than 1',
-                    }
-                })
-                return
-            }
-            tempData = {
-                ...tempData,
-                sort: selectedBanner.sort
-            }
-        }
-
-        console.log("🚀 ~ file: BannerLeftWrapper.jsx:86 ~ onAddNewEditor ~ tempData:", tempData)
-        return
-        if (isEditing === true) {
-            dispatch({
-                type: GetBannerAction.EDIT_SAVING_BANNER,
-                payload: {
-                    ...tempData,
-                    _id: selectedBanner._id
-                },
-            });
-            return
-        }
-        dispatch({
-            type: GetBannerAction.ADD_BANNER,
-            payload: {
-                data: tempData
-            },
-        });
-    }
 
     const onReset = useCallback(() => {
+
         dispatch({
             type: GetBannerAction.CANCEL_EDITING_BANNER
         })
@@ -174,10 +200,6 @@ export default function BannerLeftWrapper() {
         })
     }, [dispatch])
 
-    const onStatusChange = useCallback((value) => {
-        onPropertyChange(value, 'status')
-    }, [onPropertyChange])
-
     const onShowUrlChange = useCallback((value) => {
         dispatch({
             type: GetBannerAction.SET_SHOW_URL,
@@ -189,7 +211,7 @@ export default function BannerLeftWrapper() {
 
     const handleModalClose = useCallback(() => {
         handleClose()
-        onReset()
+        // onReset()
     }, [onReset, handleClose])
 
     const statusStyle = {
@@ -214,16 +236,16 @@ export default function BannerLeftWrapper() {
                 <h4>{isEditing ? '編輯' : '新增'}</h4>
             </CardHeader>
             <CardBody>
-                <MyScrollbar component='form' height='700px'>
-                    <form ref={formRef} name='class-form' className='banner-submit-form' onSubmit={onAddNewEditor}>
+                <MyScrollbar component='div' height='739px'>
+                    <form ref={formRef} name='class-form' className='banner-submit-form'>
                         <div>
                             <input type="hidden" name='_id' value={selectedBanner._id} />
                         </div>
-                        <div className={'banner-status'}>
+                        {/* <div className={'banner-status'}>
                             <span style={statusStyle}>{statusString}</span>
 
                             {selectedBanner.status !== '' && <FormControlLabel control={<Checkbox />} label={checkboxString} />}
-                        </div>
+                        </div> */}
                         <div>
                             <label htmlFor="name">Banner名稱</label>
                             <input type="text" name='name' value={selectedBanner.name} onChange={e => onPropertyChange(e.target.value, 'name')} />
@@ -234,7 +256,7 @@ export default function BannerLeftWrapper() {
                         </div>
                         <div>
                             <label htmlFor="hyperlink">超連結</label>
-                            <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink', 'media')} />
+                            <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink || undefined} onChange={e => onPropertyChange(e.target.value, 'hyperlink', 'media')} />
                         </div>
                         <Media
                             onPropertyChange={onPropertyChange}
@@ -243,20 +265,22 @@ export default function BannerLeftWrapper() {
                             alt={false}
                         />
                         <BannerPublishInfo
-                            isEternal={selectedBannerSchedulePeriod.isEternal}
-                            isDisplay={selectedBannerSchedulePeriod.isDisplay}
-                            startDate={selectedBannerSchedulePeriod.startDate}
-                            endDate={selectedBannerSchedulePeriod.endDate}
+                            isOnShelvesImmediate={selectedBannerPublishInfo.isOnShelvesImmediate}
+                            eternal={selectedBannerPublishInfo.eternal}
+                            display={selectedBannerPublishInfo.display}
+                            startDate={startDate}
+                            endDate={endDate}
                             onPropertyChange={onPropertyChange}
                         />
                         <div>
                             <label htmlFor="remark">備註</label>
-                            <textarea type="text" name='remark' value={selectedBanner.remark} onChange={e => onPropertyChange(e.target.value, 'remark')} />
+                            <textarea type="text" name='remark' value={selectedBanner.remark || undefined} onChange={e => onPropertyChange(e.target.value, 'remark')} />
                         </div>
                         <FormButtonList
                             isEditing={isEditing}
                             onReset={onReset}
-                            callback={onAddNewEditor}
+                            checkPatchType={GetBannerAction.CHECK_BANNER_BEFORE_SUBMIT}
+                        // callback={onAddNewEditor}
                         />
                     </form>
                 </MyScrollbar>

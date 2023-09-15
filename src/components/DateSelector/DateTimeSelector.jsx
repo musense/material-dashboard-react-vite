@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/zh-tw';
@@ -15,8 +15,9 @@ const DateTimeSelector = ({
     defaultValue,
     width = null,
     title = null,
-    setState
+    setState,
 }) => {
+    console.log("🚀 ~ file: DateTimeSelector.jsx:20 ~ defaultValue:", defaultValue)
 
     const {
         date,

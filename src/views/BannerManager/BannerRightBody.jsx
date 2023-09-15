@@ -22,8 +22,11 @@ import {
 } from "@reducers/GetBannerReducer";
 import MediaModal from "@components/Modal/MediaModal";
 import { useCallback } from "react";
+import { getSelectedBanner } from "../../reducers/GetBannerReducer";
 
 export default function BannerRightBody({ headerMap }) {
+
+    const selectedBanner = useSelector(getSelectedBanner)
 
     const selectedPatchKey = useSelector(getSelectedPatchKey);
     const currentPage = useSelector(getCurrentPage);
@@ -94,6 +97,7 @@ export default function BannerRightBody({ headerMap }) {
                 handleOpen={handleOpen}
                 setMediaInfo={onPreviewMedia}
                 className={'Banner'}
+                selectedId={selectedBanner._id}
             />
 
         </form>

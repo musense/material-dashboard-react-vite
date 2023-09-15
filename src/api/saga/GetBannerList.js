@@ -7,16 +7,21 @@ function toBackendFormData(requestData) {
     const formData = new FormData()
 
 
-    formData.append('name', JSON.stringify(requestData.name))
-    formData.append('sort', JSON.stringify(requestData.sort))
-    formData.append('hyperlink', JSON.stringify(requestData.hyperlink))
-    formData.append('remark', JSON.stringify(requestData.remark))
-    // formData.append('eternal', JSON.stringify(requestData.eternal))
-    formData.append('startDate', JSON.stringify(requestData.startDate))
-    formData.append('endDate', JSON.stringify(requestData.endDate))
-    formData.append('status', JSON.stringify(requestData.status))
+    requestData.name && formData.append('name', JSON.stringify(requestData.name))
+    requestData.sort && formData.append('sort', JSON.stringify(requestData.sort))
+    requestData.hyperlink && formData.append('hyperlink', JSON.stringify(requestData.hyperlink))
+    requestData.remark && formData.append('remark', JSON.stringify(requestData.remark))
+    requestData.display && formData.append('display', JSON.stringify(requestData.display))
 
-    if (requestData.media) {
+    // if ('eternal' in requestData) {
+    requestData.eternal && formData.append('eternal', JSON.stringify(requestData.eternal))
+    if (!requestData.eternal) {
+        requestData.startDate && formData.append('startDate', JSON.stringify(requestData.startDate))
+        requestData.endDate && formData.append('endDate', JSON.stringify(requestData.endDate))
+    }
+    // }
+
+    if ('media' in requestData) {
         Object.entries(requestData.media).forEach(([key, value]) => {
             if (key === 'contentImagePath') {
                 if (value === null || value === '') {
@@ -39,7 +44,6 @@ function toBackendFormData(requestData) {
                 value !== null && formData.append('homeImagePath', new Blob([value], { type: 'text/plain' }))
                 return
             }
-            formData.append('altText', JSON.stringify(value))
         })
     }
 
@@ -50,24 +54,30 @@ function toBackendFormData(requestData) {
 export function GetDefaultBannerList(signal) {
     const startDate = new Date(`${dayjs().subtract(3, 'month').format('YYYY-MM-DD')} 00:00:00`).getTime()
     const endDate = new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`).getTime()
-    const startDateString = `startDate=${startDate}&`
-    const endDateString = `endDate=${new Date(endDate).getTime()}&`
+    const startDateString = `startDate=${startDate}`
+    const endDateString = `endDate=${new Date(endDate).getTime()}`
 
-    // return instance.get(`/banner/dashboard?pageNumber=1&limit=10${startDateString}${endDateString}`, { signal });
-    return instance.get(`/banner/dashboard?pageNumber=1&limit=10&`, { signal });
+    // return instance.get(`/banner/dashboard?pageNumber=1&limit=10&${startDateString}&${endDateString}`, { signal });
+    return instance.get(`/banner/dashboard?pageNumber=1&limit=10`, { signal });
 
 }
 
 function* GetBannerList() {
     try {
+        const startDate = new Date(`${dayjs().subtract(3, 'month').format('YYYY-MM-DD')} 00:00:00`).getTime()
+        const endDate = new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`).getTime()
+        const startDateString = `startDate=${startDate}`
+        const endDateString = `endDate=${new Date(endDate).getTime()}`
 
-        const response = yield instance.get(`/banner/dashboard/`);
-        const { currentPage, totalCount, data: responseData } = yield response.data
-        const bannerList = toFrontendData(responseData)
+        const response = yield instance.get(`/banner/dashboard?pageNumber=1&limit=10&${startDateString}&${endDateString}`);
+        const { currentPage, totalCount, data: bannerList } = yield response.data
+        // const bannerList = toFrontendData(responseData)
         yield put({
-            type: GetBannerAction.REQUEST_POPULAR_BANNER_SUCCESS,
+            type: GetBannerAction.REQUEST_BANNER_SUCCESS,
             payload: {
-                bannerList
+                bannerList,
+                totalCount: parseInt(totalCount),
+                currentPage: parseInt(currentPage),
             },
         })
     } catch (error) {
@@ -167,6 +177,7 @@ function* AddBanner(payload) {
         // return
         const response = yield instance.post(`/banner`, requestData);
         const responseData = yield response.data;
+        console.log("🚀 ~ file: GetBannerList.js:172 ~ function*AddBanner ~ responseData:", responseData)
         yield put({
             type: GetBannerAction.ADD_BANNER_SUCCESS,
             payload: null
@@ -194,13 +205,14 @@ function* UpdateBanner(payload) {
         const { _id, ...data } = payload;
         console.log("🚀 ~ file: GetBannerList.js:150 ~ function*UpdateBanner ~ data:", data)
         console.log("🚀 ~ file: GetBannerList.js:150 ~ function*UpdateBanner ~ _id:", _id)
-        // const requestData = toBackendData(data)
+        const requestData = toBackendFormData(data)
         // return
-        const response = yield instance.patch(`/banner/${_id}`, data);
-        const bannerList = yield response.data;
+        const response = yield instance.patch(`/banner/${_id}`, requestData);
+        // const bannerList = yield response.data;
+        const { message } = yield response;
         yield put({
             type: GetBannerAction.UPDATE_BANNER_SUCCESS,
-            payload: bannerList
+            payload: message
         })
     } catch (error) {
         yield getErrorMessage(error, GetBannerAction.UPDATE_BANNER_FAIL)
@@ -235,12 +247,12 @@ function* watchGetBannerListSaga() {
     }
 }
 
-function* watchGetPopularBannerListSaga() {
-    while (true) {
-        const { payload } = yield take(GetBannerAction.REQUEST_POPULAR_BANNER)
-        yield GetPopularBannerList(payload)
-    }
-}
+// function* watchGetPopularBannerListSaga() {
+//     while (true) {
+//         const { payload } = yield take(GetBannerAction.REQUEST_POPULAR_BANNER)
+//         yield GetPopularBannerList(payload)
+//     }
+// }
 
 function* watchAddBanner() {
     while (true) {
@@ -272,7 +284,7 @@ function* watchDeleteBanner() {
 
 function* mySaga() {
     yield all([
-        watchGetPopularBannerListSaga(),
+        // watchGetPopularBannerListSaga(),
         watchSearchBanner(),
         watchGetBannerListSaga(),
         watchUpdateBanner(),

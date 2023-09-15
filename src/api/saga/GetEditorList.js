@@ -47,6 +47,7 @@ function* GetEditorByID(payload) {
         const responseData = yield response.data;
         // return
         const mappedEditorData = toFrontendData(responseData)
+        console.log("🚀 ~ file: GetEditorList.js:50 ~ function*GetEditorByID ~ mappedEditorData:", mappedEditorData)
         // return
         yield put({
             type: GetEditorAction.REQUEST_EDITOR_SUCCESS,
@@ -127,7 +128,7 @@ function* AddEditor(payload) {
     try {
         const { data, draft } = payload
         let response
-        const requestFormData = toBackendFormData(data, 'add_new')
+        const requestFormData = toBackendFormData(data)
         // return
         if (!draft) {
             //* 不是草稿時執行以下程式
@@ -196,7 +197,9 @@ function* UpdateEditor(payload) {
     // return
     const { id, data } = payload
     try {
-        const requestFormData = toBackendFormData(data, 'update')
+        const requestFormData = toBackendFormData(data)
+        const categories = requestFormData.get('categories')
+        console.log("🚀 ~ file: GetEditorList.js:201 ~ function*UpdateEditor ~ categories:", categories)
         // return
         let response
         if (typeof requestFormData.get('contentImagePath') === 'object') {

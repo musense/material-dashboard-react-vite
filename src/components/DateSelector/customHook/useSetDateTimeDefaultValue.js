@@ -7,9 +7,13 @@ export default function useSetDateTimeDefaultValue(defaultValue) {
     const [time, setTime] = useState(dayjs(new Date()));
 
     useEffect(() => {
-        if (!defaultValue) return
-        setDate(dayjs(defaultValue))
-        setTime(dayjs(defaultValue))
+        const value = defaultValue
+            ? defaultValue === 'now'
+                ? new Date()
+                : new Date(defaultValue)
+            : new Date()
+        setDate(dayjs(value))
+        setTime(dayjs(value))
     }, [defaultValue]);
 
     return {

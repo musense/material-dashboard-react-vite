@@ -24,7 +24,7 @@ import * as GetConfigAction from "@actions/GetConfigAction.js";
 const myContainerStyle = {
   position: 'relative',
   marginTop: '74px',
-  maxHeight: 'calc(100vh - 74px)',
+  height: 'calc(100vh - 74px)',
 }
 
 function Admin({ ...props }) {

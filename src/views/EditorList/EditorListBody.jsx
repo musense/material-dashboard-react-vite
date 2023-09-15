@@ -1,5 +1,5 @@
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import CardBody from '@components/Card/CardBody.jsx';
 import { useSelector } from 'react-redux';
 import MediaModal from '../../components/Modal/MediaModal';
@@ -17,6 +17,7 @@ import getErrorMessage from '@utils/getErrorMessage';
 import { useNavigate } from 'react-router-dom';
 
 import {
+    getEditor,
     getTotalPage,
     getCurrentPage,
     getTotalCount,
@@ -25,10 +26,10 @@ import {
     getSelectedPatchKey
 } from '@reducers/GetEditorReducer'
 
-
-
 export default function EditorListBody({ headerMap }) {
-
+    const navigate = useNavigate();
+    const editor = useSelector(getEditor)
+    console.log("🚀 ~ file: EditorListBody.jsx:32 ~ EditorListBody ~ editor:", editor)
     const showList = useSelector(getEditorShowList);
     const currentPage = useSelector(getCurrentPage);
     const totalPage = useSelector(getTotalPage);
@@ -47,14 +48,17 @@ export default function EditorListBody({ headerMap }) {
     const errorMessage = getErrorMessage(dialogMessage, serverMessage)
     console.log("🚀 ~ file: EditorListBody.jsx:45 ~ EditorListBody ~ errorMessage:", errorMessage)
 
-    const navigateCheckArray = ['User is verified', 'get successfully']
-
+    const navigateCheckArray = useMemo(() => {
+        return ['User is verified', 'get successfully']
+    }, [])
+    useEffect(() => {
+        if (errorMessage === navigateCheckArray[0]) navigateCheckArray.shift()
+    }, [navigateCheckArray, errorMessage]);
     useEffect(() => {
         if (navigateCheckArray.length === 0) {
-            navigate(`/admin/editorList/${titleView._id}`)
+            editor?._id && navigate(`/admin/editorList/${editor?._id}`)
         }
-        if (errorMessage === navigateCheckArray[0]) navigateCheckArray.shift()
-    }, [errorMessage]);
+    }, [navigateCheckArray, errorMessage, navigate, editor]);
 
     useDeleteSelectedRow(messageDialogReturnValue, {
         deleteType: GetEditorAction.BUNCH_DELETE_EDITOR

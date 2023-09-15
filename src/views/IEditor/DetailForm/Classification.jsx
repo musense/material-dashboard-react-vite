@@ -3,7 +3,8 @@ import SingleClassificationSelect from "../../../components/Select/SingleClassif
 
 export default function Classification({ categories, onPropertyChange }) {
     const onClassificationChange = useCallback((value) => {
-        onPropertyChange(value, "categories", null);
+        // 單一接口採用array模式
+        onPropertyChange([value], "categories", null);
     }, [onPropertyChange])
 
     return <section id="categories">

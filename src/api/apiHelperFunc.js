@@ -109,26 +109,27 @@ export function toFrontendData(responseData) {
     }
 }
 
-export function toBackendFormData(requestData, createType) {
+export function toBackendFormData(requestData) {
     const formData = new FormData()
-    // if (createType === 'add_new') {
-    requestData.title && formData.append('title', JSON.stringify(requestData.title))
-    requestData.content && formData.append('content', JSON.stringify(requestData.content))
-    // }
-    if (requestData.webHeader) {
+
+    'title' in requestData && formData.append('title', JSON.stringify(requestData.title))
+    'content' in requestData && formData.append('content', JSON.stringify(requestData.content))
+
+    if ('webHeader' in requestData) {
         Object.entries(requestData.webHeader).forEach(([key, value]) => {
             if (key === 'sitemapUrl') return;
-
             formData.append(key, JSON.stringify(value))
         })
     }
-    if (requestData.tags) {
-        formData.append('tags', JSON.stringify(requestData.tags))
+    if ('tags' in requestData) {
+        const tagValue = requestData.tags === null ? '[]' : JSON.stringify(requestData.tags)
+        formData.append('tags', tagValue)
     }
-    if (requestData.categories) {
-        formData.append('categories', JSON.stringify([requestData.categories]))
+    if ('categories' in requestData) {
+        const categoriesValue = requestData.categories.every(c => c === null) ? null : JSON.stringify(requestData.categories)
+        formData.append('categories', categoriesValue)
     }
-    if (requestData.media) {
+    if ('media' in requestData) {
         Object.entries(requestData.media).forEach(([key, value]) => {
             if (key === 'contentImagePath') {
                 if (value === null || value === '') {
@@ -154,12 +155,12 @@ export function toBackendFormData(requestData, createType) {
             formData.append('altText', JSON.stringify(value))
         })
     }
-    if (requestData.publishInfo) {
+    if ('publishInfo' in requestData) {
         Object.entries(requestData.publishInfo).forEach(([key, value]) => {
             formData.append(key, JSON.stringify(value))
         })
     }
-    if (requestData.draft) {
+    if ('draft' in requestData) {
         formData.append('draft', JSON.stringify(requestData.draft))
     }
 
@@ -199,6 +200,7 @@ export function* getErrorMessage(error, patchType) {
         return
     }
     if (error.response) {
+        console.log("🚀 ~ file: apiHelperFunc.js:203 ~ function*getErrorMessage ~ error.response.data:", error.response.data)
         errorMessage = error.response.data.message || error.response.data.messages.join(',')
     } else {
         errorMessage = error.code

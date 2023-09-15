@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 
 export default function usePreview(previewID, isPreview) {
-    const previewURL = import.meta.env.VITE_PREVIEW_URL
+    const previewURL = import.meta.env.VITE_MAIN_URL
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -10,5 +10,5 @@ export default function usePreview(previewID, isPreview) {
         if (!previewID) return
         window.open(`${previewURL}/preview/${previewID}`, '_blank')
         dispatch({ type: "PREVIEW_FINISHED" })
-    }, [isPreview, previewID, previewURL]);
+    }, [dispatch, isPreview, previewID, previewURL]);
 }

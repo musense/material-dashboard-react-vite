@@ -23,6 +23,8 @@ import {
 
 export default function TagRightBody({ headerMap }) {
 
+    const id = useSelector((state) => state.getTagsReducer.selectedTag.id);
+
     const currentPage = useSelector(getCurrentPage);
     const showList = useSelector(getTagShowList);
     const totalPage = useSelector(getTotalPage);
@@ -77,6 +79,7 @@ export default function TagRightBody({ headerMap }) {
                 showList={showList}
                 handleOpenDialog={handleOpenDialog}
                 className={'tag'}
+                selectedId={id}
             />
         </form>
         <MessageDialog

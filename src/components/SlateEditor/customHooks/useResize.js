@@ -6,28 +6,30 @@ const useResize = () => {
 
     const preventDrag = useCallback((e) => {
         e.preventDefault();
-    }, [resizing]);
+    }, []);
 
-    const onMouseDown = useCallback(() => {
-        document.addEventListener("dragstart", preventDrag);
-        // document.querySelector("[data-slate-editor]>table").classList.add('resizing');
-        document.addEventListener("mousemove", onMouseMove);
-        document.addEventListener("mouseup", onMouseUp);
-        setResizing(true);
-    }, [setResizing, onMouseMove, onMouseUp])
-    const onMouseUp = useCallback(() => {
-        // document.querySelector("[data-slate-editor]>table").classList.remove('resizing');
-        document.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
-        document.removeEventListener("dragstart", preventDrag);
-        setResizing(false);
-    }, [setResizing, onMouseMove, onMouseUp])
     const onMouseMove = useCallback((e) => {
         setSize(currentSize => ({
             width: currentSize.width + e.movementX,
             height: currentSize.height + e.movementY
         }));
     }, [setSize])
+
+    const onMouseUp = useCallback(() => {
+        // document.querySelector("[data-slate-editor]>table").classList.remove('resizing');
+        onMouseMove && document.removeEventListener("mousemove", onMouseMove);
+        onMouseUp && document.removeEventListener("mouseup", onMouseUp);
+        document.removeEventListener("dragstart", preventDrag);
+        setResizing(false);
+    }, [setResizing, onMouseMove, preventDrag])
+
+    const onMouseDown = useCallback(() => {
+        document.addEventListener("dragstart", preventDrag);
+        // document.querySelector("[data-slate-editor]>table").classList.add('resizing');
+        onMouseMove && document.addEventListener("mousemove", onMouseMove);
+        onMouseUp && document.addEventListener("mouseup", onMouseUp);
+        setResizing(true);
+    }, [setResizing, onMouseMove, onMouseUp, preventDrag])
 
     return [size, onMouseDown, resizing];
 }

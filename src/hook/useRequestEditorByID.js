@@ -6,17 +6,17 @@ export default function useRequestEditorByID(id, editor) {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (editor) return
-        requestEditorByID(id)
-    }, []);
-
-    const requestEditorByID = (id) => {
+    const requestEditorByID = useCallback((id) => {
         dispatch({
             type: GetEditorAction.REQUEST_EDITOR_BY_ID,
             payload: {
                 data: id
             },
         });
-    }
+    }, [dispatch])
+
+    useEffect(() => {
+        if (editor) return
+        requestEditorByID(id)
+    }, [editor, id, requestEditorByID]);
 }

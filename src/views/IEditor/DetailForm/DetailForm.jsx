@@ -69,7 +69,7 @@ const DetailForm = ({ createType }) => {
                     tags={tags}
                     onPropertyChange={onPropertyChange} />
                 <Classification
-                    categories={categories}
+                    categories={categories[0]}
                     onPropertyChange={onPropertyChange} />
                 <Media
                     onPropertyChange={onPropertyChange}

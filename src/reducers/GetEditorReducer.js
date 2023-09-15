@@ -98,7 +98,10 @@ const getEditorReducer = (state = initialState, action) => {
     case GetEditorAction.REQUEST_EDITOR_SUCCESS:
       return {
         ...state,
-        editor: action.payload,
+        editor: {
+          ...action.payload,
+          categories: [action.payload.categories]
+        },
         errorMessage: errorMessage.getFinish
       }
     case GetEditorAction.UPDATE_EDITOR_SUCCESS:
@@ -139,6 +142,8 @@ const getEditorReducer = (state = initialState, action) => {
 
 export default getEditorReducer
 
+const getEditor = state => state.getEditorReducer.editor
+
 const getEditorList = state => state.getEditorReducer.titleList && [...state.getEditorReducer.titleList]
 const getCurrentPage = state => state.getEditorReducer.currentPage
 
@@ -157,6 +162,7 @@ const getEditorShowList = createSelector(
   })
 
 export {
+  getEditor,
   getCurrentPage,
   getTotalPage,
   getTotalCount,

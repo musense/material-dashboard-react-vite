@@ -25,12 +25,20 @@ const headerMap = {
         },
         { name: "排序", patchKey: "sort", type: "number", className: "flex-1" },
         { name: "超連結", patchKey: "hyperlink", type: "string", className: "flex-2" },
-        { name: "排程時間", patchKey: "startDate", type: "date", className: "flex-2" },
+        {
+            name: "排程時間",
+            patchKey: "startDate",
+            checkKey: ["eternal"],
+            showKeys: ["startDate", "endDate"],
+            type: "dateps",
+            className: "flex-2"
+        },
         { name: "狀態", patchKey: "status", type: "string", className: "flex-1" },
         {
             type: "__edit_cell__",
             copyText: "hyperlink",
             editType: GetBannerAction.EDITING_BANNER,
+            // cancelEditType: GetBannerAction.CANCEL_EDITING_BANNER,
             className: "flex-1"
         }
     ],
@@ -46,10 +54,10 @@ function BannerList() {
         if (BannerDispatchMessage.includes(returnMessage)) {
             dispatch({ type: GetBannerAction.REQUEST_BANNER })
         }
-        return () => {
-            dispatch({ type: GetBannerAction.CANCEL_EDITING_BANNER })
-        }
-    }, [returnMessage]);
+        // return () => {
+        //     dispatch({ type: GetBannerAction.CANCEL_EDITING_BANNER })
+        // }
+    }, [returnMessage, dispatch]);
 
     return (
         <div className={'manager-container'}>

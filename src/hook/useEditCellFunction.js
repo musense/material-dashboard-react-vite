@@ -9,7 +9,6 @@ export default function useEditCellFunction({
         name,
     },
     onEdit: {
-        selectedID = null,
         editType,
         editData,
         callback = null

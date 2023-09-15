@@ -24,7 +24,7 @@ import { getMaxSizeClassName } from '../../reducers/GetConfigReducer';
 export default function EditorRightWrapper({ headerMap }) {
 
     const maxSize = useSelector(getMaxSizeClassName);
-
+    const id = useSelector((state) => state.getClassReducer.editorClass.id);
     const currentPage = useSelector(getCurrentPage);
     const showList = useSelector(getClassShowList);
     const totalPage = useSelector(getTotalPage);
@@ -85,6 +85,7 @@ export default function EditorRightWrapper({ headerMap }) {
                                     showList={showList}
                                     handleOpenDialog={handleOpenDialog}
                                     className="editor-class"
+                                    selectedId={id}
                                 />
                             </form>
                         </CardBody>

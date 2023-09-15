@@ -14,13 +14,13 @@ import useRequestEditorByID from '../../../hook/useRequestEditorByID.js';
 import useBeforeUnloadSave from '../../../hook/useBeforeUnloadSave.js';
 import { useLoaderData } from 'react-router-dom';
 import getErrorMessage from '@utils/getErrorMessage.js';
+import { getEditor } from '@reducers/GetEditorReducer'
 
 function IEditor() {
 
   // const data = useLoaderData()
   const { id } = useParams();
-  const editor = useSelector((state) => state.getEditorReducer.editor);
-
+  const editor = useSelector(getEditor);
 
   const submitState = useSelector((state) => state.getSlateReducer.submitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
@@ -30,6 +30,7 @@ function IEditor() {
   const message = getErrorMessage(errorMessage, returnMessage)
 
 
+  console.log("🚀 ~ file: index.jsx:26 ~ IEditor ~ submitState:", submitState)
 
   const {
     title,

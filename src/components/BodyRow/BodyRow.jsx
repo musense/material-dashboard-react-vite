@@ -4,8 +4,8 @@ import BodyCell from "../BodyCell/BodyCell";
 import EditBodyCell from "../EditBodyCell/EditBodyCell";
 import { Stack } from "@mui/material";
 
-export default function BodyRow({ headerRow, item, handleOpenDialog, setMediaInfo }) {
-    return <div className='body-row'>
+export default function BodyRow({ headerRow, item, handleOpenDialog, setMediaInfo, className }) {
+    return <div className={`body-row ${className}`}>
         {headerRow.map((configItem, index) => {
             let cellContent
             if (configItem.patchKey?.includes(".")) {
@@ -49,6 +49,37 @@ export default function BodyRow({ headerRow, item, handleOpenDialog, setMediaInf
                     return <BodyCell
                         key={index}
                         children={getUpdateDateTime(cellContent)}
+                        className={configItem.className}
+                    />
+                }
+                case "datep": {
+                    return <BodyCell
+                        key={index}
+                        children={<Stack spacing={0} direction={'column'} >
+                            <span>{getUpdateDateTime(item[configItem.showKeys[0]])}</span>
+                            <span>~</span>
+                            <span>{getUpdateDateTime(item[configItem.showKeys[1]])}</span>
+                        </Stack>}
+                        className={configItem.className}
+                    />
+                }
+                case "dateps": {
+                    let content
+                    if (item[configItem.checkKey[0]] === true) {
+                        content = <span>常駐</span>
+                    } else {
+                        content = (<>
+                            <span>{getUpdateDateTime(item[configItem.showKeys[0]])}</span>
+                            <span>~</span>
+                            <span>{getUpdateDateTime(item[configItem.showKeys[1]])}</span>
+                        </>
+                        )
+                    }
+                    return <BodyCell
+                        key={index}
+                        children={<Stack spacing={0} direction={'column'} >
+                            {content}
+                        </Stack>}
                         className={configItem.className}
                     />
                 }

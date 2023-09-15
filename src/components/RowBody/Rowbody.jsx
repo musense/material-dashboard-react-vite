@@ -7,7 +7,8 @@ export default function RowBody({
     showList,
     handleOpenDialog,
     setMediaInfo = null,
-    className = ''
+    className = '',
+    selectedId = ''
 }) {
 
     const headerRow = headerConfig.headerRow
@@ -23,6 +24,7 @@ export default function RowBody({
                                 item={item}
                                 handleOpenDialog={handleOpenDialog}
                                 setMediaInfo={setMediaInfo}
+                                className={selectedId === item._id ? 'selected' : ''}
                             />
                         );
                     })

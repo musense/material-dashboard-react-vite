@@ -43,7 +43,7 @@ function TagList() {
         if (tagDispatchMessage.includes(returnMessage)) {
             dispatch({ type: GetTagsAction.REQUEST_TAG })
         }
-    }, [returnMessage]);
+    }, [returnMessage, dispatch]);
 
 
     return (

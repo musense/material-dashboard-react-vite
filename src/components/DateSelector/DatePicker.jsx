@@ -12,17 +12,18 @@ const DatePicker = ({
     setState
 }) => {
 
+    console.log("🚀 ~ file: DatePicker.jsx:16 ~ state:", state)
     const [value, setValue] = useState(dayjs(state));
-
-    useEffect(() => {
-        handleChange(dayjs(state));
-    }, [state]);
 
     const handleChange = useCallback((newValue) => {
         const formattedValue = newValue.format('YYYY-MM-DD');
         setValue(newValue)
         setState && setState(formattedValue)
     }, [setValue, setState])
+
+    useEffect(() => {
+        handleChange(dayjs(state));
+    }, [handleChange, state]);
 
     const styles = useMemo(() => ({
         height: height,

@@ -83,12 +83,6 @@ function RouterIndex() {
                             path: ":id",
                             name: "編輯文章",
                             element: <IEditor />,
-                            loader: async ({ params, request: { signal } }) => {
-                                const res = await instance.get(`/editor/${params.id}`, { signal })
-
-
-                                return res.data
-                            }
                         },
                     ]
                 },

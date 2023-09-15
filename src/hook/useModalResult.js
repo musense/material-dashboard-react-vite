@@ -68,18 +68,6 @@ export default function useModalResult({
                 setSuccess(false)
                 break;
             }
-            case "ERR_NETWORK": {
-                setTitle("註冊失敗")
-                setContent("請重新檢查填入資訊！")
-                setSuccess(false)
-                break;
-            }
-            case "ERR_NETWORK": {
-                setTitle("註冊失敗")
-                setContent("連線錯誤！")
-                setSuccess(false)
-                break;
-            }
             case "Password error": {
                 setTitle("註冊失敗")
                 setContent("密碼規則錯誤！需英文大小寫+數字共六碼！")
@@ -104,6 +92,16 @@ export default function useModalResult({
                     setContent('文章標題不可重複！')
                 } else {
                     setContent(`${name}名稱不可重複！`)
+                }
+                setSuccess(false)
+                return
+            }
+            case 'duplicate sorting error': {
+                setTitle('Failed!')
+                if (isEditor) {
+                    setContent('排序不可重複！')
+                } else {
+                    setContent(`${name}排序不可重複！`)
                 }
                 setSuccess(false)
                 return

@@ -2,6 +2,9 @@ import getSortedList from '@utils/getSortedList';
 import *  as GetBannerAction from '../actions/GetBannerAction';
 import { errorMessage } from './errorMessage';
 import { createSelector } from 'reselect'
+import dayjs from 'dayjs';
+import flattenObj from '../utils/flattenObj';
+import getSubmitObject from '../utils/getSubmitState';
 
 const initialState = {
     sortingMap: {
@@ -27,16 +30,19 @@ const initialState = {
             hyperlink: '',
         },
         publishInfo: {
-            isEternal: false,
-            isDisplay: false,
+            isOnShelvesImmediate: false,
+            eternal: false,
+            display: false,
             isScheduled: false,
             scheduledAt: {
-                startDate: '',
-                endDate: ''
+                startDate: null,
+                endDate: null
             }
         }
     },
     showUrl: '',
+    updateInitialState: null,
+    submitState: null,
     currentPage: null,
     totalCount: null,
     isEditing: false,
@@ -50,7 +56,11 @@ const getBannerReducer = (state = initialState, action) => {
                 ...state,
                 selectedBanner: {
                     ...initialState.selectedBanner,
+                    ...initialState.selectedBanner.media,
+                    ...initialState.selectedBanner.publishInfo,
+                    ...initialState.selectedBanner.publishInfo.scheduledAt,
                 },
+                showUrl: '',
                 isEditing: false
             }
         }
@@ -68,6 +78,7 @@ const getBannerReducer = (state = initialState, action) => {
                     selectedBanner: {
                         ...state.selectedBanner,
                         [property]: value,
+                        [`!~${property}`]: state.updateInitialState ? state.updateInitialState[property] : undefined,
                     }
                 }
             }
@@ -79,6 +90,7 @@ const getBannerReducer = (state = initialState, action) => {
                         [info]: {
                             ...state.selectedBanner[info],
                             [property]: value,
+                            [`!~${property}`]: state.updateInitialState && state.updateInitialState[info][property],
                         }
                     }
                 }
@@ -92,43 +104,49 @@ const getBannerReducer = (state = initialState, action) => {
                         [detail]: {
                             ...state.selectedBanner[info][detail],
                             [property]: value,
+                            [`!~${property}`]: state.updateInitialState && state.updateInitialState[info][detail][property],
                         }
                     }
                 }
             }
         }
-        case GetBannerAction.EDITING_BANNER:
-            const banner = action.payload.data;
-            console.log("🚀 ~ file: GetBannerReducer.js:81 ~ getBannerReducer ~ banner:", banner)
+        case GetBannerAction.EDITING_BANNER: {
+            const {
+                ...props
+            } = action.payload.data
+
+            const selectedBanner = {
+                _id: props._id,
+                name: props.name,
+                serialNumber: props.serialNumber,
+                sort: props.sort,
+                remark: props.remark,
+                status: props.status,
+                eternal: props.eternal ?? false,
+                display: props.display ?? false,
+                media: {
+                    homeImagePath: props.homeImagePath,
+                    contentImagePath: props.contentImagePath,
+                    hyperlink: props.hyperlink,
+                },
+                publishInfo: {
+                    eternal: props.eternal ?? false,
+                    display: props.display ?? false,
+                    isScheduled: props.eternal || props.startDate || props.endDate ? true : false,
+                    scheduledAt: {
+                        startDate: props.startDate,
+                        endDate: props.endDate
+                    }
+                }
+            }
             return {
                 ...state,
-                selectedBanner: {
-                    _id: banner._id,
-                    name: banner.name,
-                    serialNumber: banner.serialNumber,
-                    sort: banner.sort,
-                    remark: banner.remark,
-                    status: banner.status,
-                    eternal: banner.eternal,
-                    display: banner.display,
-                    media: {
-                        homeImagePath: banner.homeImagePath,
-                        contentImagePath: banner.contentImagePath,
-                        hyperlink: banner.hyperlink,
-                    },
-                    publishInfo: {
-                        isEternal: banner.eternal,
-                        isDisplay: banner.display,
-                        isScheduled: banner.startDate || banner.endDate ? true : false,
-                        scheduledAt: {
-                            startDate: banner.startDate,
-                            endDate: banner.endDate
-                        }
-                    }
-                },
-                showUrl: banner.homeImagePath,
+                selectedBanner: selectedBanner,
+                updateInitialState: selectedBanner,
+                showUrl: props.homeImagePath,
                 isEditing: true,
             }
+        }
         case GetBannerAction.ADD_BANNER_SUCCESS:
             return {
                 ...state,
@@ -137,7 +155,7 @@ const getBannerReducer = (state = initialState, action) => {
         case GetBannerAction.UPDATE_BANNER_SUCCESS:
             return {
                 ...state,
-                bannerList: action.payload,
+                // bannerList: action.payload,
                 errorMessage: errorMessage.updateSuccess
             }
         case GetBannerAction.DELETE_BANNER_SUCCESS:
@@ -149,11 +167,15 @@ const getBannerReducer = (state = initialState, action) => {
         case GetBannerAction.ADD_BANNER_FAIL:
         case GetBannerAction.UPDATE_BANNER_FAIL:
         case GetBannerAction.DELETE_BANNER_FAIL: {
+            const serverErrorMessage = action.payload.errorMessage
             let errorMessage;
-            if (action.payload.errorMessage.indexOf('E11000 duplicate key error') !== -1) {
+            console.log("🚀 ~ file: GetBannerReducer.js:170 ~ getBannerReducer ~ serverErrorMessage:", serverErrorMessage)
+            if (serverErrorMessage.indexOf('E11000 duplicate key error') !== -1 && serverErrorMessage.indexOf('sort_1') !== -1) {
+                errorMessage = 'duplicate sorting error'
+            } else if (serverErrorMessage.indexOf('E11000 duplicate key error') !== -1) {
                 errorMessage = 'duplicate key error'
             } else {
-                errorMessage = action.payload.errorMessage
+                errorMessage = serverErrorMessage
             }
             return {
                 ...state,
@@ -206,6 +228,31 @@ const getBannerReducer = (state = initialState, action) => {
                 errorMessage: action.payload.message
             }
         }
+        case GetBannerAction.CHECK_BANNER_BEFORE_SUBMIT: {
+            let submitState = {}
+            const createType = action.payload.createType;
+            if (createType === 'add_new') {
+                submitState = { ...state.selectedBanner }
+                console.log("🚀 ~ file: GetBannerReducer.js:230 ~ getBannerReducer ~ submitState:", submitState)
+            } else {
+                const selectedBanner = flattenObj({ ...state.selectedBanner })
+
+                submitState = getSubmitObject(selectedBanner)
+                console.log("🚀 ~ file: GetBannerReducer.js:237 ~ getBannerReducer ~ submitState:", submitState)
+
+            }
+            return {
+                ...state,
+                submitState: submitState,
+                updateInitialState: null,
+            }
+        }
+        case GetBannerAction.RESET_BANNER_SUBMIT_STATE: {
+            return {
+                ...state,
+                submitState: null
+            }
+        }
         case GetBannerAction.UPDATE_BANNER:
         case GetBannerAction.DELETE_BANNER:
             return {
@@ -256,12 +303,35 @@ const getBannerShowList = createSelector(
     })
 
 const getSelectedBanner = state => state.getBannerReducer.selectedBanner && state.getBannerReducer.selectedBanner
-const getSelectedBannerMedia = state => state.getBannerReducer.selectedBanner?.media
-const getSelectedBannerPublishInfo = state => state.getBannerReducer.selectedBanner?.publishInfo
-const getSelectedBannerPublishInfoSchedulePeriod = state => state.getBannerReducer.selectedBanner?.publishInfo.scheduledAt
+
+const getSelectedBannerMedia = createSelector(
+    [getSelectedBanner],
+    (selectedBanner) => selectedBanner?.media
+)
+
+const getSelectedBannerPublishInfo = createSelector(
+    [getSelectedBanner],
+    (selectedBanner) => selectedBanner?.publishInfo
+)
+
+const getSelectedBannerPublishInfoSchedulePeriod = createSelector(
+    [getSelectedBannerPublishInfo],
+    (publishInfo) => publishInfo?.scheduledAt
+)
+
+const getStartDate = createSelector(
+    [getSelectedBannerPublishInfoSchedulePeriod],
+    (scheduledAt) => scheduledAt.startDate
+)
+
+const getEndDate = createSelector(
+    [getSelectedBannerPublishInfoSchedulePeriod],
+    (scheduledAt) => scheduledAt.endDate
+)
 
 
 
+const getSubmitState = (state) => state.getBannerReducer?.submitState && state.getBannerReducer.submitState
 
 export {
     getBannerList,
@@ -278,4 +348,7 @@ export {
     getSelectedBannerMedia,
     getSelectedBannerPublishInfo,
     getSelectedBannerPublishInfoSchedulePeriod,
+    getStartDate,
+    getEndDate,
+    getSubmitState
 }

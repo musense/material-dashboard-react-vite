@@ -1,6 +1,6 @@
 import * as GetSlateAction from './../actions/GetSlateAction';
-import recurseCheckAndDelete from '@utils/recurseCheckAndDelete';
-import generateErrorMessage from '@utils/generateErrorMessage';
+import recurseCheckAndDelete from '../utils/recurseCheckAndDelete';
+import generateErrorMessage from '../utils/generateErrorMessage';
 
 const initialState = {
   contentForm: {
@@ -21,7 +21,8 @@ const initialState = {
       sitemapUrl: '',
     },
     tags: null,
-    categories: null,
+    // initialValue須給array
+    categories: [],
     media: {
       contentImagePath: '',
       homeImagePath: '',
@@ -77,7 +78,7 @@ const getSlateReducer = (state = initialState, action) => {
           headTitle: props.webHeader.headTitle || '',
           headDescription: props.webHeader.headDescription || '',
           headKeyword: props.webHeader.headKeyword || '',
-          manualUrl: props.webHeader.manualUrl || '',
+          manualUrl: '',
           sitemapUrl: props.sitemapUrl,
         },
         tags: props.tags || initialState.detailForm.tags,
@@ -117,7 +118,7 @@ const getSlateReducer = (state = initialState, action) => {
       }
     }
     case GetSlateAction.SET_PROPERTY: {
-      const { form, info, property, value } = action.payload.allProps
+      const { form, info, property, value = null } = action.payload.allProps
       return info ? {
         ...state,
         [form]: {
@@ -135,7 +136,6 @@ const getSlateReducer = (state = initialState, action) => {
         }
       }
     }
-
     case GetSlateAction.CHECK_BEFORE_SUBMIT: {
       const isPreview = action.payload.isPreview
       const submitState = JSON.parse(JSON.stringify({ ...state.contentForm, ...state.detailForm }))

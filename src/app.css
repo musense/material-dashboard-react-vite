@@ -92,8 +92,9 @@ input {
 }
 
 .left-wrapper {
-  min-width: 400px;
-  width: fit-content;
+  /* min-width: 400px; */
+  /* width: fit-content; */
+  width: 400px;
 }
 
 .right-wrapper {
@@ -160,6 +161,19 @@ input {
   display: flex;
   flex-direction: row;
   height: fit-content;
+}
+
+.body-row:nth-child(2n-1) {
+  background-color: #eee;
+}
+
+.body-row:nth-child(2n) {
+  background-color: #ccc;
+}
+
+.body-row:hover,
+.body-row.selected {
+  background-color: lightcyan;
 }
 
 .header-cell,
@@ -249,13 +263,6 @@ input {
   gap: 20px;
 }
 
-.body-row:nth-child(2n-1) {
-  background-color: #eee;
-}
-
-.body-row:nth-child(2n) {
-  background-color: #ccc;
-}
 
 .edit-icon-wrapper {
   --edit-icon-size: 35px;
@@ -355,7 +362,7 @@ input {
 
 .banner-submit-form {
   height: fit-content;
-  /* padding-right: 10px; */
+  padding-right: 10px;
 }
 
 .banner-submit-form textarea {

@@ -15,18 +15,19 @@ import CardHeader from "@components/Card/CardHeader.jsx";
 
 import customTabsStyle from "@assets/jss/material-dashboard-react/components/customTabsStyle.jsx";
 
-function CustomTabs({ ...props }) {
-  const [value, setvalue] = useState(0);
-  const handleChange = (value) => setvalue(value);
 
-  const { classes, headerColor, plainTabs, tabs, title } = props;
+function CustomTabs({ ...props }) {
+  const [value, setValue] = useState(0);
+  const handleChange = (e, newValue) => setValue(newValue)
+
+  const { classes, headerColor, plainTabs, tabs, title, color, className } = props;
 
   const cardTitle = classNames({
     [classes.cardTitle]: true
   });
   return (
     <Card plain={plainTabs}>
-      <CardHeader color={headerColor} plain={plainTabs}>
+      <CardHeader color={headerColor} plain={plainTabs} className={className}>
         {title !== undefined ? <div className={cardTitle}>{title}</div> : null}
         <Tabs
           value={value}

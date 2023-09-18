@@ -1,4 +1,4 @@
-import { GetDefaultBannerList } from "@api/saga/GetBannerList"
+import { GetDefaultBannerList } from "@api/banner"
 import * as GetBannerAction from '@actions/GetBannerAction';
 
 const bannerListGetter = (dispatch) => async ({ request: { signal } }) => {

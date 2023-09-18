@@ -3,6 +3,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import cardHeaderStyle from "@assets/jss/material-dashboard-react/components/cardHeaderStyle.jsx";
+import './CardHeader.css'
 
 function CardHeader({ ...props }) {
   const {
@@ -15,6 +16,7 @@ function CardHeader({ ...props }) {
     icon,
     ...rest
   } = props;
+
   const cardHeaderClasses = classNames({
     [classes.cardHeader]: true,
     [classes[color + "CardHeader"]]: color,
@@ -24,7 +26,10 @@ function CardHeader({ ...props }) {
     [className]: className !== undefined
   });
   return (
-    <div className={cardHeaderClasses} {...rest}>
+    <div
+      className={cardHeaderClasses}
+      {...rest}
+    >
       {children}
     </div>
   );

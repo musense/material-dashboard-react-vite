@@ -17,6 +17,7 @@
     "test": "react-scripts test --env=jsdom"
   },
   "dependencies": {
+    "@atlaskit/theme": "12.3.0",
     "@emotion/css": "^11.10.6",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -37,6 +38,7 @@
     "image-extensions": "^1.1.0",
     "interweave": "^12.8.0",
     "is-url": "^1.2.4",
+    "memoize-one": "6.0.0",
     "prop-types": "15.7.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
@@ -59,9 +61,11 @@
     "slate": "^0.91.4",
     "slate-history": "^0.86.0",
     "slate-react": "^0.92.0",
+    "styled-components": "5.3.9",
     "typescript": "^5.0.2"
   },
   "devDependencies": {
+    "@types/styled-components": "^5.1.27",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react-swc": "^3.3.2",

@@ -5,39 +5,76 @@ import MyScrollbar from "../../components/MyScrollbar/MyScrollbar";
 import { colors } from '@atlaskit/theme';
 import styled from 'styled-components'
 import Item, { grid } from "./Item";
+import ContentsFilterInput from "./ContentFilterInput";
+import * as GetEditorAction from "../../actions/GetEditorAction.js";
+import { useDispatch, useSelector } from 'react-redux';
 
-const mainStyle = {
-    display: "flex",
-    justifyContent: "space-evenly",
-    // flexDirection: "row",
-    // gap: "50px",
-    // alignItems: "flex-start",
-    // width: "100%",
-    // height: "100%"
-}
+const droppableHeight = 630
+export const borderRadius = 2;
+// const getListStyle = isDraggingOver => ({
+//     background: isDraggingOver ? "lightblue" : "lightgrey",
+//     padding: grid,
+//     width: 500
+// });
 
-const getListStyle = isDraggingOver => ({
-    background: isDraggingOver ? "lightblue" : "lightgrey",
-    padding: grid,
-    width: 500
-});
+const DropHeader = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    &>div{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+`
+const DropBody = DropHeader
 
 const TitleH2 = styled.h2`
     width: 500px;
     text-align: center;
+    margin: 0;
 `
 const DraggableWrapper = styled.div`
   padding: ${grid}px;
-  min-height: 200px;
-  height: fit-content;
+  width: 500px;
   flex-grow: 1;
   transition: background-color 0.2s ease;
   ${(props) =>
-        props.isDraggingOver ? `background-color: lightblue` : `background-color: lightgrey`};
+        props.isDraggingOver
+            ? `background-color: lightblue`
+            : `background-color: lightgrey`
+    };
 `;
 
-export default function EditorTypeList({ type, notList, list }) {
+const SubmitButton = styled.button`
+    border: none;
+    height: 1.8rem;
+    width: 180px;
+    color: white;
+    background-color: darkviolet;
+    cursor: pointer;
+    align-self: flex-end;
+    &:hover{
+        background-color: violet;
+    }
+`
 
+const typeMap = new Map([
+    ["top", "置頂"],
+    ["popular", "熱門"],
+    ["recommend", "推薦"],
+])
+export default function EditorTypeList({ type, notList, list }) {
+    const dispatch = useDispatch();
+    console.log("🚀 ~ file: EditorTypeList.jsx:52 ~ EditorTypeList ~ list:", list)
+    console.log("🚀 ~ file: EditorTypeList.jsx:52 ~ EditorTypeList ~ notList:", notList)
+
+    const [lastDispatchList, setLastDispatchList] = useState([]);
+    const [dispatchList, setDispatchList] = useState([]);
+    const [removeList, setRemoveList] = useState([]);
+    console.log("🚀 ~ file: EditorTypeList.jsx:56 ~ EditorTypeList ~ dispatchList:", dispatchList)
+    console.log("🚀 ~ file: EditorTypeList.jsx:56 ~ EditorTypeList ~ removeList:", removeList)
     const [state, setState] = useState(
         {
             notList:
@@ -47,6 +84,15 @@ export default function EditorTypeList({ type, notList, list }) {
                 { items: [] }
         }
     );
+
+    const setDispatchListFunction = useCallback((list) => {
+        const sortingList = list.map((item, index) => {
+            return ({
+                [item._id]: index + 1
+            });
+        });
+        setDispatchList(sortingList);
+    }, [])
 
     useEffect(() => {
         if (notList) {
@@ -68,9 +114,11 @@ export default function EditorTypeList({ type, notList, list }) {
                     items: [...list]
                 }
             }))
+            setDispatchListFunction(list);
         }
 
-    }, [notList, list]);
+    }, [notList, list, setDispatchListFunction]);
+
 
     const onDragEnd = (event) => {
         const { source, destination } = event;
@@ -98,49 +146,107 @@ export default function EditorTypeList({ type, notList, list }) {
 
         // set state新的 state
         setState(newItemObj);
-
-        // 計算sprint內的分數總和
-        // const newTotalScoreSum = newItemObj.sprintList.items.reduce(
-        //   (acc, val) => acc + val.score,
-        //   0
-        // );
-        // setTotalScoreSum(newTotalScoreSum);
+        if (source.droppableId !== destination.droppableId && destination.droppableId === 'notList') {
+            const filteredList = newItemObj[source.droppableId].items.filter(item => item[remove._id] === undefined)
+            setDispatchListFunction(filteredList)
+            setRemoveList(prevState => [
+                ...prevState,
+                { [remove._id]: -1 }
+            ])
+        }
+        if (destination.droppableId === 'list') {
+            setDispatchListFunction(newItemObj[destination.droppableId].items)
+        }
     };
+
+    const onReset = () => {
+        setState(({
+            notList: {
+                items: notList
+            },
+            list: {
+                items: list
+            }
+        }))
+    }
+
+    const onSubmit = useCallback(() => {
+        if (JSON.stringify([
+            ...dispatchList,
+            ...removeList
+        ]) === JSON.stringify(lastDispatchList)) return
+
+        if (type === 'top' && dispatchList.length > 2) {
+            // modal alert
+            // length larger than 2 will not be cut off but only the top 2 will be showed on the index page
+            console.log("🚀 ~ file: EditorTypeList.jsx:183 ~ onSubmit ~ dispatchList:", dispatchList)
+        }
+
+        if (type === 'popular' && dispatchList.length > 5) {
+            // modal alert
+            // length larger than 5 will be cut off due to useless
+            dispatchList.splice(5, dispatchList.length)
+            console.log("🚀 ~ file: EditorTypeList.jsx:183 ~ onSubmit ~ dispatchList:", dispatchList)
+        }
+
+        dispatch({
+            type: GetEditorAction.BUNCH_MODIFY_TYPE_LIST,
+            payload: {
+                type: type,
+                list: [
+                    ...dispatchList,
+                    ...removeList
+                ]
+            }
+        })
+        setLastDispatchList([
+            ...dispatchList,
+            ...removeList
+        ])
+    }, [dispatch, dispatchList, removeList, type, lastDispatchList])
+
     return <div>
-        <div style={mainStyle}>
-            <TitleH2>非{type}文章</TitleH2>
-            <TitleH2>{type}文章</TitleH2>
-        </div>
-        <div style={mainStyle}>
+        <DropHeader>
+            <div>
+                <TitleH2>非{typeMap.get(type)}文章</TitleH2>
+                <ContentsFilterInput type={type} />
+            </div>
+            <div>
+                <TitleH2>{typeMap.get(type)}文章</TitleH2>
+                <SubmitButton onClick={onSubmit}>確認</SubmitButton>
+            </div>
+        </DropHeader>
+        <DropBody>
             <DragDropContext onDragEnd={onDragEnd}>
                 {Object.keys(state).map((key, ind) => (
-                    <MyScrollbar key={ind} height="700px">
+                    <MyScrollbar key={ind} height={`${droppableHeight}px`}>
                         <Droppable droppableId={key}>
                             {(provided, snapshot) => (
                                 <DraggableWrapper
                                     ref={provided.innerRef}
+                                    className={key}
                                     isDraggingOver={snapshot.isDraggingOver}
-                                    style={getListStyle(snapshot.isDraggingOver)}
                                     {...provided.droppableProps}
                                 >
                                     {state[key]?.items.map((el, index) => (
                                         <Item
+                                            droppableId={key}
                                             key={el._id}
                                             item={el}
                                             index={index}
                                         />
                                     ))}
+                                    {provided.placeholder}
                                 </DraggableWrapper>
-
                             )}
                         </Droppable>
                     </MyScrollbar>
-
                 ))}
-
             </DragDropContext>
-        </div>
+        </DropBody>
     </div>
+
+
 }
 
 

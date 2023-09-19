@@ -22,10 +22,10 @@
     transition: all 0.2s ease-in-out;
 }
 
-.CardHeader-tabs button:hover,
+/* .CardHeader-tabs button:hover,
 .CardHeader-tabs button.Mui-selected {
     bottom: 10px !important;
-}
+} */
 
 .CardHeader-tabs button>span:first-child {
     font-size: 1.3em;

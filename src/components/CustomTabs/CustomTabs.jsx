@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -18,13 +18,24 @@ import customTabsStyle from "@assets/jss/material-dashboard-react/components/cus
 
 function CustomTabs({ ...props }) {
   const [value, setValue] = useState(0);
-  const handleChange = (e, newValue) => setValue(newValue)
 
-  const { classes, headerColor, plainTabs, tabs, title, color, className } = props;
+  const {
+    classes,
+    headerColor,
+    plainTabs,
+    tabs,
+    title,
+    color,
+    className,
+    onClick,
+  } = props;
+
+  const handleChange = (e, newValue) => setValue(newValue)
 
   const cardTitle = classNames({
     [classes.cardTitle]: true
   });
+
   return (
     <Card plain={plainTabs}>
       <CardHeader color={headerColor} plain={plainTabs} className={className}>
@@ -56,6 +67,7 @@ function CustomTabs({ ...props }) {
                   selected: classes.tabSelected,
                   wrapper: classes.tabWrapper,
                 }}
+                onClick={prop.onClick}
                 key={key}
                 label={prop.tabName}
                 {...icon}

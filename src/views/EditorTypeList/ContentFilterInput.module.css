@@ -1,0 +1,46 @@
+.content-filter-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+
+    .filter-button {
+        border: none;
+        height: 1.8rem;
+        width: 180px;
+        color: white;
+        background-color: darkviolet;
+        cursor: pointer;
+    }
+
+    .filter-button:hover {
+        background-color: violet;
+    }
+
+    .filter-input {
+        height: 40px;
+        width: 150px;
+        font-size: .875rem;
+        border: 1px solid black;
+        border-radius: 4px;
+    }
+
+
+    @media (max-width: 768px) {
+        >* {
+            height: 3.5rem;
+        }
+
+        .filter-button {
+            width: 5rem;
+        }
+
+        .filter-input {
+            width: 17rem;
+            font-size: 1.5rem;
+            padding: 0 1.2rem;
+        }
+    }
+}

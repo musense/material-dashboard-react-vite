@@ -35,7 +35,7 @@ const customTabsStyle = {
       background: "linear-gradient(60deg, #ab47bc, #8e24aa)",
       boxShadow: "0 4px 20px 0 rgba(0, 0, 0,.14), 0 7px 10px -5px rgba(156, 39, 176,.4) !important",
       opacity: "1",
-      bottom: "10px",
+      // bottom: "10px",
       transition: "0.2s opacity 0.1s, 0.2s background-color 0.1s, 0.2s bottom 0.1s",
       "&:last-child": {
         marginLeft: "0px"

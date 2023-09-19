@@ -7,7 +7,7 @@ import { getGetErrorMessage } from '../apiHelperFunc';
 function* GetTopContentList(payload = { page: 1 }) {
     const { page } = payload;
     try {
-        const response = yield instance.get(`/editor/topAndNews?pageNumber=${page}&limit=10`);
+        const response = yield instance.get(`/editor/topAndNews?pageNumber=${page}&limit=9999`);
         const responseData = yield response.data
         console.log("🚀 ~ file: GetEditorTypeList.js:12 ~ function*GetTopContentList ~ responseData:", responseData)
         const { totalCount, currentPage, data: topTitleList } = responseData
@@ -29,7 +29,7 @@ function* GetTopContentList(payload = { page: 1 }) {
 function* GetNotTopWithSearchList(payload = { page: 1, search: '' }) {
     const { page, search } = payload
     try {
-        const response = yield instance.get(`/editor/searchUntop?pageNumber=${page}&limit=10&name=${search}`);
+        const response = yield instance.get(`/editor/searchUntop?pageNumber=${page}&limit=9999&name=${search}`);
         const responseData = yield response.data
         console.log("🚀 ~ file: GetEditorTypeList.js:34 ~ function*GetNotTopWithSearchList ~ responseData:", responseData)
         const { totalCount, currentPage, data: notTopTitleList } = responseData
@@ -51,7 +51,7 @@ function* GetNotTopWithSearchList(payload = { page: 1, search: '' }) {
 function* GetHotContentList(payload = { page: 1 }) {
     const { page } = payload;
     try {
-        const response = yield instance.get(`/editor/popular?pageNumber=${page}&limit=10`);
+        const response = yield instance.get(`/editor/popular?pageNumber=${page}&limit=9999`);
         const responseData = yield response.data
         const { totalCount, currentPage, data: hotTitleList } = responseData
 
@@ -72,7 +72,7 @@ function* GetHotContentList(payload = { page: 1 }) {
 function* GetNotHotWithSearchList(payload = { page: 1, search: '' }) {
     const { page, search } = payload
     try {
-        const response = yield instance.get(`/editor/searchUnpopular?pageNumber=${page}limit=10&name=${search}`);
+        const response = yield instance.get(`/editor/searchUnpopular?pageNumber=${page}limit=9999&name=${search}`);
         const responseData = yield response.data
         const { totalCount, currentPage, data: notHotTitleList } = responseData
 
@@ -93,7 +93,7 @@ function* GetNotHotWithSearchList(payload = { page: 1, search: '' }) {
 function* GetRecommendContentList(payload = { page: 1 }) {
     const { page } = payload;
     try {
-        const response = yield instance.get(`/editor/recommend?pageNumber=${page}&limit=10`);
+        const response = yield instance.get(`/editor/recommend?pageNumber=${page}&limit=9999`);
         const responseData = yield response.data
         const { totalCount, currentPage, data: recommendTitleList } = responseData
 
@@ -114,7 +114,7 @@ function* GetRecommendContentList(payload = { page: 1 }) {
 function* GetNotRecommendWithSearchList(payload = { page: 1, search: '' }) {
     const { page, search } = payload
     try {
-        const response = yield instance.get(`/editor/searchUnrecommend?pageNumber=${page}&limit=10&name=${search}`);
+        const response = yield instance.get(`/editor/searchUnrecommend?pageNumber=${page}&limit=9999&name=${search}`);
         const responseData = yield response.data
         const { totalCount, currentPage, data: notRecommendTitleList } = responseData
 
@@ -128,6 +128,72 @@ function* GetNotRecommendWithSearchList(payload = { page: 1, search: '' }) {
         })
     } catch (error) {
         yield getGetErrorMessage(error, GetEditorAction.REQUEST_RECOMMEND_EDITOR_FAIL)
+    }
+}
+
+// PATCH
+function* TopBunchModifyList(payload = { list: [] }) {
+    const { list } = payload
+    try {
+        const response = yield instance.patch(`/editor/top/bunchModifiedByIds`, {
+            'ids': list
+        });
+        const responseData = yield response.data
+        const { updateCount, failedCount } = responseData
+
+        yield put({
+            type: GetEditorAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
+            payload: {
+                updateCount: parseInt(updateCount),
+                failedCount: parseInt(failedCount),
+            }
+        })
+    } catch (error) {
+        yield getGetErrorMessage(error, GetEditorAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
+    }
+}
+
+// PATCH
+function* PopularBunchModifyList(payload = { list: [] }) {
+    const { list } = payload
+    try {
+        const response = yield instance.patch(`/editor/popular/bunchModifiedByIds`, {
+            'ids': list
+        });
+        const responseData = yield response.data
+        const { updateCount, failedCount } = responseData
+
+        yield put({
+            type: GetEditorAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
+            payload: {
+                updateCount: parseInt(updateCount),
+                failedCount: parseInt(failedCount),
+            }
+        })
+    } catch (error) {
+        yield getGetErrorMessage(error, GetEditorAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
+    }
+}
+
+// PATCH
+function* RecommendBunchModifyList(payload = { list: [] }) {
+    const { list } = payload
+    try {
+        const response = yield instance.patch(`/editor/recommend/bunchModifiedByIds`, {
+            'ids': list
+        });
+        const responseData = yield response.data
+        const { updateCount, failedCount } = responseData
+
+        yield put({
+            type: GetEditorAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
+            payload: {
+                updateCount: parseInt(updateCount),
+                failedCount: parseInt(failedCount),
+            }
+        })
+    } catch (error) {
+        yield getGetErrorMessage(error, GetEditorAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
     }
 }
 
@@ -180,6 +246,50 @@ function* watchGetNotRecommendEditorSaga() {
     }
 }
 
+function* watchBunchModifyEditorTypeSaga() {
+    while (true) {
+        const { payload } = yield take(GetEditorAction.BUNCH_MODIFY_TYPE_LIST)
+        switch (payload.type) {
+            case 'top': {
+                yield TopBunchModifyList(payload)
+            }
+                break;
+            case 'popular': {
+                yield PopularBunchModifyList(payload)
+            }
+                break;
+            case 'recommend': {
+                yield RecommendBunchModifyList(payload)
+            }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+function* watchSearchEditorTypeSaga() {
+    while (true) {
+        const { payload } = yield take(GetEditorAction.SEARCH_EDITOR_TYPE_LIST)
+        switch (payload.type) {
+            case 'top': {
+                yield GetNotTopWithSearchList(payload)
+            }
+                break;
+            case 'popular': {
+                yield GetNotHotWithSearchList(payload)
+            }
+                break;
+            case 'recommend': {
+                yield GetNotRecommendWithSearchList(payload)
+            }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 function* mySaga() {
     yield all([
         watchGetTopEditorSaga(),
@@ -187,7 +297,9 @@ function* mySaga() {
         watchGetHotEditorSaga(),
         watchGetNotHotEditorSaga(),
         watchGetRecommendEditorSaga(),
-        watchGetNotRecommendEditorSaga()
+        watchGetNotRecommendEditorSaga(),
+        watchBunchModifyEditorTypeSaga(),
+        watchSearchEditorTypeSaga(),
     ])
 }
 

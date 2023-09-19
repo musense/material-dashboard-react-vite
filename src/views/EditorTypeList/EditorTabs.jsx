@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Card from "@components/Card/Card.jsx";
 import CardBody from "@components/Card/CardBody.jsx";
 import CardFooter from "@components/Card/CardFooter.jsx";
@@ -9,14 +9,17 @@ import GridContainer from "@components/Grid/GridContainer.jsx";
 import GridItem from "@components/Grid/GridItem.jsx";
 
 import { useDispatch, useSelector } from 'react-redux';
-import useQuery from '../../hook/useQuery.js';
+import searchMap from '../../hook/useQuery.js';
 import * as GetEditorAction from "../../actions/GetEditorAction.js";
 import { getHotList, getNotHotList, getNotRecommendList, getNotTopList, getRecommendList, getTopList } from '../../reducers/GetEditorReducer.js';
 import EditorTypeList from './EditorTypeList.jsx';
+import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
 
 export default function EditorTabs() {
 
-    const search = new useQuery()
+    const location = useLocation();
+    console.log("🚀 ~ file: EditorTabs.jsx:21 ~ EditorTabs ~ location:", location)
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const topList = useSelector(getTopList)
@@ -25,107 +28,112 @@ export default function EditorTabs() {
     const notHotList = useSelector(getNotHotList)
     const recommendList = useSelector(getRecommendList)
     const notRecommendList = useSelector(getNotRecommendList)
-    console.log("🚀 ~ file: EditorTypeHeader.jsx:54 ~ EditorTabs ~ topList:", topList)
-    console.log("🚀 ~ file: EditorTypeHeader.jsx:54 ~ EditorTabs ~ notTopList:", notTopList)
+
+    const search = new searchMap()
+    const type = search.get('type') ?? 'top'
+    console.log("🚀 ~ file: EditorTabs.jsx:34 ~ EditorTabs ~ type:", type)
+
+    const GetDefaultTypeList = useCallback((actionType) => {
+        if (actionType === '') return
+        dispatch({
+            type: GetEditorAction[actionType]
+        });
+    }, [dispatch])
+
+    const GetDefaultNotTypeList = useCallback(() => {
+        dispatch({
+            type: GetEditorAction.SEARCH_EDITOR_TYPE_LIST,
+            payload: {
+                search: '',
+                type: type,
+                page: 1
+            }
+        });
+    }, [dispatch, type])
+
     useEffect(() => {
-        console.log("🚀 ~ file: index.jsx:23 ~ EditorTypeList ~ search:", search)
-        console.log("🚀 ~ file: index.jsx:23 ~ EditorTypeList ~ search.get('type'):", search.get('type'))
-        dispatch({
-            type: GetEditorAction.REQUEST_TOP_EDITOR
-        })
-        dispatch({
-            type: GetEditorAction.SEARCH_NOT_TOP_EDITOR_LIST
-        })
-        dispatch({
-            type: GetEditorAction.REQUEST_HOT_EDITOR
-        })
-        dispatch({
-            type: GetEditorAction.SEARCH_NOT_HOT_EDITOR_LIST
-        })
-        dispatch({
-            type: GetEditorAction.REQUEST_RECOMMEND_EDITOR
-        })
-        dispatch({
-            type: GetEditorAction.SEARCH_NOT_RECOMMEND_EDITOR_LIST
-        })
-        switch (search.get('type')) {
-            case 'news': {
-                dispatch({
-                    type: GetEditorAction.REQUEST_TOP_EDITOR
-                })
-                dispatch({
-                    type: GetEditorAction.SEARCH_NOT_TOP_EDITOR_LIST
-                })
+        switch (type) {
+            case 'top': {
+                GetDefaultTypeList('REQUEST_TOP_EDITOR');
+                GetDefaultNotTypeList();
                 break;
             }
-            case 'hot': {
-                dispatch({
-                    type: GetEditorAction.REQUEST_HOT_EDITOR
-                })
-                dispatch({
-                    type: GetEditorAction.SEARCH_NOT_HOT_EDITOR_LIST
-                })
+            case 'popular': {
+                GetDefaultTypeList('REQUEST_HOT_EDITOR');
+                GetDefaultNotTypeList();
                 break;
             }
             case 'recommend': {
-                // dispatch recommend contents list
+                GetDefaultTypeList('REQUEST_RECOMMEND_EDITOR');
+                GetDefaultNotTypeList();
                 break;
             }
             default: {
-                dispatch({
-                    type: GetEditorAction.REQUEST_TOP_EDITOR
-                })
-                dispatch({
-                    type: GetEditorAction.SEARCH_NOT_TOP_EDITOR_LIST
-                })
+                GetDefaultTypeList('REQUEST_TOP_EDITOR');
+                GetDefaultNotTypeList();
                 break;
             }
         }
+    }, [GetDefaultNotTypeList, GetDefaultTypeList, type]);
 
+    return (
+        <CustomTabs
+            headerColor="primary"
+            className='CardHeader-tabs'
+            tabs={[
+                {
+                    color: "primary",
+                    tabName: "置頂文章",
+                    onClick: () => navigate({
+                        pathname: ".",
+                        search: createSearchParams({
+                            type: "top"
+                        }).toString()
+                    }),
+                    tabContent: (
+                        <EditorTypeList
+                            type={'top'}
+                            notList={notTopList}
+                            list={topList}
+                        />
+                    ),
+                },
+                {
+                    color: "primary",
+                    tabName: "熱門文章",
+                    onClick: () => navigate({
+                        pathname: ".",
+                        search: createSearchParams({
+                            type: "popular"
+                        }).toString()
+                    }),
+                    tabContent: (
+                        <EditorTypeList
+                            type={'popular'}
+                            notList={notHotList}
+                            list={hotList} />
+                    ),
+                },
+                {
+                    color: "primary",
+                    tabName: "推薦文章",
+                    onClick: () => navigate({
+                        pathname: ".",
+                        search: createSearchParams({
+                            type: "recommend"
+                        }).toString()
+                    }),
+                    tabContent: (
+                        <EditorTypeList
+                            type={'recommend'}
+                            notList={notRecommendList}
+                            list={recommendList} />
+                    ),
+                },
+            ]}
+        />
+    )
 
-    }, []);
-
-
-    return <CustomTabs
-        headerColor="primary"
-        className='CardHeader-tabs'
-        tabs={[
-            {
-                color: "primary",
-                tabName: "置頂文章",
-                // tabIcon: BugReport,
-                tabContent: (
-                    <EditorTypeList
-                        type={'置頂'}
-                        notList={notTopList}
-                        list={topList}
-                    />
-                ),
-            },
-            {
-                color: "primary",
-                tabName: "熱門文章",
-                // tabIcon: Code,
-                tabContent: (
-                    <EditorTypeList
-                        type={'熱門'}
-                        notList={notHotList}
-                        list={hotList} />
-                ),
-            },
-            {
-                color: "primary",
-                tabName: "推薦文章",
-                // tabIcon: Cloud,
-                tabContent: (
-                    <EditorTypeList
-                        type={'推薦'}
-                        notList={notRecommendList}
-                        list={recommendList} />
-                ),
-            },
-        ]}
-    />;
 }
 
 

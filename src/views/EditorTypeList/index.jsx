@@ -23,10 +23,7 @@ function EditorTypeList() {
 
     return (
         <div className={'container'}>
-            {/* <Card> */}
             <EditorTabs />
-            {/* <EditorTypeBody /> */}
-            {/* </Card> */}
         </div>
     );
 }

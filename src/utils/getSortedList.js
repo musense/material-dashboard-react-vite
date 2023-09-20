@@ -1,4 +1,4 @@
-function getSortedList(originalList, sortingKey, sortingMap) {
+function getSortedList(originalList = [], sortingKey, sortingMap) {
     const clonedList = [...originalList]
     let sortedList = clonedList.sort((item1, item2) => {
         let typeOf = typeof item1[sortingKey]

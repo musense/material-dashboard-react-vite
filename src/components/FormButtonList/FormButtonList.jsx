@@ -10,13 +10,15 @@ export default function FormButtonList({
 }) {
     const dispatch = useDispatch();
     const onSubmit = useCallback((e) => {
+        if (checkPatchType) {
+            dispatch({
+                type: checkPatchType,
+                payload: {
+                    createType: isEditing ? 'update' : 'add_new',
+                }
+            })
 
-        dispatch({
-            type: checkPatchType,
-            payload: {
-                createType: isEditing ? 'update' : 'add_new',
-            }
-        })
+        }
         callback && callback(e)
     }, [dispatch, checkPatchType, isEditing, callback])
 

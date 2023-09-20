@@ -145,7 +145,8 @@ export default function BodyRow({ headerRow, item, handleOpenDialog, setMediaInf
 
                     if (configItem.deleteText) {
                         deleteText = item[configItem.deleteText]
-                    } else if (configItem.deleteText?.includes(".")) {
+                    }
+                    if (configItem.deleteText?.includes(".")) {
                         const splitDeleteText = configItem.deleteText.split(".")
                         deleteText = item[splitDeleteText[0]][splitDeleteText[1]]
                     }

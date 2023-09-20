@@ -103,7 +103,7 @@ export default function BannerLeftWrapper() {
             tempData = {
                 name: submitState?.name,
                 // sort: submitState?.sort,
-                hyperlink: submitState?.media.hyperlink,
+                hyperlink: submitState?.hyperlink,
                 remark: submitState?.remark,
 
                 eternal: submitState?.publishInfo.eternal,
@@ -256,7 +256,7 @@ export default function BannerLeftWrapper() {
                         </div>
                         <div>
                             <label htmlFor="hyperlink">超連結</label>
-                            <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink || undefined} onChange={e => onPropertyChange(e.target.value, 'hyperlink', 'media')} />
+                            <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink || undefined} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
                         </div>
                         <Media
                             onPropertyChange={onPropertyChange}

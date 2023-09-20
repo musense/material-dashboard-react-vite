@@ -24,10 +24,10 @@ const initialState = {
         sort: '',
         remark: '',
         status: '',
+        hyperlink: '',
         media: {
             contentImagePath: '',
             homeImagePath: '',
-            hyperlink: '',
         },
         publishInfo: {
             isOnShelvesImmediate: false,
@@ -90,7 +90,7 @@ const getBannerReducer = (state = initialState, action) => {
                         [info]: {
                             ...state.selectedBanner[info],
                             [property]: value,
-                            [`!~${property}`]: state.updateInitialState && state.updateInitialState[info][property],
+                            [`!~${property}`]: state.updateInitialState ? state.updateInitialState[info][property] : undefined,
                         }
                     }
                 }
@@ -104,7 +104,7 @@ const getBannerReducer = (state = initialState, action) => {
                         [detail]: {
                             ...state.selectedBanner[info][detail],
                             [property]: value,
-                            [`!~${property}`]: state.updateInitialState && state.updateInitialState[info][detail][property],
+                            [`!~${property}`]: state.updateInitialState ? state.updateInitialState[info][detail][property] : undefined,
                         }
                     }
                 }
@@ -124,10 +124,10 @@ const getBannerReducer = (state = initialState, action) => {
                 status: props.status,
                 eternal: props.eternal ?? false,
                 display: props.display ?? false,
+                hyperlink: props.hyperlink,
                 media: {
                     homeImagePath: props.homeImagePath,
                     contentImagePath: props.contentImagePath,
-                    hyperlink: props.hyperlink,
                 },
                 publishInfo: {
                     eternal: props.eternal ?? false,
@@ -236,6 +236,7 @@ const getBannerReducer = (state = initialState, action) => {
                 console.log("🚀 ~ file: GetBannerReducer.js:230 ~ getBannerReducer ~ submitState:", submitState)
             } else {
                 const selectedBanner = flattenObj({ ...state.selectedBanner })
+                console.log("🚀 ~ file: GetBannerReducer.js:239 ~ getBannerReducer ~ selectedBanner:", selectedBanner)
 
                 submitState = getSubmitObject(selectedBanner)
                 console.log("🚀 ~ file: GetBannerReducer.js:237 ~ getBannerReducer ~ submitState:", submitState)

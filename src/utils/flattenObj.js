@@ -10,7 +10,7 @@ const flattenObj = (ob) => {
         // We check the type of the i using
         // typeof() function and recursively
         // call the function again
-        if ((typeof ob[i]) === 'object' && !Array.isArray(ob[i])) {
+        if ((typeof ob[i]) === 'object' && !Array.isArray(ob[i]) && ob[i] !== null) {
             const temp = flattenObj(ob[i]);
             for (const j in temp) {
 

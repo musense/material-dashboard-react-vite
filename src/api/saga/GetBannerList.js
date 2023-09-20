@@ -7,17 +7,17 @@ function toBackendFormData(requestData) {
     const formData = new FormData()
 
 
-    requestData.name && formData.append('name', JSON.stringify(requestData.name))
-    requestData.sort && formData.append('sort', JSON.stringify(requestData.sort))
-    requestData.hyperlink && formData.append('hyperlink', JSON.stringify(requestData.hyperlink))
-    requestData.remark && formData.append('remark', JSON.stringify(requestData.remark))
-    requestData.display && formData.append('display', JSON.stringify(requestData.display))
+    requestData.name !== undefined && formData.append('name', JSON.stringify(requestData.name))
+    requestData.sort !== undefined && formData.append('sort', JSON.stringify(requestData.sort))
+    requestData.hyperlink !== undefined && formData.append('hyperlink', JSON.stringify(requestData.hyperlink))
+    requestData.remark !== undefined && formData.append('remark', JSON.stringify(requestData.remark))
+    requestData.display !== undefined && formData.append('display', JSON.stringify(requestData.display))
 
     // if ('eternal' in requestData) {
-    requestData.eternal && formData.append('eternal', JSON.stringify(requestData.eternal))
+    requestData.eternal !== undefined && formData.append('eternal', JSON.stringify(requestData.eternal))
     if (!requestData.eternal) {
-        requestData.startDate && formData.append('startDate', JSON.stringify(requestData.startDate))
-        requestData.endDate && formData.append('endDate', JSON.stringify(requestData.endDate))
+        requestData.startDate !== undefined && formData.append('startDate', JSON.stringify(requestData.startDate))
+        requestData.endDate !== undefined && formData.append('endDate', JSON.stringify(requestData.endDate))
     }
     // }
 

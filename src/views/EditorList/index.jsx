@@ -20,7 +20,7 @@ const headerMap = {
       type: "image",
       className: "flex-2 image-container"
     },
-    { name: "標題", patchKey: "content.title", className: "flex-3", type: "string" },
+    { name: "標題", patchKey: "content.title", className: "flex-3", type: "stringl" },
     { name: "瀏覽數", patchKey: "pageView", type: "number" },
     {
       name: "狀態",

@@ -10,7 +10,7 @@ export default function BodyRow({ headerRow, item, handleOpenDialog, setMediaInf
             let cellContent
             if (configItem.patchKey?.includes(".")) {
                 const splitPatchKey = configItem.patchKey.split(".")
-                cellContent = item[splitPatchKey[0]][splitPatchKey[1]]
+                cellContent = item[splitPatchKey[0]] ? item[splitPatchKey[0]][splitPatchKey[1]] : null
             } else {
                 cellContent = item[configItem.patchKey]
             }
@@ -44,6 +44,16 @@ export default function BodyRow({ headerRow, item, handleOpenDialog, setMediaInf
                             </span>
                         </Stack>
                     } className={configItem.className} />
+                }
+                case "stringl": {
+                    return <BodyCell
+                        key={index}
+                        children={(
+                            <div className={'ellipsis'}>
+                                {cellContent}
+                            </div>
+                        )}
+                        className={configItem.className} />
                 }
                 case "date": {
                     return <BodyCell

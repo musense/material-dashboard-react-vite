@@ -341,6 +341,34 @@ input {
   flex: 1;
 }
 
+.ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.lineClamp1 {
+  -webkit-line-clamp: 1;
+}
+
+.lineClamp2 {
+  -webkit-line-clamp: 2;
+}
+
+.lineClamp3 {
+  -webkit-line-clamp: 3;
+}
+
+.lineClamp4 {
+  -webkit-line-clamp: 4;
+}
+
+.lineClamp5 {
+  -webkit-line-clamp: 5;
+}
+
 @media (max-width: 1500px) {
   .button-wrapper {
     flex-direction: column;

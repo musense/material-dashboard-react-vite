@@ -8,6 +8,10 @@ import Item, { grid } from "./Item";
 import ContentsFilterInput from "./ContentFilterInput";
 import * as GetEditorAction from "../../actions/GetEditorAction.js";
 import { useDispatch, useSelector } from 'react-redux';
+import Icon from "../Icons/Icon";
+import MessageDialog from "../../components/Modal/MessageDialog";
+import useModal from "../../hook/useModal";
+import useModalResult from "../../hook/useModalResult";
 
 const droppableHeight = 630
 export const borderRadius = 2;
@@ -17,10 +21,14 @@ export const borderRadius = 2;
 //     width: 500
 // });
 
+const DropContainer = styled.div`
+    margin: 0 auto;
+    width: fit-content;
+`
 const DropHeader = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    gap: 200px;
     &>div{
         display: flex;
         flex-direction: column;
@@ -31,9 +39,17 @@ const DropHeader = styled.div`
 const DropBody = DropHeader
 
 const TitleH2 = styled.h2`
-    width: 500px;
+    position: relative;
+    width: fit-content;
     text-align: center;
     margin: 0;
+
+    &>button{
+        position: absolute;
+        top: 50%;
+        right: -25px;
+        transform: translateY(-50%);
+    }
 `
 const DraggableWrapper = styled.div`
   padding: ${grid}px;
@@ -47,6 +63,12 @@ const DraggableWrapper = styled.div`
     };
 `;
 
+const ButtonWrapper = styled.div`
+    position: relative;
+    width: 500px;
+    text-align: right;
+`
+
 const SubmitButton = styled.button`
     border: none;
     height: 1.8rem;
@@ -59,6 +81,12 @@ const SubmitButton = styled.button`
         background-color: violet;
     }
 `
+const IconButton = styled.button`
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: transparent;
+`
 
 const typeMap = new Map([
     ["top", "置頂"],
@@ -66,15 +94,13 @@ const typeMap = new Map([
     ["recommend", "推薦"],
 ])
 export default function EditorTypeList({ type, notList, list }) {
-    const dispatch = useDispatch();
-    console.log("🚀 ~ file: EditorTypeList.jsx:52 ~ EditorTypeList ~ list:", list)
-    console.log("🚀 ~ file: EditorTypeList.jsx:52 ~ EditorTypeList ~ notList:", notList)
 
+    // const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+
+    const dispatch = useDispatch();
     const [lastDispatchList, setLastDispatchList] = useState([]);
     const [dispatchList, setDispatchList] = useState([]);
     const [removeList, setRemoveList] = useState([]);
-    console.log("🚀 ~ file: EditorTypeList.jsx:56 ~ EditorTypeList ~ dispatchList:", dispatchList)
-    console.log("🚀 ~ file: EditorTypeList.jsx:56 ~ EditorTypeList ~ removeList:", removeList)
     const [state, setState] = useState(
         {
             notList:
@@ -179,14 +205,12 @@ export default function EditorTypeList({ type, notList, list }) {
         if (type === 'top' && dispatchList.length > 2) {
             // modal alert
             // length larger than 2 will not be cut off but only the top 2 will be showed on the index page
-            console.log("🚀 ~ file: EditorTypeList.jsx:183 ~ onSubmit ~ dispatchList:", dispatchList)
         }
 
         if (type === 'popular' && dispatchList.length > 5) {
             // modal alert
             // length larger than 5 will be cut off due to useless
             dispatchList.splice(5, dispatchList.length)
-            console.log("🚀 ~ file: EditorTypeList.jsx:183 ~ onSubmit ~ dispatchList:", dispatchList)
         }
 
         dispatch({
@@ -204,16 +228,55 @@ export default function EditorTypeList({ type, notList, list }) {
             ...removeList
         ])
     }, [dispatch, dispatchList, removeList, type, lastDispatchList])
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalContent, setModalContent] = useState('');
 
-    return <div>
+    const {
+        open: openDialog,
+        handleOpen: handleOpenDialog,
+        handleClose: handleCloseDialog
+    } = useModal(modalTitle)
+
+    const setModalContext = useCallback((type) => {
+        switch (type) {
+            case 'top': {
+                setModalTitle('置頂文章規則')
+                setModalContent(`可插入原先於首頁依發布日期排序的文章，\n但於首頁最多只可插入2篇，\n因此置頂文章超過2篇會以灰色呈現，\n若想在網頁看到更多置頂文章，\n請點選「記事一覽」查詢。`)
+            } break;
+            case 'popular': {
+                setModalTitle('熱門文章規則')
+                setModalContent(`熱門文章首先以觀看次數自然排序，\n且仍可人工插入排序，\n但於首頁最多只會呈現5篇熱門文章，\n因此超過5篇者將以灰色呈現，\n並將於確認後移除熱門文章，\n恢復到非熱門文章區。`)
+            } break;
+            case 'recommend': {
+                setModalTitle('推薦文章規則')
+                setModalContent(`可插入無上限推薦文章，\n但首頁最多只會顯示8篇，\n因此超過8篇者將以灰色呈現。`)
+            } break;
+
+            default: {
+                setModalTitle('')
+                setModalContent('')
+            }
+                break;
+        }
+        handleOpenDialog()
+    }, [handleOpenDialog])
+
+    return <DropContainer>
         <DropHeader>
             <div>
                 <TitleH2>非{typeMap.get(type)}文章</TitleH2>
                 <ContentsFilterInput type={type} />
             </div>
             <div>
-                <TitleH2>{typeMap.get(type)}文章</TitleH2>
-                <SubmitButton onClick={onSubmit}>確認</SubmitButton>
+                <TitleH2>
+                    {typeMap.get(type)}文章
+                    <IconButton onClick={() => setModalContext(type)}>
+                        <Icon icon={'question'} />
+                    </IconButton>
+                </TitleH2>
+                <ButtonWrapper>
+                    <SubmitButton onClick={onSubmit}>確認</SubmitButton>
+                </ButtonWrapper>
             </div>
         </DropHeader>
         <DropBody>
@@ -244,9 +307,16 @@ export default function EditorTypeList({ type, notList, list }) {
                 ))}
             </DragDropContext>
         </DropBody>
-    </div>
-
-
+        <MessageDialog
+            dialogTitle={modalTitle}
+            dialogContent={modalContent}
+            // success={success}
+            open={openDialog}
+            setClose={handleCloseDialog}
+            confirm={false}
+            data={"Hello World"}
+        />
+    </DropContainer>
 }
 
 

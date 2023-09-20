@@ -23,7 +23,9 @@ const getItemStyle = (isDragging, draggableStyle, type, sorting) => {
             ? sorting > 2 && transparency
             : type === "popularSorting"
                 ? sorting > 5 && transparency
-                : 1
+                : type === "recommendSorting"
+                    ? sorting > 8 && transparency
+                    : 1
         ,
 
         // styles we need to apply on draggables
@@ -93,7 +95,7 @@ export default function Item({ item, index, droppableId }) {
             className = ['popularSorting', Number(index) + 1];
 
         } else if (recommendSorting !== undefined) {
-            className = ['recommendSorting'];
+            className = ['recommendSorting', Number(index) + 1];
         }
     }
     return (
@@ -123,7 +125,7 @@ export default function Item({ item, index, droppableId }) {
                                 </>
                                 }
                             </div>
-                            <span>{item.title}</span>
+                            <span className={'ellipsis lineClamp3'}>{item.title}</span>
                             <span>{item.serialNumber}</span>
                             <Icon icon="drag" />
                             {droppableId === 'list' && <span>{index + 1}</span>}

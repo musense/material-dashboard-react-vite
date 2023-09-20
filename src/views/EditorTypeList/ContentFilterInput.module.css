@@ -4,7 +4,7 @@
     flex-wrap: nowrap;
     align-items: flex-end;
     justify-content: space-between;
-    width: 100%;
+    width: 500px;
 
     .filter-button {
         border: none;

@@ -8,12 +8,13 @@ import Box from '@mui/material/Box';
 import ConfirmButtonWrapper from './components/ConfirmButtonWrapper';
 import EditorButtonWrapper from './components/EditorButtonWrapper';
 
-const style = {
+const style = (w) => ({
   minWidth: 300,
   height: 'fit-content',
   m: 0,
-  p: 3
-}
+  p: 3,
+  [w && 'width']: w,
+})
 
 export default function MessageDialog({
   open,
@@ -25,7 +26,8 @@ export default function MessageDialog({
   sitemapUrl = null,
   confirm = null,
   data = null,
-  editor = null
+  editor = null,
+  width = null,
 }) {
   const handleClose = useCallback((event, reason) => {
     if (reason === 'backdropClick') return
@@ -39,7 +41,7 @@ export default function MessageDialog({
       aria-describedby="alert-dialog-description"
       disableEscapeKeyDown={true}
     >
-      <Box sx={style}>
+      <Box sx={style(width)}>
         <DialogTitle id="alert-dialog-title">
           {dialogTitle}
         </DialogTitle>

@@ -315,6 +315,7 @@ export default function EditorTypeList({ type, notList, list }) {
             setClose={handleCloseDialog}
             confirm={false}
             data={"Hello World"}
+            width={400}
         />
     </DropContainer>
 }

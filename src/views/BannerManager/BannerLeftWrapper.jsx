@@ -238,7 +238,7 @@ export default function BannerLeftWrapper() {
             </CardHeader>
             <CardBody>
                 {/* <MyScrollbar component='div' height='739px'> */}
-                <MyScrollbar component='div' height='700px'>
+                <MyScrollbar component='div' height='calc(100vh - 220px)'>
                     <form ref={formRef} name='class-form' className='banner-submit-form'>
                         <div>
                             <input type="hidden" name='_id' value={selectedBanner._id} />

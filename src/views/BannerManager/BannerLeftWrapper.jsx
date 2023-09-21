@@ -54,10 +54,11 @@ export default function BannerLeftWrapper() {
             console.log("🚀 ~ file: BannerLeftWrapper.jsx:73 ~ onAddNewEditor ~ submitState:", submitState)
 
             for (const key in submitState) {
-                if (key === 'contentImagePath') {
+                if (key === 'contentImagePath' || key === 'homeImagePath') {
                     tempData = {
                         ...tempData,
                         media: {
+                            ...tempData.media,
                             [key]: submitState[key]
                         }
                     }
@@ -69,7 +70,7 @@ export default function BannerLeftWrapper() {
                 }
             }
             console.log("🚀 ~ file: BannerLeftWrapper.jsx:73 ~ onAddNewEditor ~ tempData:", tempData)
-
+            // return
             dispatch({
                 type: GetBannerAction.EDIT_SAVING_BANNER,
                 payload: {
@@ -236,7 +237,8 @@ export default function BannerLeftWrapper() {
                 <h4>{isEditing ? '編輯' : '新增'}</h4>
             </CardHeader>
             <CardBody>
-                <MyScrollbar component='div' height='739px'>
+                {/* <MyScrollbar component='div' height='739px'> */}
+                <MyScrollbar component='div' height='700px'>
                     <form ref={formRef} name='class-form' className='banner-submit-form'>
                         <div>
                             <input type="hidden" name='_id' value={selectedBanner._id} />

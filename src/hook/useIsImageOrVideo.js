@@ -1,16 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useIsImageOrVideo(url) {
 
     const [isImage, setIsImage] = useState(true);
     const [iframeUrl, setIframeUrl] = useState();
-
-    const getProperty = useCallback((propertyName) => {
-        const indexOf = url.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
-        const endIndexOf = url.indexOf(`"`, indexOf);
-        const property = url.substr(indexOf, endIndexOf - indexOf);
-        return property
-    }, [url])
 
     useEffect(() => {
         if (!url || typeof url !== 'string') {
@@ -18,10 +11,10 @@ export default function useIsImageOrVideo(url) {
             setIframeUrl('')
             return
         }
-        if (url.indexOf('<iframe') !== -1) {
-            const src = getProperty('src');
+        if (url.indexOf('youtube') !== -1) {
+            // const src = getProperty('src');
             setIsImage(false)
-            setIframeUrl(src)
+            setIframeUrl(url)
         } else {
             setIsImage(true)
             setIframeUrl(url)

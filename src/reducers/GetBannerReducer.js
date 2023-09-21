@@ -143,7 +143,7 @@ const getBannerReducer = (state = initialState, action) => {
                 ...state,
                 selectedBanner: selectedBanner,
                 updateInitialState: selectedBanner,
-                showUrl: props.homeImagePath,
+                showUrl: props.contentImagePath,
                 isEditing: true,
             }
         }

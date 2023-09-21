@@ -39,19 +39,13 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
     const [isImage, setIsImage] = useState(true);
     const [iframeUrl, setIframeUrl] = useState(undefined);
 
-    const getProperty = useCallback((propertyName) => {
-        const indexOf = mediaInfo.contentImagePath.indexOf(`${propertyName}="`) + `${propertyName}="`.length;
-        const endIndexOf = mediaInfo.contentImagePath.indexOf(`"`, indexOf);
-        const property = mediaInfo.contentImagePath.substr(indexOf, endIndexOf - indexOf);
-        return property
-    }, [mediaInfo])
 
     useEffect(() => {
         if (!mediaInfo) return
-        if (mediaInfo.contentImagePath.indexOf('<iframe') !== -1) {
-            const src = getProperty('src');
+        if (mediaInfo.contentImagePath.indexOf('youtube') !== -1) {
+            // const src = getProperty('src');
             setIsImage(false)
-            setIframeUrl(src)
+            setIframeUrl(mediaInfo.contentImagePath)
         } else {
             setIsImage(true)
             setIframeUrl(mediaInfo.contentImagePath)

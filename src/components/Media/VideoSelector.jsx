@@ -18,11 +18,13 @@ export default function VideoSelector({
             filmUrl.indexOf('?v=') + 3,
             filmUrl.length
         );
+
+
         const youtubeInfo = await fetchYoutubeInfo(youtubeID);
         if (youtubeInfo) {
             onVideoChange({
                 iframeUrl: youtubeInfo.html,
-                imageUrl: youtubeInfo.thumbnail_url
+                imageUrl: youtubeInfo.thumbnail_url,
             })
         }
     }, [onRemoveClick, onVideoChange])

@@ -4,7 +4,13 @@ import BodyCell from "../BodyCell/BodyCell";
 import EditBodyCell from "../EditBodyCell/EditBodyCell";
 import { Stack } from "@mui/material";
 
-export default function BodyRow({ headerRow, item, handleOpenDialog, setMediaInfo, className }) {
+export default function BodyRow({
+    headerRow,
+    item,
+    handleOpenDialog,
+    setMediaInfo,
+    className
+}) {
     return <div className={`body-row ${className}`}>
         {headerRow.map((configItem, index) => {
             let cellContent

@@ -28,7 +28,7 @@ export default function useUploadImage(imageUploadRef, onImageChange = null) {
             }
             onImageChange({
                 imageContent: imageContent,
-                imageUrl: imageUrl
+                imageUrl: imageUrl,
             })
         };
 

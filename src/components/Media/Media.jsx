@@ -32,13 +32,13 @@ export default function Media({
         onPropertyChange(value, 'altText', 'media')
     }, [onPropertyChange])
 
-    const onImageChange = useCallback(({ imageContent, imageUrl, showUrl }) => {
+    const onImageChange = useCallback(({ imageContent, imageUrl }) => {
         onShowUrlChange(imageUrl)
         onPropertyChange(imageContent, 'contentImagePath', 'media')
         onPropertyChange('', 'homeImagePath', 'media')
     }, [onPropertyChange, onShowUrlChange])
 
-    const onVideoChange = useCallback(({ iframeUrl, imageUrl, showUrl }) => {
+    const onVideoChange = useCallback(({ iframeUrl, imageUrl }) => {
         onShowUrlChange(getProperty(iframeUrl, 'src'))
         onPropertyChange(iframeUrl, 'contentImagePath', 'media')
         onPropertyChange(imageUrl, 'homeImagePath', 'media')

@@ -29,6 +29,7 @@ import { getEndDate, getStartDate } from '../../reducers/GetBannerReducer';
 
 export default function BannerLeftWrapper() {
 
+    const formFilmUrlRef = useRef(null);
     const formRef = useRef(null);
     const dispatch = useDispatch();
 
@@ -45,6 +46,13 @@ export default function BannerLeftWrapper() {
     const showUrl = useSelector(getShowUrl);
     const serverMessage = useSelector(getBannerErrorMessage);
 
+
+    useEffect(() => {
+        formFilmUrlRef.current = document.querySelector('#detail-form-film-url');
+        if (formFilmUrlRef.current === null) {
+            return
+        }
+    }, []);
     const onAddNewEditor = useCallback(() => {
 
         let tempData = {}
@@ -185,6 +193,8 @@ export default function BannerLeftWrapper() {
         dispatch({
             type: GetBannerAction.CANCEL_EDITING_BANNER
         })
+        const formFilmUrl = formFilmUrlRef.current
+        formFilmUrl.value = ''
     }, [dispatch])
 
     const onPropertyChange = useCallback((value, property, info = null, detail = null) => {
@@ -212,7 +222,7 @@ export default function BannerLeftWrapper() {
 
     const handleModalClose = useCallback(() => {
         handleClose()
-        // onReset()
+        onReset()
     }, [onReset, handleClose])
 
     const statusStyle = {
@@ -258,7 +268,7 @@ export default function BannerLeftWrapper() {
                         </div>
                         <div>
                             <label htmlFor="hyperlink">超連結</label>
-                            <input type="text" name='hyperlink' value={selectedBannerMedia.hyperlink || undefined} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
+                            <input type="text" name='hyperlink' value={selectedBanner.hyperlink} onChange={e => onPropertyChange(e.target.value, 'hyperlink')} />
                         </div>
                         <Media
                             onPropertyChange={onPropertyChange}
@@ -276,7 +286,7 @@ export default function BannerLeftWrapper() {
                         />
                         <div>
                             <label htmlFor="remark">備註</label>
-                            <textarea type="text" name='remark' value={selectedBanner.remark || undefined} onChange={e => onPropertyChange(e.target.value, 'remark')} />
+                            <textarea type="text" name='remark' value={selectedBanner.remark} onChange={e => onPropertyChange(e.target.value, 'remark')} />
                         </div>
                         <FormButtonList
                             isEditing={isEditing}

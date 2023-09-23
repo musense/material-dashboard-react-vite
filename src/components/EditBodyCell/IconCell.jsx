@@ -1,41 +1,35 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Icon from '@views/Icons/Icon';
 
 export default function IconCell({
-    iconName: name,
-    iconTitle: title,
+    iconName,
+    iconTitle,
     callback,
     copy = false,
-    copyText = null
+    copyText = undefined
 }) {
-    let inputProps = {
-        title: title,
-        className: "edit-icon-input",
-        type: "button"
+
+    const iconCell = ({ iconName, iconTitle, callback = null }) => {
+        let inputProps = (callback) => ({
+            title: iconTitle,
+            className: "edit-icon-input",
+            type: "button",
+            ...callback && { 'onClick': callback }
+        })
+        return <div className="edit-icon-wrapper" >
+            <input {...inputProps(callback)} />
+            < Icon icon={iconName} />
+        </div>
     }
+
     let content
-        , iconCell = ({ inputProps, callback = null }) => {
-            if (callback) {
-                inputProps = useMemo(() => ({
-                    ...inputProps,
-                    onClick: callback
-                }), [inputProps, callback])
-            }
-            return <div className="edit-icon-wrapper" >
-                <input {...inputProps} />
-                < Icon icon={name} />
-            </div>
-        }
-        , copyTemplate = (
-            <CopyToClipboard text={copyText} onCopy={callback}>
-                {iconCell({ inputProps })}
-            </CopyToClipboard>
-        )
     if (!copy) {
-        content = iconCell({ inputProps, callback })
+        content = iconCell({ iconName, iconTitle, callback })
     } else {
-        content = copyTemplate
+        content = <CopyToClipboard text={copyText} onCopy={callback}>
+            {iconCell({ iconName, iconTitle })}
+        </CopyToClipboard>
     }
     return content
 }

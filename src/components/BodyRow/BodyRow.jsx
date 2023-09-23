@@ -4,6 +4,8 @@ import BodyCell from "../BodyCell/BodyCell";
 import EditBodyCell from "../EditBodyCell/EditBodyCell";
 import { Stack } from "@mui/material";
 
+const InnerEditBodyCell = React.memo(EditBodyCell)
+
 export default function BodyRow({
     headerRow,
     item,
@@ -160,7 +162,7 @@ export default function BodyRow({
                     if (configItem.editData) {
                         editData = item[configItem.editData]
                     }
-                    return <EditBodyCell
+                    return <InnerEditBodyCell
                         key={index}
                         copyText={copyText}
                         id={item._id}

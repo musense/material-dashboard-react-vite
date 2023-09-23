@@ -6,7 +6,7 @@ export default function useModal(data) {
 
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
+    const handleOpen = useCallback(() => setOpen(true), [setOpen]);
     const handleClose = useCallback(() => {
         setOpen(false)
         dispatch({

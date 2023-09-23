@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useMemo } from "react";
+import { shallowEqual, useDispatch } from 'react-redux';
 import * as GetEditorAction from '../../actions/GetEditorAction';
 import { useNavigate } from 'react-router-dom';
 import Stack from "@mui/material/Stack";
@@ -30,39 +30,85 @@ export default function EditorListButtonList({
         })
     }, [dispatch])
 
-    const buttonProps = {
+    const buttonProps = useMemo(() => ({
         color: 'info',
         size: 'small',
         variant: 'contained',
-    }
+    }), [])
 
     return <Stack spacing={2} direction={'row'}
         display={'flex'} useFlexGap flexWrap="wrap"
         alignItems={'center'} sx={{ my: '1rem' }}>
-        <Button
-            {...buttonProps}
-            onClick={onAddNew}>
-            新增文章
-        </Button>
-        <Button
-            {...buttonProps}
-            disabled={currentPage === 1}
-            onClick={() => onPageButtonClick(currentPage - 1)}>
-            上一頁
-        </Button>
-        <PageButtonList
+        <InnerCreateEditorButton
+            buttonProps={buttonProps}
+            onAddNew={onAddNew}
+        />
+        <InnerPrevButton
+            buttonProps={buttonProps}
+            currentPage={currentPage}
+            onPageButtonClick={onPageButtonClick}
+        />
+        <InnerPageButtonList
             totalPage={totalPage}
             currentPage={currentPage}
             patchType={GetEditorAction.REQUEST_EDITOR_PAGE} />
-        <Button
-            {...buttonProps}
-            disabled={currentPage === totalPage}
-            onClick={() => onPageButtonClick(currentPage + 1)}>
-            下一頁
-        </Button>
-        <Typography sx={{ fontSize: 16 }}>
-            合計：{totalCount}筆
-        </Typography>
+        <InnerNextButton
+            buttonProps={buttonProps}
+            currentPage={currentPage}
+            totalPage={totalPage}
+            onPageButtonClick={onPageButtonClick}
+        />
+        <InnerSummedUpText
+            totalCount={totalCount}
+        />
     </Stack>;
 }
+const InnerPageButtonList = React.memo(PageButtonList)
+const InnerPrevButton = React.memo(PrevButton)
+const InnerNextButton = React.memo(NextButton)
+const InnerCreateEditorButton = React.memo(CreateEditorButton)
+const InnerSummedUpText = React.memo(SummedUpText)
 
+function SummedUpText({ totalCount }) {
+    return <Typography sx={{ fontSize: 16 }}>
+        合計：{totalCount}筆
+    </Typography>;
+}
+
+function NextButton({
+    buttonProps,
+    currentPage,
+    totalPage,
+    onPageButtonClick
+}) {
+    return <Button
+        {...buttonProps}
+        disabled={currentPage === totalPage}
+        onClick={() => onPageButtonClick(currentPage + 1)}>
+        下一頁
+    </Button>;
+}
+
+function CreateEditorButton({
+    buttonProps,
+    onAddNew
+}) {
+    return <Button
+        {...buttonProps}
+        onClick={onAddNew}>
+        新增文章
+    </Button>;
+}
+
+function PrevButton({
+    buttonProps,
+    currentPage,
+    onPageButtonClick
+}) {
+    return <Button
+        {...buttonProps}
+        disabled={currentPage === 1}
+        onClick={() => onPageButtonClick(currentPage - 1)}>
+        上一頁
+    </Button>;
+}

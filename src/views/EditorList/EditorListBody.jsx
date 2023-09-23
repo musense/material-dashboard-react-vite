@@ -26,6 +26,8 @@ import {
     getSelectedPatchKey
 } from '@reducers/GetEditorReducer'
 
+const InnerEditorListButtonList = React.memo(EditorListButtonList);
+
 const InnerRowHeader = React.memo(RowHeader);
 // const InnerRowBody = React.memo(RowBody);
 export default function EditorListBody({ headerMap }) {
@@ -99,7 +101,7 @@ export default function EditorListBody({ headerMap }) {
 
     return <CardBody>
         <EditorSearchForm />
-        <EditorListButtonList
+        <InnerEditorListButtonList
             currentPage={currentPage}
             totalPage={totalPage}
             totalCount={totalCount}

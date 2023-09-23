@@ -26,6 +26,8 @@ import {
     getSelectedPatchKey
 } from '@reducers/GetEditorReducer'
 
+const InnerRowHeader = React.memo(RowHeader);
+// const InnerRowBody = React.memo(RowBody);
 export default function EditorListBody({ headerMap }) {
     const navigate = useNavigate();
     const editor = useSelector(getEditor)
@@ -103,7 +105,7 @@ export default function EditorListBody({ headerMap }) {
             totalCount={totalCount}
         />
         <form className='view-list-form'>
-            <RowHeader
+            <InnerRowHeader
                 headerConfig={headerMap}
                 selectedPatchKey={selectedPatchKey} />
             <RowBody

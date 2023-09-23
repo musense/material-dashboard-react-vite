@@ -1,9 +1,10 @@
 import React from "react";
 import HeaderCell from '../../components/HeaderCell/HeaderCell'
 
+
 export default function RowHeader({ headerConfig, selectedPatchKey }) {
     return <div data-attr="data-header" className='view-header'>
-        <Header
+        <InnerHeader
             headerMap={headerConfig.headerRow}
             patchType={headerConfig.patchType}
             reducerName={headerConfig.reducerName}
@@ -11,6 +12,10 @@ export default function RowHeader({ headerConfig, selectedPatchKey }) {
         />
     </div>;
 }
+
+const InnerHeader = React.memo(Header)
+const InnerHeaderCell = React.memo(HeaderCell)
+
 
 function Header({
     headerMap,
@@ -20,7 +25,7 @@ function Header({
 }) {
     return <div className="header-row">
         {headerMap.map((cell, index) => {
-            return <HeaderCell
+            return <InnerHeaderCell
                 key={index}
                 className={cell.className}
                 name={cell.name}

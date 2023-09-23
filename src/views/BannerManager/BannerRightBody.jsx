@@ -24,6 +24,9 @@ import MediaModal from "@components/Modal/MediaModal";
 import { useCallback } from "react";
 import { getSelectedBanner } from "../../reducers/GetBannerReducer";
 
+// const InnerRowHeader = React.memo(RowHeader)
+// const InnerRowBody = React.memo(RowBody)
+
 export default function BannerRightBody({ headerMap }) {
 
     const selectedBanner = useSelector(getSelectedBanner)

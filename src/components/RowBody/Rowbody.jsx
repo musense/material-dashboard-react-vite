@@ -2,6 +2,8 @@ import React from 'react';
 import MyScrollbar from './../MyScrollbar/MyScrollbar'
 import BodyRow from '../BodyRow/BodyRow';
 
+const InnerBodyRow = React.memo(BodyRow);
+
 export default function RowBody({
     headerConfig,
     showList,
@@ -18,7 +20,7 @@ export default function RowBody({
                 {
                     showList && showList.length > 0 && showList.map((item, index) => {
                         return (
-                            <BodyRow
+                            <InnerBodyRow
                                 key={index}
                                 headerRow={headerRow}
                                 item={item}
@@ -33,5 +35,3 @@ export default function RowBody({
         </MyScrollbar>
     );
 }
-
-

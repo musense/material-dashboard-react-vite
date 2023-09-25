@@ -9,6 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import SingleClassificationSelect from '@components/Select/SingleClassificationSelect';
 import SingleStatusSelect from '@components/Select/SingleStatusSelect';
 
+const InnerSingleClassificationSelect = React.memo(SingleClassificationSelect)
+const InnerSingleStatusSelect = React.memo(SingleStatusSelect)
+const InnerDateSelector = React.memo(DateSelector)
+
 const style = {
     width: '100%',
     height: 'fit-content',
@@ -129,7 +133,7 @@ export default function EditorSearchForm() {
             </div>
             <div >
                 <label htmlFor="classification">分類</label>
-                <SingleClassificationSelect
+                <InnerSingleClassificationSelect
                     defaultSelected={categories}
                     width={'180px'}
                     height={'34px'}
@@ -138,14 +142,14 @@ export default function EditorSearchForm() {
             </div>
             <div >
                 <label htmlFor="classification">狀態</label>
-                <SingleStatusSelect
+                <InnerSingleStatusSelect
                     defaultSelected={status}
                     width={'180px'}
                     height={'34px'}
                     setState={onStatusChange}
                 />
             </div>
-            <DateSelector
+            <InnerDateSelector
                 startDate={startDate}
                 endDate={endDate}
                 width={'160px'}

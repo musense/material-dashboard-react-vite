@@ -27,6 +27,7 @@ import {
 } from '@reducers/GetEditorReducer'
 
 const InnerEditorListButtonList = React.memo(EditorListButtonList);
+const InnerEditorSearchForm = React.memo(EditorSearchForm);
 
 const InnerRowHeader = React.memo(RowHeader);
 // const InnerRowBody = React.memo(RowBody);
@@ -100,7 +101,7 @@ export default function EditorListBody({ headerMap }) {
     }, [handleOpen, setMediaInfo])
 
     return <CardBody>
-        <EditorSearchForm />
+        <InnerEditorSearchForm />
         <InnerEditorListButtonList
             currentPage={currentPage}
             totalPage={totalPage}

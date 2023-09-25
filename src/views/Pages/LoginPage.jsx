@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
-// import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
-// import Email from '@material-ui/icons/Email';
 import Card from '@components/Card/Card.jsx';
 import CardBody from '@components/Card/CardBody.jsx';
 import CardFooter from '@components/Card/CardFooter.jsx';

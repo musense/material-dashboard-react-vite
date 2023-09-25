@@ -1,138 +1,88 @@
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Fingerprint from '@material-ui/icons/Fingerprint';
-import Menu from '@material-ui/icons/Menu';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 import Button from '@components/CustomButtons/Button';
 import authNavbarStyle from '@assets/jss/material-dashboard-react/components/authNavbarStyle.jsx';
 
+// eslint-disable-next-line react-refresh/only-export-components
 function AuthNavbar(props) {
-  const { classes, color, brandText } = props;
+  const { classes, brandText } = props;
+  console.log("🚀 ~ file: AuthNavbar.jsx:21 ~ AuthNavbar ~ props:", props)
   const location = useLocation();
-  const [open, setOpen] = useState(false);
-  const handleDrawerToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-  // verifies if routeName is the one active (in browser input)
-  const activeRoute = (routeName) => {
-    // return this.props.location.pathname.indexOf(routeName) > -1 ? true : false;
-    return location.pathname.indexOf(routeName) > -1 ? true : false;
-  };
 
-  const appBarClasses = cx({
-    [' ' + classes[color]]: color,
-  });
-  const list = (
+  // verifies if routeName is the one active (in browser input)
+  const activeRoute = useCallback((routeName) => {
+    return location.pathname.indexOf(routeName) > -1 ? true : false;
+  }, [location.pathname]);
+
+  const brandTextButton = useMemo(() =>
+    <Button href='#' className={classes.title} color='transparent'>
+      {brandText}
+    </Button>, [brandText, classes.title])
+
+  const authLink = useCallback((route) => {
+    return <NavLink
+      to={`/${route}`}
+      className={cx(classes.navLink, {
+        [classes.navLinkActive]: activeRoute(`/${route}`),
+      })}
+    >
+      {
+        route === 'login'
+          ? <Fingerprint className={classes.listItemIcon} />
+          : <PersonAdd className={classes.listItemIcon} />
+      }
+      <ListItemText
+        primary={route}
+        disableTypography={true}
+        className={classes.listItemText} />
+    </NavLink>
+  }, [activeRoute, classes.listItemIcon, classes.listItemText, classes.navLink, classes.navLinkActive])
+
+  const list = useMemo(() => (
     <List className={classes.list}>
-      {/* <ListItem className={classes.listItem}>
-        <NavLink to={'/admin/dashboard'} className={classes.navLink}>
-          <Dashboard className={classes.listItemIcon} />
-          <ListItemText
-            primary={'Dashboard'}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
-      </ListItem> */}
-      <ListItem className={classes.listItem}>
-        <NavLink
-          to={'/register'}
-          className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute('/register'),
-          })}
-        >
-          <PersonAdd className={classes.listItemIcon} />
-          <ListItemText
-            primary={'Register'}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <NavLink
-          to={'/login'}
-          className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute('/login'),
-          })}
-        >
-          <Fingerprint className={classes.listItemIcon} />
-          <ListItemText
-            primary={'Login'}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
-      </ListItem>
+      {
+        [
+          'register',
+          'login',
+        ].map((route) => {
+          return <ListItem className={classes.listItem} key={route}>
+            {authLink(route)}
+          </ListItem>
+        })
+      }
     </List>
-  );
-  return (
-    <AppBar position='static' className={classes.appBar + appBarClasses}>
-      <Toolbar className={classes.container}>
-        <Hidden smDown>
-          <div className={classes.flex}>
-            <Button href='#' className={classes.title} color='transparent'>
-              {brandText}
-            </Button>
-          </div>
-        </Hidden>
-        <Hidden mdUp>
-          <div className={classes.flex}>
-            <Button href='#' className={classes.title} color='transparent'>
-              MD Pro React
-            </Button>
-          </div>
-        </Hidden>
-        <Hidden smDown>{list}</Hidden>
-        <Hidden mdUp>
-          <Button
-            className={classes.sidebarButton}
-            color='transparent'
-            justIcon
-            aria-label='open drawer'
-            onClick={handleDrawerToggle}
-          >
-            <Menu />
-          </Button>
-        </Hidden>
-        <Hidden mdUp>
-          <Hidden mdUp>
-            <Drawer
-              variant='temporary'
-              anchor={'right'}
-              open={open}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              onClose={handleDrawerToggle}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
-            >
-              {/* {list} */}
-            </Drawer>
-          </Hidden>
-        </Hidden>
-      </Toolbar>
+  ), [authLink, classes.list, classes.listItem]);
+
+  const toolbar = useMemo(() => {
+    return <Toolbar className={classes.container}>
+      <div className={classes.flex}>
+        {brandTextButton}
+      </div>
+      {list}
+    </Toolbar>
+  }, [brandTextButton, classes.container, classes.flex, list])
+  const appBar = useMemo(() => {
+    return <AppBar position='static' className={classes.appBar}>
+      {toolbar}
     </AppBar>
-  );
+  }, [toolbar, classes.appBar])
+  return appBar
 }
-// }
 
 AuthNavbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  color: PropTypes.oneOf(['primary', 'info', 'success', 'warning', 'danger']),
   brandText: PropTypes.string,
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default withStyles(authNavbarStyle)(AuthNavbar);

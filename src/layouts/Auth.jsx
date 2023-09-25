@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 // import { Routes, Route } from 'react-router-dom';
 
@@ -15,9 +15,13 @@ import useRefreshStayCurrentPage from '@hook/useRefreshStayCurrentPage';
 import { useSelector } from "react-redux";
 import { getAuthRoutes } from "../reducers/GetConfigReducer.js";
 
+const InnerAuthNavbar = React.memo(AuthNavbar)
 function Auth({ ...props }) {
   useRefreshStayCurrentPage()
-  const { classes, ...rest } = props;
+  const {
+    classes,
+    ...rest
+  } = props;
 
   const location = useLocation();
   const authRoutes = useSelector(getAuthRoutes);
@@ -33,7 +37,7 @@ function Auth({ ...props }) {
     }
   };
 
-  const getActiveRoute = (routes) => {
+  const getActiveRoute = useCallback((routes) => {
     let activeRoute = import.meta.env.VITE_LOGO_TEXT;
 
     for (let i = 0; i < routes.length; i++) {
@@ -42,10 +46,10 @@ function Auth({ ...props }) {
       }
     }
     return activeRoute;
-  };
+  }, [location.pathname]);
   return (
     <div>
-      <AuthNavbar brandText={getActiveRoute(authRoutes)} {...rest} />
+      <InnerAuthNavbar brandText={getActiveRoute(authRoutes)} {...rest} />
       <div className={classes.wrapper}>
         <div
           className={classes.fullPage}

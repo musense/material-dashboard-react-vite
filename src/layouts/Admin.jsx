@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 // creates a beautiful scrollbar
 // @mui/material components
@@ -20,12 +20,13 @@ import * as GetTagsAction from "@actions/GetTagsAction.js";
 import useResetEditorState from '../hook/useResetEditorState';
 import * as GetConfigAction from "@actions/GetConfigAction.js";
 
-
 const myContainerStyle = {
   position: 'relative',
   marginTop: '74px',
   height: 'calc(100vh - 74px)',
 }
+
+const InnerSidebar = React.memo(Sidebar)
 
 function Admin({ ...props }) {
 
@@ -39,9 +40,9 @@ function Admin({ ...props }) {
 
   useResetEditorState(location.pathname)
 
-  const handleDrawerToggle = () => {
+  const handleDrawerToggle = useCallback(() => {
     dispatch({ type: GetConfigAction.TOGGLE_SIDEBAR_OPEN });
-  };
+  }, [dispatch]);
   function getRoute() {
     return props.location && props.location.pathname !== '/admin/maps';
   }
@@ -72,7 +73,7 @@ function Admin({ ...props }) {
   return (
     <>
       <div className={classes.wrapper}>
-        <Sidebar
+        <InnerSidebar
           image={image}
           handleDrawerToggle={handleDrawerToggle}
           open={sidebarOpen}

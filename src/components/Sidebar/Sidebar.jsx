@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -18,14 +18,16 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary.jsx';
 
 const LazyLogoImage = /* @vite-ignore */React.lazy(() => import('./LogoImage'));
 
+// eslint-disable-next-line react-refresh/only-export-components
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
+  const mainSiteUrl = import.meta.env.VITE_MAIN_URL
   const location = useLocation();
   const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
   console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)
-  function activeRoute(routeName) {
+  const activeRoute = useCallback((routeName) => {
     return location.pathname === routeName;
-  }
+  }, [location.pathname])
   const {
     classes,
     color,
@@ -33,40 +35,49 @@ const Sidebar = ({ ...props }) => {
     open,
     handleDrawerToggle
   } = props;
+  console.log("🚀 ~ file: Sidebar.jsx:38 ~ Sidebar ~ classes:", classes)
 
-  const router = routesOnSideBar.map((route, key) => {
-    const listItemClasses = classNames({
-      [' ' + classes[color]]: activeRoute(route.path),
-    });
-    const whiteFontClasses = classNames({
-      [' ' + classes.whiteFont]: activeRoute(route.path),
-    });
-    return (
-      <NavLink
-        to={route.path}
-        className={({ isActive }) => isActive ? 'active' : ''}
-        key={key}
-      >
-        <ListItem button className={classes.itemLink + listItemClasses}>
-          <Icon icon='contentPaste' />
-          <ListItemText
-            primary={route.name}
-            className={classNames(classes.itemText, whiteFontClasses)}
-            disableTypography={true}
-          />
-        </ListItem>
-      </NavLink>
-    );
-  })
+  const item = useCallback((routeName,
+    routePath
+  ) => {
+    return <ListItem button
+      className={classes.itemLink + classNames({
+        [' ' + classes[color]]: activeRoute(routePath),
+      })}
+    >
+      <Icon icon='contentPaste' />
+      <ListItemText
+        primary={routeName}
+        className={classNames(classes.itemText, classNames({
+          [' ' + classes.whiteFont]: activeRoute(routePath),
+        }))}
+        disableTypography={true} />
+    </ListItem>
+  }, [activeRoute, classes, color])
 
-  const links = (
-    <List className={classes.list}>
+  const router = useMemo(() => {
+    return routesOnSideBar.map((route, key) => {
+
+      return (
+        <NavLink
+          to={route.path}
+          className={({ isActive }) => isActive ? 'active' : ''}
+          key={key}
+        >
+          {item(route.name, route.path)}
+        </NavLink>
+      );
+    })
+  }, [routesOnSideBar, item])
+
+  const links = useMemo(() => {
+    return <List className={classes.list}>
       {router}
     </List>
-  );
-  const mainSiteUrl = import.meta.env.VITE_MAIN_URL
-  const brand = (
-    <div className={classes.logo}>
+  }, [classes.list, router])
+
+  const brand = useMemo(() => {
+    return <div className={classes.logo}>
       <a href={mainSiteUrl} target="_blank" className={classNames(classes.logoLink)}>
         <div className={classes.logoImage}>
           <ErrorBoundary>
@@ -77,7 +88,31 @@ const Sidebar = ({ ...props }) => {
         </div>
       </a>
     </div>
-  );
+  }, [classes.img, classes.logo, classes.logoImage, classes.logoLink, mainSiteUrl])
+
+
+  const drawer = useMemo(() => {
+    return <Drawer
+      anchor={'left'}
+      variant='persistent'
+      hideBackdrop
+      open={open}
+      classes={{
+        paper: classNames(classes.drawerPaper),
+      }}
+      onClose={handleDrawerToggle}
+    >
+      {brand}
+      <div className={classes.sidebarWrapper}>{links}</div>
+      {image !== undefined ? (
+        <div
+          className={classes.background}
+          style={{ backgroundImage: 'url(' + image + ')' }} />
+      ) : null}
+    </Drawer>;
+  }, [brand, classes.background, classes.drawerPaper, classes.sidebarWrapper, handleDrawerToggle, image, links, open])
+
+
   return (
     <div>
       {/* <Drawer
@@ -106,26 +141,7 @@ const Sidebar = ({ ...props }) => {
         ) : null}
       </Drawer> */}
 
-      <Drawer
-        anchor={'left'}
-        variant='persistent'
-        hideBackdrop
-        open={open}
-        classes={{
-          paper: classNames(classes.drawerPaper),
-        }}
-        onClose={handleDrawerToggle}
-      >
-        {brand}
-        <div className={classes.sidebarWrapper}>{links}</div>
-        {image !== undefined ? (
-          <div
-            className={classes.background}
-            style={{ backgroundImage: 'url(' + image + ')' }}
-          />
-        ) : null}
-
-      </Drawer>
+      {drawer}
     </div>
   );
 };

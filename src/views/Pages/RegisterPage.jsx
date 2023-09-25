@@ -1,16 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
-import Icon from '@material-ui/core/Icon';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import React, { useCallback, useEffect } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Email from '@material-ui/icons/Email';
-import Face from '@material-ui/icons/Face';
 import Card from '@components/Card/Card.jsx';
 import CardBody from '@components/Card/CardBody.jsx';
 import CardFooter from '@components/Card/CardFooter.jsx';
 import CardHeader from '@components/Card/CardHeader.jsx';
 import Button from '@components/CustomButtons/Button.jsx';
-import CustomInput from '@components/CustomInput/CustomInput.jsx';
 import GridContainer from '@components/Grid/GridContainer.jsx';
 import GridItem from '@components/Grid/GridItem.jsx';
 import registerPageStyle from '@assets/jss/material-dashboard-react/views/registerPageStyle.jsx';
@@ -18,15 +13,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { REGISTER_USER, REGISTER_USER_ERROR_RESET } from './../../actions/GetUserAction';
 import { useNavigate } from 'react-router-dom';
 import MessageDialog from '@components/Modal/MessageDialog';
-
 import useModalResult from '@hook/useModalResult';
 
+import UsernameInput from './Inputs/UsernameInput';
+import EmailInput from './Inputs/EmailInput';
+import PasswordInput from './Inputs/PasswordInput';
+import useIcon from './useIcon';
+
+// eslint-disable-next-line react-refresh/only-export-components
 function RegisterPage(props) {
   const { classes } = props;
 
   const errors = {};
   const navigate = useNavigate()
-  const dispatch = new useDispatch();
+  const dispatch = useDispatch();
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
 
   const {
@@ -37,11 +37,20 @@ function RegisterPage(props) {
     message: returnMessage
   });
 
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = useCallback(() => setOpen(true), []);
+
+  const {
+    lockIcon,
+    emailIcon,
+    faceIcon
+  } = useIcon(classes.inputAdornmentIcon)
+
   useEffect(() => {
     if (title) handleClickOpen()
-  }, [title]);
+  }, [handleClickOpen, title]);
 
-  const register = (e) => {
+  const register = useCallback((e) => {
     e.preventDefault();
 
     const fields = ['email', 'username', 'password'];
@@ -64,12 +73,9 @@ function RegisterPage(props) {
         password: formValues.password,
       },
     });
-  };
+  }, [dispatch]);
 
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => setOpen(true);
-
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
     dispatch({
       type: REGISTER_USER_ERROR_RESET
@@ -77,7 +83,7 @@ function RegisterPage(props) {
     if (success) {
       navigate('/login', { replace: true })
     }
-  };
+  }, [dispatch, navigate, success]);
 
   return (
     <div className={classes.container}>
@@ -92,63 +98,19 @@ function RegisterPage(props) {
                 <h4 className={classes.cardTitle}>註冊</h4>
               </CardHeader>
               <CardBody>
-                <CustomInput
-                  labelText='Name...'
-                  id='name'
-                  formControlProps={{
-                    fullWidth: true,
-                    className: classes.formControlClassName,
-                  }}
-                  inputProps={{
-                    required: true,
-                    type: 'text',
-                    name: 'username',
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <Face className={classes.inputAdornmentIcon} />
-                      </InputAdornment>
-                    ),
-                  }}
+                <UsernameInput
+                  classes={classes}
+                  icon={faceIcon}
                 />
-                <CustomInput
-                  labelText='Email...'
-                  id='email'
-                  formControlProps={{
-                    fullWidth: true,
-                    className: classes.formControlClassName,
-                  }}
-                  error={errors.username}
-                  inputProps={{
-                    required: true,
-                    type: 'email',
-                    name: 'email',
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <Email className={classes.inputAdornmentIcon} />
-                      </InputAdornment>
-                    ),
-                  }}
+                <EmailInput
+                  errors={errors}
+                  classes={classes}
+                  icon={emailIcon}
                 />
-                <CustomInput
-                  labelText='Password...'
-                  id='password'
-                  formControlProps={{
-                    fullWidth: true,
-                    className: classes.formControlClassName,
-                  }}
-                  error={errors.password}
-                  inputProps={{
-                    required: true,
-                    name: 'password',
-                    type: 'password',
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <Icon className={classes.inputAdornmentIcon}>
-                          lock_outline
-                        </Icon>
-                      </InputAdornment>
-                    ),
-                  }}
+                <PasswordInput
+                  errors={errors}
+                  classes={classes}
+                  icon={lockIcon}
                 />
               </CardBody>
               <CardFooter className={classes.justifyContentCenter}>
@@ -177,4 +139,7 @@ RegisterPage.propTypes = {
   history: PropTypes.object,
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default withStyles(registerPageStyle)(RegisterPage);
+
+

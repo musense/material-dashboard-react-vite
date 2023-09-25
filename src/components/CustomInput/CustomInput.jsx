@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -9,6 +9,7 @@ import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
 import customInputStyle from "@assets/jss/material-dashboard-react/components/customInputStyle.jsx";
 
+// eslint-disable-next-line react-refresh/only-export-components
 function CustomInput({ ...props }) {
   const {
     classes,
@@ -22,32 +23,43 @@ function CustomInput({ ...props }) {
     onInputChange
   } = props;
 
-  const labelClasses = classNames({
-    [" " + classes.labelRootError]: error,
-    [" " + classes.labelRootSuccess]: success && !error
-  });
-  const underlineClasses = classNames({
-    [classes.underlineError]: error,
-    [classes.underlineSuccess]: success && !error,
-    [classes.underline]: true
-  });
-  const marginTop = classNames({
-    [classes.marginTop]: labelText === undefined
-  });
+  const labelClasses = useMemo(() => {
+    return classNames({
+      [" " + classes.labelRootError]: error,
+      [" " + classes.labelRootSuccess]: success && !error
+    });
+  }, [classes.labelRootError, classes.labelRootSuccess, error, success])
+
+  const underlineClasses = useMemo(() => {
+    return classNames({
+      [classes.underlineError]: error,
+      [classes.underlineSuccess]: success && !error,
+      [classes.underline]: true
+    });
+  }, [classes.underline, classes.underlineError, classes.underlineSuccess, error, success])
+
+  const marginTop = useMemo(() => {
+    return classNames({
+      [classes.marginTop]: labelText === undefined
+    });
+  }, [classes.marginTop, labelText])
+
   return (
     <FormControl
       {...formControlProps}
       className={formControlProps.className + " " + classes.formControl}
     >
-      {labelText !== undefined ? (
-        <InputLabel
-          className={classes.labelRoot + labelClasses}
-          htmlFor={id}
-          {...labelProps}
-        >
-          {labelText}
-        </InputLabel>
-      ) : null}
+      {labelText !== undefined
+        ? (
+          <InputLabel
+            className={classes.labelRoot + labelClasses}
+            htmlFor={id}
+            {...labelProps}
+          >
+            {labelText}
+          </InputLabel>
+        )
+        : null}
       <Input
         onChange={onInputChange}
         classes={{
@@ -58,11 +70,11 @@ function CustomInput({ ...props }) {
         id={id}
         {...inputProps}
       />
-      {error ? (
-        <Clear className={classes.feedback + " " + classes.labelRootError} />
-      ) : success ? (
-        <Check className={classes.feedback + " " + classes.labelRootSuccess} />
-      ) : null}
+      {error
+        ? <Clear className={classes.feedback + " " + classes.labelRootError} />
+        : success
+          ? <Check className={classes.feedback + " " + classes.labelRootSuccess} />
+          : null}
     </FormControl>
   );
 }
@@ -78,4 +90,5 @@ CustomInput.propTypes = {
   success: PropTypes.bool
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default withStyles(customInputStyle)(CustomInput);

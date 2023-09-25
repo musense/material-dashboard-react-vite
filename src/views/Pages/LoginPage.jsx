@@ -1,18 +1,13 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Icon from '@material-ui/core/Icon';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import React, { useCallback, useEffect } from 'react';
+// import InputAdornment from '@material-ui/core/InputAdornment';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Check from '@material-ui/icons/Check';
-import Email from '@material-ui/icons/Email';
+// import Email from '@material-ui/icons/Email';
 import Card from '@components/Card/Card.jsx';
 import CardBody from '@components/Card/CardBody.jsx';
 import CardFooter from '@components/Card/CardFooter.jsx';
 import CardHeader from '@components/Card/CardHeader.jsx';
 import Button from '@components/CustomButtons/Button.jsx';
-import CustomInput from '@components/CustomInput/CustomInput.jsx';
 import GridContainer from '@components/Grid/GridContainer.jsx';
 import GridItem from '@components/Grid/GridItem.jsx';
 import loginPageStyle from '@assets/jss/material-dashboard-react/views/loginPageStyle.jsx';
@@ -23,27 +18,33 @@ import MessageDialog from '../../components/Modal/MessageDialog';
 import * as GetUserAction from '@actions/GetUserAction';
 import useModalResult from '@hook/useModalResult';
 import useRememberMe from '@hook/useRememberMe';
-import { getSelectedRoutesKeys } from '../../reducers/GetConfigReducer';
-import { useLocation } from "react-router-dom";
-
+import RememberMeCheckBox from './Inputs/RememberMeCheckBox';
+import EmailInput from './Inputs/EmailInput';
+import PasswordInput from './Inputs/PasswordInput';
+import useIcon from './useIcon';
+// eslint-disable-next-line react-refresh/only-export-components
 function LoginPage(props) {
   const { classes } = props;
 
   const loginFormRef = useRef(null);
-  const [rememberMeChecked, setRememberMeChecked] = useState(false);
+
   const errors = {};
   const navigate = useNavigate()
-  const dispatch = new useDispatch();
+  const dispatch = useDispatch();
   const returnMessage = useSelector((state) => state.getUserReducer.errorMessage);
-  const routesWithPath = useSelector(getSelectedRoutesKeys);
-  const location = useLocation()
-  console.log("🚀 ~ file: LoginPage.jsx:38 ~ LoginPage ~ routesWithPath:", routesWithPath)
-  console.log("🚀 ~ file: LoginPage.jsx:38 ~ LoginPage ~ location.pathname:", location.pathname)
 
   const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => setOpen(true);
+  const handleClickOpen = useCallback(() => setOpen(true), []);
+  const {
+    emailIcon,
+    lockIcon,
+  } = useIcon(classes.inputAdornmentIcon)
+  const {
+    rememberMeChecked,
+    setRememberMeChecked,
+    rememberMeStorageSetter
+  } = useRememberMe(loginFormRef)
 
-  const { rememberMeChecked: defaultRememberMeChecked } = useRememberMe(loginFormRef)
   const {
     title,
     content,
@@ -54,16 +55,16 @@ function LoginPage(props) {
 
   useEffect(() => {
     if (title) handleClickOpen()
-  }, [title]);
+  }, [handleClickOpen, title]);
 
-  const login = (e) => {
+  const login = useCallback((e) => {
     e.preventDefault();
 
     const fields = ['username', 'password'];
     const formElements = e.target.elements;
-    if (rememberMeChecked) {
-      localStorage.setItem('username', formElements.username.value);
-    }
+
+    rememberMeStorageSetter(formElements.username.value);
+
     const formValues = fields
       .map((field) => ({
         [field]: formElements.namedItem(field).value,
@@ -77,9 +78,9 @@ function LoginPage(props) {
         password: formValues.password,
       },
     });
-  };
+  }, [dispatch, rememberMeStorageSetter]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
     dispatch({
       type: GetUserAction.REGISTER_USER_ERROR_RESET
@@ -87,7 +88,7 @@ function LoginPage(props) {
     if (success) {
       navigate('/admin/editorList', { replace: true })
     }
-  };
+  }, [dispatch, navigate, success]);
 
   return (
     <div className={classes.container}>
@@ -102,67 +103,20 @@ function LoginPage(props) {
                 <h4 className={classes.cardTitle}>登入</h4>
               </CardHeader>
               <CardBody>
-                <CustomInput
-                  labelText='Email...'
-                  id='email'
-                  error={errors.username || errors.invalidEmailOrPassword}
-                  formControlProps={{
-                    fullWidth: true,
-                    className: classes.formControlClassName,
-                  }}
-                  inputProps={{
-                    required: true,
-                    name: 'username',
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <Email className={classes.inputAdornmentIcon} />
-                      </InputAdornment>
-                    ),
-                  }}
+                <EmailInput
+                  errors={errors}
+                  classes={classes}
+                  icon={emailIcon}
                 />
-                <CustomInput
-                  labelText='Password'
-                  id='password'
-                  error={errors.password || errors.invalidEmailOrPassword}
-                  formControlProps={{
-                    fullWidth: true,
-                    className: classes.formControlClassName,
-                  }}
-                  // onInputChange={onInputChange}
-                  inputProps={{
-                    type: 'password',
-                    required: true,
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <Icon className={classes.inputAdornmentIcon}>
-                          lock_outline
-                        </Icon>
-                      </InputAdornment>
-                    ),
-                  }}
+                <PasswordInput
+                  errors={errors}
+                  classes={classes}
+                  icon={lockIcon}
                 />
-                <FormControlLabel
-                  classes={{
-                    root:
-                      classes.checkboxLabelControl +
-                      ' ' +
-                      classes.checkboxLabelControlClassName,
-                    label: classes.checkboxLabel,
-                  }}
-                  control={
-                    <Checkbox
-                      tabIndex={-1}
-                      checked={defaultRememberMeChecked}
-                      onChange={(e) => setRememberMeChecked(e.target.checked)}
-                      checkedIcon={<Check className={classes.checkedIcon} />}
-                      icon={<Check className={classes.uncheckedIcon} />}
-                      classes={{
-                        checked: classes.checked,
-                        root: classes.checkRoot,
-                      }}
-                    />
-                  }
-                  label={<span>記住我</span>}
+                <RememberMeCheckBox
+                  classes={classes}
+                  rememberMeChecked={rememberMeChecked}
+                  setRememberMeChecked={setRememberMeChecked}
                 />
               </CardBody>
               <CardFooter className={classes.justifyContentCenter}>
@@ -180,7 +134,6 @@ function LoginPage(props) {
         open={open}
         setClose={handleClose}
       />
-
     </div>
   );
 }
@@ -191,4 +144,8 @@ LoginPage.propTypes = {
   errors: PropTypes.object,
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default withStyles(loginPageStyle)(LoginPage);
+
+
+

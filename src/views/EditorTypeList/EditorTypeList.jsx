@@ -123,6 +123,7 @@ export default function EditorTypeList({
             },
         }
     );
+    console.log("🚀 ~ file: EditorTypeList.jsx:126 ~ state:", state)
 
     const setDispatchListFunction = useCallback((list) => {
         const sortingList = list.map((item, index) => {
@@ -201,16 +202,23 @@ export default function EditorTypeList({
     }, [setDispatchListFunction, state])
 
     const onSubmit = useCallback(() => {
-        if ([
+        const checkIfDispatchListNotChanged = [
             ...dispatchList,
             ...removeList
         ].every((item, index) => {
             const lastDispatchItem = lastDispatchList[index]
-            return lastDispatchItem && Object.entries(item).map(([id, order]) =>
-                lastDispatchItem[id] && lastDispatchItem[id] === order
-            )
-        })) return
+            const test = lastDispatchItem && Object.entries(item).map(([id, order]) => {
+                return lastDispatchItem[id] && lastDispatchItem[id] === order
+            })[0]
+            return !!test
+        })
         console.log("🚀 ~ file: EditorTypeList.jsx:259 ~ onSubmit ~ onSubmit!!!")
+
+        console.log("🚀 ~ file: EditorTypeList.jsx:211 ~ onSubmit ~ checkIfDispatchListNotChanged:", checkIfDispatchListNotChanged)
+        if (checkIfDispatchListNotChanged) {
+            setModalTitle('nothing to update!')
+            return
+        }
 
         if (type === 'top' && dispatchList.length > 2) {
             // modal alert
@@ -255,9 +263,13 @@ export default function EditorTypeList({
 
     const {
         open: openDialog,
-        handleOpen: handleOpenDialog,
-        handleClose: handleCloseDialog
+        handleClose,
     } = useModal(title)
+
+    const handleCloseDialog = useCallback(() => {
+        handleClose()
+        setModalTitle('')
+    }, [handleClose, setModalTitle])
 
     const setModalContext = useCallback((type) => {
         switch (type) {
@@ -324,29 +336,38 @@ function CustomDragContext({
     state
 }) {
     return <DragDropContext
-        // onDragStart={onDragStart}
-        // onDragUpdate={onDragUpdate}
         onDragEnd={onDragEnd}
     >
         {Object.keys(state).map((key, ind) => (
-            <MyScrollbar key={ind} height={`${droppableHeight}px`}>
-                <Droppable droppableId={key}>
-                    {(provided, snapshot) => (
-                        <DraggableWrapper
-                            ref={provided.innerRef}
-                            className={key}
-                            isDraggingOver={snapshot.isDraggingOver}
-                            {...provided.droppableProps}
-                        >
-                            <ItemList
-                                items={state[key]?.items}
-                                droppableId={key} />
-                            {provided.placeholder}
-                        </DraggableWrapper>
-                    )}
-                </Droppable>
-            </MyScrollbar>
+            <DroppableContainer
+                key={ind}
+                droppableId={key}
+                state={state}
+            />
         ))}
     </DragDropContext>;
+}
+
+function DroppableContainer({
+    droppableId,
+    state
+}) {
+    return <MyScrollbar height={`${droppableHeight}px`}>
+        <Droppable droppableId={droppableId}>
+            {(provided, snapshot) => (
+                <DraggableWrapper
+                    ref={provided.innerRef}
+                    className={droppableId}
+                    isDraggingOver={snapshot.isDraggingOver}
+                    {...provided.droppableProps}
+                >
+                    <ItemList
+                        items={state[droppableId]?.items}
+                        droppableId={droppableId} />
+                    {provided.placeholder}
+                </DraggableWrapper>
+            )}
+        </Droppable>
+    </MyScrollbar>;
 }
 

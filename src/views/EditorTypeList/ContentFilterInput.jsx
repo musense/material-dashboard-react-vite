@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import styles from './ContentFilterInput.module.css'
-import * as GetEditorAction from "../../actions/GetEditorAction.js";
+import * as GetEditorTypeAction from "../../actions/GetEditorTypeAction.js";
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function ContentsFilterInput({ type }) {
@@ -13,7 +13,7 @@ export default function ContentsFilterInput({ type }) {
         if (inputRef.current === null) return
         if (lastSentValue === inputRef.current.value) return
         dispatch({
-            type: GetEditorAction.SEARCH_EDITOR_TYPE_LIST,
+            type: GetEditorTypeAction.SEARCH_EDITOR_TYPE_LIST,
             payload: {
                 search: inputRef.current.value,
                 type: type,

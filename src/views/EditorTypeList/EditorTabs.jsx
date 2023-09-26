@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import CustomTabs from "@components/CustomTabs/CustomTabs.jsx";
 
 import { useDispatch, useSelector } from 'react-redux';

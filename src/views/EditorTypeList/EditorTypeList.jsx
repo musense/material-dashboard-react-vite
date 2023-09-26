@@ -4,11 +4,13 @@ import MyScrollbar from "../../components/MyScrollbar/MyScrollbar";
 import styled from 'styled-components'
 import Item, { grid } from "./Item";
 import ContentsFilterInput from "./ContentFilterInput";
-import * as GetEditorAction from "../../actions/GetEditorAction.js";
+import * as GetEditorTypeAction from "../../actions/GetEditorTypeAction.js";
 import { useDispatch } from 'react-redux';
 import Icon from "../Icons/Icon";
 import MessageDialog from "../../components/Modal/MessageDialog";
 import useModal from "../../hook/useModal";
+import useModalResult from "../../hook/useModalResult";
+import getErrorMessage from "../../utils/getErrorMessage";
 
 const droppableHeight = 630
 export const borderRadius = 2;
@@ -100,7 +102,12 @@ const ItemList = ({ items, droppableId }) => {
 
 const InnerContentsFilterInput = React.memo(ContentsFilterInput)
 
-export default function EditorTypeList({ type, notList, list }) {
+export default function EditorTypeList({
+    type,
+    notList,
+    list,
+    errorMessage
+}) {
 
     const dispatch = useDispatch();
     const [lastDispatchList, setLastDispatchList] = useState([]);
@@ -217,7 +224,7 @@ export default function EditorTypeList({ type, notList, list }) {
         }
 
         dispatch({
-            type: GetEditorAction.BUNCH_MODIFY_TYPE_LIST,
+            type: GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST,
             payload: {
                 type: type,
                 list: [
@@ -233,38 +240,43 @@ export default function EditorTypeList({ type, notList, list }) {
     }, [dispatch, dispatchList, removeList, type, lastDispatchList])
 
 
+
     const [modalTitle, setModalTitle] = useState('');
-    const [modalContent, setModalContent] = useState('');
+
+    const message = getErrorMessage(modalTitle, errorMessage)
+
+    const {
+        title,
+        content,
+        success
+    } = useModalResult({
+        message: message
+    })
 
     const {
         open: openDialog,
         handleOpen: handleOpenDialog,
         handleClose: handleCloseDialog
-    } = useModal(modalTitle)
+    } = useModal(title)
 
     const setModalContext = useCallback((type) => {
         switch (type) {
             case 'top': {
-                setModalTitle('置頂文章規則')
-                setModalContent(`可插入原先於首頁依發布日期排序的文章，\n但於首頁最多只可插入2篇，\n因此置頂文章超過2篇會以灰色呈現，\n若想在網頁看到更多置頂文章，\n請點選「記事一覽」查詢。`)
+                setModalTitle('top contents rule')
             } break;
             case 'popular': {
-                setModalTitle('熱門文章規則')
-                setModalContent(`熱門文章首先以觀看次數自然排序，\n且仍可人工插入排序，\n但於首頁最多只會呈現5篇熱門文章，\n因此超過5篇者將以灰色呈現，\n並將於確認後移除熱門文章，\n恢復到非熱門文章區。`)
+                setModalTitle('hot contents rule')
             } break;
             case 'recommend': {
-                setModalTitle('推薦文章規則')
-                setModalContent(`可插入無上限推薦文章，\n但首頁最多只會顯示8篇，\n因此超過8篇者將以灰色呈現。`)
+                setModalTitle('recommend contents rule')
             } break;
 
             default: {
                 setModalTitle('')
-                setModalContent('')
             }
                 break;
         }
-        handleOpenDialog()
-    }, [handleOpenDialog])
+    }, [])
 
     const submitButton = useMemo(() => {
         return <SubmitButton onClick={onSubmit}>確認</SubmitButton>
@@ -294,9 +306,9 @@ export default function EditorTypeList({ type, notList, list }) {
             />
         </DropBody>
         <MessageDialog
-            dialogTitle={modalTitle}
-            dialogContent={modalContent}
-            // success={success}
+            dialogTitle={title}
+            dialogContent={content}
+            success={success}
             open={openDialog}
             setClose={handleCloseDialog}
             confirm={false}

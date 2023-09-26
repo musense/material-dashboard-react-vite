@@ -1,5 +1,5 @@
 import { all, put, take } from 'redux-saga/effects';
-import * as GetEditorAction from "../../actions/GetEditorAction";
+import * as GetEditorTypeAction from "../../actions/GetEditorTypeAction";
 import { instance } from "./AxiosInstance";
 import { getGetErrorMessage } from '../apiHelperFunc';
 
@@ -13,7 +13,7 @@ function* GetTopContentList(payload = { page: 1 }) {
         const { totalCount, currentPage, data: topTitleList } = responseData
 
         yield put({
-            type: GetEditorAction.REQUEST_TOP_EDITOR_SUCCESS,
+            type: GetEditorTypeAction.REQUEST_TOP_EDITOR_SUCCESS,
             payload: {
                 topTitleList: topTitleList,
                 totalCount: parseInt(totalCount),
@@ -21,7 +21,7 @@ function* GetTopContentList(payload = { page: 1 }) {
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.REQUEST_TOP_EDITOR_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.REQUEST_TOP_EDITOR_FAIL)
     }
 }
 
@@ -35,7 +35,7 @@ function* GetNotTopWithSearchList(payload = { page: 1, search: '' }) {
         const { totalCount, currentPage, data: notTopTitleList } = responseData
 
         yield put({
-            type: GetEditorAction.REQUEST_NOT_TOP_EDITOR_SUCCESS,
+            type: GetEditorTypeAction.REQUEST_NOT_TOP_EDITOR_SUCCESS,
             payload: {
                 notTopTitleList: notTopTitleList,
                 totalCount: parseInt(totalCount),
@@ -43,7 +43,7 @@ function* GetNotTopWithSearchList(payload = { page: 1, search: '' }) {
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.REQUEST_TOP_EDITOR_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.REQUEST_TOP_EDITOR_FAIL)
     }
 }
 
@@ -56,7 +56,7 @@ function* GetHotContentList(payload = { page: 1 }) {
         const { totalCount, currentPage, data: hotTitleList } = responseData
 
         yield put({
-            type: GetEditorAction.REQUEST_HOT_EDITOR_SUCCESS,
+            type: GetEditorTypeAction.REQUEST_HOT_EDITOR_SUCCESS,
             payload: {
                 hotTitleList: hotTitleList,
                 totalCount: parseInt(totalCount),
@@ -64,7 +64,7 @@ function* GetHotContentList(payload = { page: 1 }) {
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.REQUEST_HOT_EDITOR_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.REQUEST_HOT_EDITOR_FAIL)
     }
 }
 
@@ -77,7 +77,7 @@ function* GetNotHotWithSearchList(payload = { page: 1, search: '' }) {
         const { totalCount, currentPage, data: notHotTitleList } = responseData
 
         yield put({
-            type: GetEditorAction.REQUEST_NOT_HOT_EDITOR_SUCCESS,
+            type: GetEditorTypeAction.REQUEST_NOT_HOT_EDITOR_SUCCESS,
             payload: {
                 notHotTitleList: notHotTitleList,
                 totalCount: parseInt(totalCount),
@@ -85,7 +85,7 @@ function* GetNotHotWithSearchList(payload = { page: 1, search: '' }) {
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.REQUEST_HOT_EDITOR_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.REQUEST_HOT_EDITOR_FAIL)
     }
 }
 
@@ -98,7 +98,7 @@ function* GetRecommendContentList(payload = { page: 1 }) {
         const { totalCount, currentPage, data: recommendTitleList } = responseData
 
         yield put({
-            type: GetEditorAction.REQUEST_RECOMMEND_EDITOR_SUCCESS,
+            type: GetEditorTypeAction.REQUEST_RECOMMEND_EDITOR_SUCCESS,
             payload: {
                 recommendTitleList: recommendTitleList,
                 totalCount: parseInt(totalCount),
@@ -106,7 +106,7 @@ function* GetRecommendContentList(payload = { page: 1 }) {
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.REQUEST_RECOMMEND_EDITOR_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.REQUEST_RECOMMEND_EDITOR_FAIL)
     }
 }
 
@@ -119,7 +119,7 @@ function* GetNotRecommendWithSearchList(payload = { page: 1, search: '' }) {
         const { totalCount, currentPage, data: notRecommendTitleList } = responseData
 
         yield put({
-            type: GetEditorAction.REQUEST_NOT_RECOMMEND_EDITOR_SUCCESS,
+            type: GetEditorTypeAction.REQUEST_NOT_RECOMMEND_EDITOR_SUCCESS,
             payload: {
                 notRecommendTitleList: notRecommendTitleList,
                 totalCount: parseInt(totalCount),
@@ -127,7 +127,7 @@ function* GetNotRecommendWithSearchList(payload = { page: 1, search: '' }) {
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.REQUEST_RECOMMEND_EDITOR_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.REQUEST_RECOMMEND_EDITOR_FAIL)
     }
 }
 
@@ -142,14 +142,14 @@ function* TopBunchModifyList(payload = { list: [] }) {
         const { updateCount, failedCount } = responseData
 
         yield put({
-            type: GetEditorAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
+            type: GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
             payload: {
                 updateCount: parseInt(updateCount),
                 failedCount: parseInt(failedCount),
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
     }
 }
 
@@ -164,14 +164,14 @@ function* PopularBunchModifyList(payload = { list: [] }) {
         const { updateCount, failedCount } = responseData
 
         yield put({
-            type: GetEditorAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
+            type: GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
             payload: {
                 updateCount: parseInt(updateCount),
                 failedCount: parseInt(failedCount),
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
     }
 }
 
@@ -186,21 +186,21 @@ function* RecommendBunchModifyList(payload = { list: [] }) {
         const { updateCount, failedCount } = responseData
 
         yield put({
-            type: GetEditorAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
+            type: GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS,
             payload: {
                 updateCount: parseInt(updateCount),
                 failedCount: parseInt(failedCount),
             }
         })
     } catch (error) {
-        yield getGetErrorMessage(error, GetEditorAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
+        yield getGetErrorMessage(error, GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST_FAIL)
     }
 }
 
 
 function* watchGetTopEditorSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.REQUEST_TOP_EDITOR)
+        const { payload } = yield take(GetEditorTypeAction.REQUEST_TOP_EDITOR)
         // yield AuthUser(GetEditorAction.AUTH_USER_SUCCESS, GetEditorAction.AUTH_USER_FAIL)
         yield GetTopContentList(payload)
     }
@@ -208,7 +208,7 @@ function* watchGetTopEditorSaga() {
 
 function* watchGetNotTopEditorSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.SEARCH_NOT_TOP_EDITOR_LIST)
+        const { payload } = yield take(GetEditorTypeAction.SEARCH_NOT_TOP_EDITOR_LIST)
         // yield AuthUser(GetEditorAction.AUTH_USER_SUCCESS, GetEditorAction.AUTH_USER_FAIL)
         yield GetNotTopWithSearchList(payload)
     }
@@ -216,7 +216,7 @@ function* watchGetNotTopEditorSaga() {
 
 function* watchGetHotEditorSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.REQUEST_HOT_EDITOR)
+        const { payload } = yield take(GetEditorTypeAction.REQUEST_HOT_EDITOR)
         // yield AuthUser(GetEditorAction.AUTH_USER_SUCCESS, GetEditorAction.AUTH_USER_FAIL)
         yield GetHotContentList(payload)
     }
@@ -224,7 +224,7 @@ function* watchGetHotEditorSaga() {
 
 function* watchGetNotHotEditorSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.SEARCH_NOT_HOT_EDITOR_LIST)
+        const { payload } = yield take(GetEditorTypeAction.SEARCH_NOT_HOT_EDITOR_LIST)
         // yield AuthUser(GetEditorAction.AUTH_USER_SUCCESS, GetEditorAction.AUTH_USER_FAIL)
         yield GetNotHotWithSearchList(payload)
     }
@@ -232,7 +232,7 @@ function* watchGetNotHotEditorSaga() {
 
 function* watchGetRecommendEditorSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.REQUEST_RECOMMEND_EDITOR)
+        const { payload } = yield take(GetEditorTypeAction.REQUEST_RECOMMEND_EDITOR)
         // yield AuthUser(GetEditorAction.AUTH_USER_SUCCESS, GetEditorAction.AUTH_USER_FAIL)
         yield GetRecommendContentList(payload)
     }
@@ -240,7 +240,7 @@ function* watchGetRecommendEditorSaga() {
 
 function* watchGetNotRecommendEditorSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.SEARCH_NOT_RECOMMEND_EDITOR_LIST)
+        const { payload } = yield take(GetEditorTypeAction.SEARCH_NOT_RECOMMEND_EDITOR_LIST)
         // yield AuthUser(GetEditorAction.AUTH_USER_SUCCESS, GetEditorAction.AUTH_USER_FAIL)
         yield GetNotRecommendWithSearchList(payload)
     }
@@ -248,7 +248,7 @@ function* watchGetNotRecommendEditorSaga() {
 
 function* watchBunchModifyEditorTypeSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.BUNCH_MODIFY_TYPE_LIST)
+        const { payload } = yield take(GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST)
         switch (payload.type) {
             case 'top': {
                 yield TopBunchModifyList(payload)
@@ -270,7 +270,7 @@ function* watchBunchModifyEditorTypeSaga() {
 
 function* watchSearchEditorTypeSaga() {
     while (true) {
-        const { payload } = yield take(GetEditorAction.SEARCH_EDITOR_TYPE_LIST)
+        const { payload } = yield take(GetEditorTypeAction.SEARCH_EDITOR_TYPE_LIST)
         switch (payload.type) {
             case 'top': {
                 yield GetNotTopWithSearchList(payload)

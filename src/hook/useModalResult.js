@@ -115,15 +115,6 @@ export default function useModalResult({
                 }
                 return
             }
-            case 'update successfully': {
-                setTitle('Success')
-                setContent(`${name}更新成功！`)
-                setSuccess(true)
-                if (isEditor) {
-                    setSitemapUrl(data.sitemapUrl)
-                }
-                return
-            }
             case 'please add tag name': {
                 setTitle('Warning')
                 setContent(`請輸入[${name}名稱]！`)
@@ -214,6 +205,21 @@ export default function useModalResult({
                 setSuccess(false)
                 return
             }
+            case 'update successfully': {
+                setTitle('Success')
+                setContent(`${name}更新成功！`)
+                setSuccess(true)
+                if (isEditor) {
+                    setSitemapUrl(data.sitemapUrl)
+                }
+                return
+            }
+            case 'update fail!': {
+                setTitle('Failed!')
+                setContent(`${name}更新失敗！`)
+                setSuccess(false)
+                return
+            }
             case 'Please select create date': {
                 setTitle('Warning')
                 setContent('請輸入創建日期！')
@@ -250,6 +256,24 @@ export default function useModalResult({
                 setSuccess(false)
                 return
             }
+            case 'top contents rule': {
+                setTitle('置頂文章規則')
+                setContent(`可插入原先於首頁依發布日期排序的文章，\n但於首頁最多只可插入2篇，\n因此置頂文章超過2篇會以灰色呈現，\n若想在網頁看到更多置頂文章，\n請點選「記事一覽」查詢。`)
+                setSuccess(true)
+                return
+            }
+            case 'hot contents rule': {
+                setTitle('熱門文章規則')
+                setContent(`熱門文章首先以觀看次數自然排序，\n且仍可人工插入排序，\n但於首頁最多只會呈現5篇熱門文章，\n因此超過5篇者將以灰色呈現，\n並將於確認後移除熱門文章，\n恢復到非熱門文章區。`)
+                setSuccess(true)
+                return
+            }
+            case 'recommend contents rule': {
+                setTitle('推薦文章規則')
+                setContent(`可插入無上限推薦文章，\n但首頁最多只會顯示8篇，\n因此超過8篇者將以灰色呈現。`)
+                setSuccess(true)
+                return
+            }
             case '--reset-error-message': {
                 setTitle(null)
                 setContent(null)
@@ -258,9 +282,7 @@ export default function useModalResult({
                 return
             }
 
-            default: {
-
-            }
+            default:
                 break;
         }
         return () => {

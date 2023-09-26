@@ -16,12 +16,6 @@ const initialState = {
   },
   selectedPatchKey: null,
   titleList: null,
-  topTitleState: null,
-  notTopTitleState: null,
-  hotTitleState: null,
-  notHotTitleState: null,
-  recommendTitleState: null,
-  notRecommendTitleState: null,
   _id: '',
   editor: null,
   currentPage: null,
@@ -70,66 +64,6 @@ const getEditorReducer = (state = initialState, action) => {
         currentPage: action.payload.currentPage,
         totalCount: action.payload.totalCount,
         errorMessage: errorMessage.getFinish
-      }
-    case GetEditorAction.REQUEST_TOP_EDITOR_SUCCESS:
-      return {
-        ...state,
-        topTitleState: {
-          list: action.payload.topTitleList,
-          currentPage: action.payload.currentPage,
-          totalCount: action.payload.totalCount,
-          errorMessage: action.payload.errorMessage,
-        },
-      }
-    case GetEditorAction.REQUEST_NOT_TOP_EDITOR_SUCCESS:
-      return {
-        ...state,
-        notTopTitleState: {
-          list: action.payload.notTopTitleList,
-          currentPage: action.payload.currentPage,
-          totalCount: action.payload.totalCount,
-          errorMessage: action.payload.errorMessage,
-        },
-      }
-    case GetEditorAction.REQUEST_HOT_EDITOR_SUCCESS:
-      return {
-        ...state,
-        hotTitleState: {
-          list: action.payload.hotTitleList,
-          currentPage: action.payload.currentPage,
-          totalCount: action.payload.totalCount,
-          errorMessage: action.payload.errorMessage,
-        },
-      }
-    case GetEditorAction.REQUEST_NOT_HOT_EDITOR_SUCCESS:
-      return {
-        ...state,
-        notHotTitleState: {
-          list: action.payload.notHotTitleList,
-          currentPage: action.payload.currentPage,
-          totalCount: action.payload.totalCount,
-          errorMessage: action.payload.errorMessage,
-        },
-      }
-    case GetEditorAction.REQUEST_RECOMMEND_EDITOR_SUCCESS:
-      return {
-        ...state,
-        recommendTitleState: {
-          list: action.payload.recommendTitleList,
-          currentPage: action.payload.currentPage,
-          totalCount: action.payload.totalCount,
-          errorMessage: action.payload.errorMessage,
-        },
-      }
-    case GetEditorAction.REQUEST_NOT_RECOMMEND_EDITOR_SUCCESS:
-      return {
-        ...state,
-        notRecommendTitleState: {
-          list: action.payload.notRecommendTitleList,
-          currentPage: action.payload.currentPage,
-          totalCount: action.payload.totalCount,
-          errorMessage: action.payload.errorMessage,
-        },
       }
     case GetEditorAction.REQUEST_EDITOR_PAGE:
       return {
@@ -227,63 +161,6 @@ const getEditorShowList = createSelector(
     return titleList?.slice(start, end)
   })
 
-const getTopState = state => state.getEditorReducer.topTitleState
-const getNotTopState = state => state.getEditorReducer.notTopTitleState
-
-const getTopList = createSelector(
-  [getTopState],
-  (state) => {
-    console.log("🚀 ~ file: GetEditorReducer.js:236 ~ state:", state)
-    return state?.list
-  }
-)
-
-const getNotTopList = createSelector(
-  [getNotTopState],
-  (state) => {
-    console.log("🚀 ~ file: GetEditorReducer.js:244 ~ state:", state)
-    return state?.list
-  }
-)
-
-const getHotState = state => state.getEditorReducer.hotTitleState
-const getNotHotState = state => state.getEditorReducer.notHotTitleState
-
-const getHotList = createSelector(
-  [getHotState],
-  (state) => {
-    console.log("🚀 ~ file: GetEditorReducer.js:236 ~ state:", state)
-    return state?.list
-  }
-)
-
-const getNotHotList = createSelector(
-  [getNotHotState],
-  (state) => {
-    console.log("🚀 ~ file: GetEditorReducer.js:244 ~ state:", state)
-    return state?.list
-  }
-)
-
-const getRecommendState = state => state.getEditorReducer.recommendTitleState
-const getNotRecommendState = state => state.getEditorReducer.notRecommendTitleState
-
-const getRecommendList = createSelector(
-  [getRecommendState],
-  (state) => {
-    console.log("🚀 ~ file: GetEditorReducer.js:236 ~ state:", state)
-    return state?.list
-  }
-)
-
-const getNotRecommendList = createSelector(
-  [getNotRecommendState],
-  (state) => {
-    console.log("🚀 ~ file: GetEditorReducer.js:244 ~ state:", state)
-    return state?.list
-  }
-)
-
 export {
   getEditor,
   getCurrentPage,
@@ -292,10 +169,4 @@ export {
   getSelectedPatchKey,
   getEditorErrorMessage,
   getEditorShowList,
-  getTopList,
-  getNotTopList,
-  getHotList,
-  getNotHotList,
-  getRecommendList,
-  getNotRecommendList,
 }

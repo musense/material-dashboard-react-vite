@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import getTagsReducer from './GetTagsReducer'
 import getEditorReducer from './GetEditorReducer'
+import getEditorTypeReducer from './GetEditorTypeReducer'
 import getUserReducer from './GetUserReducer'
 import getClassReducer from './GetClassReducer'
 import getDialogReducer from './GetDialogReducer'
@@ -12,6 +13,7 @@ import getConfigReducer from './GetConfigReducer'
 const rootReducer = combineReducers({
     getTagsReducer: getTagsReducer,
     getEditorReducer: getEditorReducer,
+    getEditorTypeReducer: getEditorTypeReducer,
     getUserReducer: getUserReducer,
     getClassReducer: getClassReducer,
     getDialogReducer: getDialogReducer,

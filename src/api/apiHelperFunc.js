@@ -218,10 +218,15 @@ export function* getErrorMessage(error, patchType) {
 }
 
 export function* getGetErrorMessage(error, patchType) {
+    console.log("🚀 ~ file: apiHelperFunc.js:225 ~ function*getGetErrorMessage ~ error.message:", error.message)
+    let errorMessage = error.message
+    if (error?.message === 'Request failed with status code 440') {
+        errorMessage = 'Please login first'
+    }
     yield put({
         type: patchType,
         payload: {
-            errorMessage: error.message
+            errorMessage: errorMessage
         }
     })
 }

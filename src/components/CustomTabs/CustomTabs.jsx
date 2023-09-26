@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // nodejs library to set properties for components
@@ -15,10 +15,14 @@ import CardHeader from "@components/Card/CardHeader.jsx";
 
 import customTabsStyle from "@assets/jss/material-dashboard-react/components/customTabsStyle.jsx";
 
-
+const routeParamMap = new Map([
+  ['top', 0],
+  ['popular', 1],
+  ['recommend', 2],
+])
 // eslint-disable-next-line react-refresh/only-export-components
 function CustomTabs({ ...props }) {
-  const [value, setValue] = useState(0);
+
 
   const {
     classes,
@@ -26,15 +30,23 @@ function CustomTabs({ ...props }) {
     plainTabs,
     tabs,
     title,
-    color,
     className,
+    search,
   } = props;
 
-  const handleChange = useCallback((e, newValue) => setValue(newValue), [])
+  const [value, setValue] = useState(0);
+
+  const handleChange = useCallback((e, newValue) => {
+    setValue(newValue)
+  }, [])
 
   const cardTitle = classNames({
     [classes.cardTitle]: true
   });
+
+  useEffect(() => {
+    setValue(routeParamMap.get(search))
+  }, [search]);
 
   return (
     <Card plain={plainTabs}>
@@ -107,6 +119,7 @@ CustomTabs.propTypes = {
   ),
   rtlActive: PropTypes.bool,
   plainTabs: PropTypes.bool,
+  search: PropTypes.string,
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CustomTabs from "@components/CustomTabs/CustomTabs.jsx";
 
 import { useDispatch, useSelector } from 'react-redux';
 import searchMap from '../../hook/useQuery.js';
-import * as GetEditorAction from "../../actions/GetEditorAction.js";
-import { getHotList, getNotHotList, getNotRecommendList, getNotTopList, getRecommendList, getTopList } from '../../reducers/GetEditorReducer.js';
+import * as GetEditorTypeAction from "../../actions/GetEditorTypeAction.js";
+import { getHotList, getNotHotList, getNotRecommendList, getNotTopList, getRecommendList, getTopList, getErrorMessage } from '../../reducers/GetEditorTypeReducer.js';
 import EditorTypeList from './EditorTypeList.jsx';
 import { useNavigate, createSearchParams } from "react-router-dom";
 
 const InnerEditorTypeList = React.memo(EditorTypeList)
+
 
 export default function EditorTabs() {
 
@@ -22,19 +23,22 @@ export default function EditorTabs() {
     const recommendList = useSelector(getRecommendList)
     const notRecommendList = useSelector(getNotRecommendList)
 
+    const serverErrorMessage = useSelector(getErrorMessage)
+
     const search = searchMap()
     const type = search.get('type') ?? 'top'
+    console.log("🚀 ~ file: EditorTabs.jsx:29 ~ EditorTabs ~ type:", type)
 
     const GetDefaultTypeList = useCallback((actionType) => {
         if (actionType === '') return
         dispatch({
-            type: GetEditorAction[actionType]
+            type: GetEditorTypeAction[actionType]
         });
     }, [dispatch])
 
     const GetDefaultNotTypeList = useCallback(() => {
         dispatch({
-            type: GetEditorAction.SEARCH_EDITOR_TYPE_LIST,
+            type: GetEditorTypeAction.SEARCH_EDITOR_TYPE_LIST,
             payload: {
                 search: '',
                 type: type,
@@ -69,8 +73,6 @@ export default function EditorTabs() {
     }, [GetDefaultNotTypeList, GetDefaultTypeList, type]);
 
     const onTabClickHandler = useCallback((targetType, searchType) => {
-        console.log("🚀 ~ file: EditorTabs.jsx:72 ~ onTabClickHandler ~ searchType:", searchType)
-        console.log("🚀 ~ file: EditorTabs.jsx:72 ~ onTabClickHandler ~ targetType:", targetType)
         if (searchType === targetType) return
         navigate({
             pathname: ".",
@@ -84,6 +86,7 @@ export default function EditorTabs() {
         <CustomTabs
             headerColor="primary"
             className='CardHeader-tabs'
+            search={type}
             tabs={[
                 {
                     color: "primary",
@@ -94,6 +97,7 @@ export default function EditorTabs() {
                             type={'top'}
                             notList={notTopList}
                             list={topList}
+                            errorMessage={serverErrorMessage}
                         />
                     ),
                 },
@@ -105,7 +109,9 @@ export default function EditorTabs() {
                         <InnerEditorTypeList
                             type={'popular'}
                             notList={notHotList}
-                            list={hotList} />
+                            list={hotList}
+                            errorMessage={serverErrorMessage}
+                        />
                     ),
                 },
                 {
@@ -116,7 +122,9 @@ export default function EditorTabs() {
                         <InnerEditorTypeList
                             type={'recommend'}
                             notList={notRecommendList}
-                            list={recommendList} />
+                            list={recommendList}
+                            errorMessage={serverErrorMessage}
+                        />
                     ),
                 },
             ]}

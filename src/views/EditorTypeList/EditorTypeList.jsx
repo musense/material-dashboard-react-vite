@@ -1,25 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import memoizeOne from 'memoize-one';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import MyScrollbar from "../../components/MyScrollbar/MyScrollbar";
-import { colors } from '@atlaskit/theme';
 import styled from 'styled-components'
 import Item, { grid } from "./Item";
 import ContentsFilterInput from "./ContentFilterInput";
 import * as GetEditorAction from "../../actions/GetEditorAction.js";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Icon from "../Icons/Icon";
 import MessageDialog from "../../components/Modal/MessageDialog";
 import useModal from "../../hook/useModal";
-import useModalResult from "../../hook/useModalResult";
 
 const droppableHeight = 630
 export const borderRadius = 2;
-// const getListStyle = isDraggingOver => ({
-//     background: isDraggingOver ? "lightblue" : "lightgrey",
-//     padding: grid,
-//     width: 500
-// });
 
 const DropContainer = styled.div`
     margin: 0 auto;
@@ -93,9 +85,22 @@ const typeMap = new Map([
     ["popular", "熱門"],
     ["recommend", "推薦"],
 ])
-export default function EditorTypeList({ type, notList, list }) {
 
-    // const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
+
+const ItemList = ({ items, droppableId }) => {
+    return items.map((item, index) => (
+        <Item
+            key={item._id}
+            item={item}
+            order={index}
+            droppableId={droppableId}
+        />
+    ))
+}
+
+const InnerContentsFilterInput = React.memo(ContentsFilterInput)
+
+export default function EditorTypeList({ type, notList, list }) {
 
     const dispatch = useDispatch();
     const [lastDispatchList, setLastDispatchList] = useState([]);
@@ -103,11 +108,12 @@ export default function EditorTypeList({ type, notList, list }) {
     const [removeList, setRemoveList] = useState([]);
     const [state, setState] = useState(
         {
-            notList:
-                { items: [] },
-
-            list:
-                { items: [] }
+            list: {
+                items: []
+            },
+            notList: {
+                items: []
+            },
         }
     );
 
@@ -145,9 +151,9 @@ export default function EditorTypeList({ type, notList, list }) {
 
     }, [notList, list, setDispatchListFunction]);
 
-
-    const onDragEnd = (event) => {
-        const { source, destination } = event;
+    const onDragEnd = useCallback((result) => {
+        const { source, destination } = result;
+        console.log("🚀 ~ file: EditorTypeList.jsx:179 ~ onDragEnd ~ destination:", destination)
 
         if (!destination) {
             return;
@@ -169,6 +175,7 @@ export default function EditorTypeList({ type, notList, list }) {
             0,
             remove
         );
+        console.log("🚀 ~ file: EditorTypeList.jsx:201 ~ onDragEnd ~ newItemObj:", newItemObj)
 
         // set state新的 state
         setState(newItemObj);
@@ -181,26 +188,22 @@ export default function EditorTypeList({ type, notList, list }) {
             ])
         }
         if (destination.droppableId === 'list') {
+            console.log("🚀 ~ file: EditorTypeList.jsx:216 ~ onDragEnd ~ destination.droppableId:", destination.droppableId)
             setDispatchListFunction(newItemObj[destination.droppableId].items)
         }
-    };
-
-    const onReset = () => {
-        setState(({
-            notList: {
-                items: notList
-            },
-            list: {
-                items: list
-            }
-        }))
-    }
+    }, [setDispatchListFunction, state])
 
     const onSubmit = useCallback(() => {
-        if (JSON.stringify([
+        if ([
             ...dispatchList,
             ...removeList
-        ]) === JSON.stringify(lastDispatchList)) return
+        ].every((item, index) => {
+            const lastDispatchItem = lastDispatchList[index]
+            return lastDispatchItem && Object.entries(item).map(([id, order]) =>
+                lastDispatchItem[id] && lastDispatchItem[id] === order
+            )
+        })) return
+        console.log("🚀 ~ file: EditorTypeList.jsx:259 ~ onSubmit ~ onSubmit!!!")
 
         if (type === 'top' && dispatchList.length > 2) {
             // modal alert
@@ -228,6 +231,8 @@ export default function EditorTypeList({ type, notList, list }) {
             ...removeList
         ])
     }, [dispatch, dispatchList, removeList, type, lastDispatchList])
+
+
     const [modalTitle, setModalTitle] = useState('');
     const [modalContent, setModalContent] = useState('');
 
@@ -261,11 +266,14 @@ export default function EditorTypeList({ type, notList, list }) {
         handleOpenDialog()
     }, [handleOpenDialog])
 
+    const submitButton = useMemo(() => {
+        return <SubmitButton onClick={onSubmit}>確認</SubmitButton>
+    }, [onSubmit])
     return <DropContainer>
         <DropHeader>
             <div>
                 <TitleH2>非{typeMap.get(type)}文章</TitleH2>
-                <ContentsFilterInput type={type} />
+                <InnerContentsFilterInput type={type} />
             </div>
             <div>
                 <TitleH2>
@@ -275,37 +283,15 @@ export default function EditorTypeList({ type, notList, list }) {
                     </IconButton>
                 </TitleH2>
                 <ButtonWrapper>
-                    <SubmitButton onClick={onSubmit}>確認</SubmitButton>
+                    {submitButton}
                 </ButtonWrapper>
             </div>
         </DropHeader>
         <DropBody>
-            <DragDropContext onDragEnd={onDragEnd}>
-                {Object.keys(state).map((key, ind) => (
-                    <MyScrollbar key={ind} height={`${droppableHeight}px`}>
-                        <Droppable droppableId={key}>
-                            {(provided, snapshot) => (
-                                <DraggableWrapper
-                                    ref={provided.innerRef}
-                                    className={key}
-                                    isDraggingOver={snapshot.isDraggingOver}
-                                    {...provided.droppableProps}
-                                >
-                                    {state[key]?.items.map((el, index) => (
-                                        <Item
-                                            droppableId={key}
-                                            key={el._id}
-                                            item={el}
-                                            index={index}
-                                        />
-                                    ))}
-                                    {provided.placeholder}
-                                </DraggableWrapper>
-                            )}
-                        </Droppable>
-                    </MyScrollbar>
-                ))}
-            </DragDropContext>
+            <CustomDragContext
+                onDragEnd={onDragEnd}
+                state={state}
+            />
         </DropBody>
         <MessageDialog
             dialogTitle={modalTitle}
@@ -320,4 +306,35 @@ export default function EditorTypeList({ type, notList, list }) {
     </DropContainer>
 }
 
+
+function CustomDragContext({
+    onDragEnd,
+    state
+}) {
+    return <DragDropContext
+        // onDragStart={onDragStart}
+        // onDragUpdate={onDragUpdate}
+        onDragEnd={onDragEnd}
+    >
+        {Object.keys(state).map((key, ind) => (
+            <MyScrollbar key={ind} height={`${droppableHeight}px`}>
+                <Droppable droppableId={key}>
+                    {(provided, snapshot) => (
+                        <DraggableWrapper
+                            ref={provided.innerRef}
+                            className={key}
+                            isDraggingOver={snapshot.isDraggingOver}
+                            {...provided.droppableProps}
+                        >
+                            <ItemList
+                                items={state[key]?.items}
+                                droppableId={key} />
+                            {provided.placeholder}
+                        </DraggableWrapper>
+                    )}
+                </Droppable>
+            </MyScrollbar>
+        ))}
+    </DragDropContext>;
+}
 

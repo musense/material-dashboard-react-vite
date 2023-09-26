@@ -2,7 +2,7 @@ import React from "react";
 import getUpdateDateTime from "../../utils/getUpdateDateTime";
 import BodyCell from "../BodyCell/BodyCell";
 import EditBodyCell from "../EditBodyCell/EditBodyCell";
-import { Stack } from "@mui/material";
+import Stack from "@mui/material/Stack";
 
 const InnerEditBodyCell = React.memo(EditBodyCell)
 
@@ -24,13 +24,12 @@ export default function BodyRow({
             }
             switch (configItem.type) {
                 case "string": {
-                    return <BodyCell
-                        key={index}
-                        children={cellContent}
-                        className={configItem.className} />
+                    return <BodyCell key={index} className={configItem.className}>
+                        {cellContent}
+                    </BodyCell>
                 }
                 case "stringd": {
-                    return <BodyCell key={index} children={
+                    return <BodyCell key={index} className={configItem.className} >
                         <Stack spacing={1} direction={'column'} >
                             <span style={{
                                 color: cellContent === '已發布' ? 'green'
@@ -51,35 +50,28 @@ export default function BodyRow({
                                 }
                             </span>
                         </Stack>
-                    } className={configItem.className} />
+                    </BodyCell>
                 }
                 case "stringl": {
-                    return <BodyCell
-                        key={index}
-                        children={(
-                            <div className={'ellipsis'}>
-                                {cellContent}
-                            </div>
-                        )}
-                        className={configItem.className} />
+                    return <BodyCell key={index} className={configItem.className} >
+                        <div className={'ellipsis'}>
+                            {cellContent}
+                        </div>
+                    </BodyCell>
                 }
                 case "date": {
-                    return <BodyCell
-                        key={index}
-                        children={getUpdateDateTime(cellContent)}
-                        className={configItem.className}
-                    />
+                    return <BodyCell key={index} className={configItem.className}>
+                        {getUpdateDateTime(cellContent)}
+                    </BodyCell>
                 }
                 case "datep": {
-                    return <BodyCell
-                        key={index}
-                        children={<Stack spacing={0} direction={'column'} >
+                    return <BodyCell key={index} className={configItem.className} >
+                        <Stack spacing={0} direction={'column'} >
                             <span>{getUpdateDateTime(item[configItem.showKeys[0]])}</span>
                             <span>~</span>
                             <span>{getUpdateDateTime(item[configItem.showKeys[1]])}</span>
-                        </Stack>}
-                        className={configItem.className}
-                    />
+                        </Stack>
+                    </BodyCell>
                 }
                 case "dateps": {
                     let content
@@ -93,13 +85,11 @@ export default function BodyRow({
                         </>
                         )
                     }
-                    return <BodyCell
-                        key={index}
-                        children={<Stack spacing={0} direction={'column'} >
+                    return <BodyCell key={index} className={configItem.className}>
+                        <Stack spacing={0} direction={'column'} >
                             {content}
-                        </Stack>}
-                        className={configItem.className}
-                    />
+                        </Stack>
+                    </BodyCell>
                 }
                 case "image": {
                     let imageSrc, imageTitle, imageAlt
@@ -115,30 +105,30 @@ export default function BodyRow({
                         imageTitle = item[configItem.checkKey]
                         imageAlt = item[configItem.alt]
                     }
-                    return <BodyCell key={index} children={
-                        item[configItem.checkKey] !== ''
+                    return <BodyCell key={index} className={configItem.className}>
+                        {item[configItem.checkKey] !== ''
                             ? (
                                 <img
                                     src={imageSrc}
                                     title={imageTitle}
                                     alt={imageAlt}
                                     onClick={e => setMediaInfo(e, item)} />
-                            ) : '無圖片/縮圖'
-                    } className={configItem.className} />
+                            ) : '無圖片/縮圖'}
+                    </BodyCell>
                 }
                 case "number": {
-                    return <BodyCell
-                        key={index}
-                        children={Number(cellContent)}
-                        className={configItem.className}
-                    />
+                    return <BodyCell key={index} className={configItem.className}>
+                        {Number(cellContent)}
+                    </BodyCell>
                 }
                 case "number-": {
-                    return <BodyCell key={index} children={
-                        item[configItem.checkKey]
-                            ? Number(cellContent)
-                            : <span>-</span>
-                    } className={configItem.className[item[configItem.checkKey]]} />
+                    return <BodyCell key={index} className={configItem.className[item[configItem.checkKey]]}>
+                        {
+                            item[configItem.checkKey]
+                                ? Number(cellContent)
+                                : <span>-</span>
+                        }
+                    </BodyCell>
                 }
                 case '__edit_cell__': {
                     let copyText
@@ -174,7 +164,9 @@ export default function BodyRow({
                     />
                 }
                 default: {
-                    return null
+                    return <BodyCell key={index}>
+                        {null}
+                    </BodyCell>
                 }
             }
         })}

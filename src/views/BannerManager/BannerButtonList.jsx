@@ -1,10 +1,16 @@
 import React from "react";
 import PageButtonList from '../../components/PageButtonList/PageButtonList';
 import Stack from "@mui/material/Stack";
-import Button from '@mui/material/Button';
 import { useDispatch } from 'react-redux';
 import * as GetBannerAction from '../../actions/GetBannerAction';
-import { Typography } from "@mui/material";
+import PrevButton from "../../components/SearchForm/PrevButton";
+import NextButton from "../../components/SearchForm/NextButton";
+import SummedUpText from "../../components/SearchForm/SummedUpText";
+
+const InnerPageButtonList = React.memo(PageButtonList)
+const InnerPrevButton = React.memo(PrevButton)
+const InnerNextButton = React.memo(NextButton)
+const InnerSummedUpText = React.memo(SummedUpText)
 
 export default function BannerButtonList({
     currentPage,
@@ -31,27 +37,23 @@ export default function BannerButtonList({
     return <Stack spacing={2} direction={'row'}
         display={'flex'} useFlexGap flexWrap="wrap"
         alignItems={'center'} sx={{ my: '1rem' }}>
-        <Button
-            {...buttonProps}
-            disabled={currentPage === 1}
-            onClick={() => onPageButtonClick(currentPage - 1)}
-        >
-            上一頁
-        </Button>
-        <PageButtonList
+        <InnerPrevButton
+            buttonProps={buttonProps}
+            currentPage={currentPage}
+            onPageButtonClick={onPageButtonClick}
+        />
+        <InnerPageButtonList
             totalPage={totalPage}
             currentPage={currentPage}
-            patchType={GetBannerAction.REQUEST_BANNER_PAGE}
+            patchType={GetBannerAction.REQUEST_EDITOR_PAGE} />
+        <InnerNextButton
+            buttonProps={buttonProps}
+            currentPage={currentPage}
+            totalPage={totalPage}
+            onPageButtonClick={onPageButtonClick}
         />
-        <Button
-            {...buttonProps}
-            disabled={currentPage === totalPage}
-            onClick={() => onPageButtonClick(currentPage + 1)}
-        >
-            下一頁
-        </Button>
-        <Typography sx={{ fontSize: 16 }}>
-            合計：{totalCount}筆
-        </Typography>
+        <InnerSummedUpText
+            totalCount={totalCount}
+        />
     </Stack>;
 }

@@ -6,7 +6,9 @@ export default function useModal(data) {
 
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
-    const handleOpen = useCallback(() => setOpen(true), [setOpen]);
+    const handleOpen = useCallback(
+        () => setOpen(true)
+        , [setOpen]);
     const handleClose = useCallback(() => {
         setOpen(false)
         dispatch({
@@ -22,7 +24,7 @@ export default function useModal(data) {
 
     useEffect(() => {
         if (data) handleOpen()
-    }, [data]);
+    }, [data, handleOpen]);
 
     return { open, handleOpen, handleClose };
 }

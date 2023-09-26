@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components'
 import Icon from "../Icons/Icon";
@@ -8,8 +8,8 @@ export const grid = 8;
 const transparency = 0.6
 
 const getItemStyle = (isDragging, draggableStyle, type, sorting) => {
-    console.log("🚀 ~ file: Item.jsx:11 ~ getItemStyle ~ sorting:", sorting)
-    return {// some basic styles to make the items look a bit nicer
+    return {// some basic styles to make the items look a bit nicer.
+
         userSelect: "none",
         padding: grid * 2,
         margin: `0 0 ${grid}px 0`,
@@ -33,12 +33,11 @@ const getItemStyle = (isDragging, draggableStyle, type, sorting) => {
     };
 }
 
-
 const ItemDiv = styled.div`
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  
+
   &>*:first-child {
     text-align: center;
     width: 100px;
@@ -62,50 +61,31 @@ const ItemDiv = styled.div`
   }
 `
 
-const TimeAvatar = styled.div`
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 999px;
-  background-color: #e38b29;
-  color: black;
-  position: absolute;
-  right: 2%;
-  top: -20%;
-`;
-
-export default function Item({ item, index, droppableId }) {
-
-    const topSorting = item.topSorting !== undefined
-        ? item.topSorting
-        : undefined;
-    const popularSorting = item.popularSorting !== undefined
-        ? item.popularSorting
-        : undefined;
-    const recommendSorting = item.recommendSorting !== undefined
-        ? item.recommendSorting
-        : undefined;
-    let className = []
+export default function Item({
+    item,
+    order,
+    droppableId
+}) {
+    let className = ''
     if (droppableId === 'list') {
-        if (topSorting !== undefined) {
-            className = ['topSorting', Number(index) + 1];
-        } else if (popularSorting !== undefined) {
-            className = ['popularSorting', Number(index) + 1];
-
-        } else if (recommendSorting !== undefined) {
-            className = ['recommendSorting', Number(index) + 1];
-        }
+        className = item.topSorting !== undefined
+            ? ['topSorting', Number(order) + 1]
+            : item.popularSorting !== undefined
+                ? ['popularSorting', Number(order) + 1]
+                : item.recommendSorting !== undefined
+                    ? ['recommendSorting', Number(order) + 1]
+                    : ''
     }
+    const dragIcon = useMemo(() => <Icon icon="drag" />, []);
+
     return (
         <Draggable
             draggableId={item._id}
-            index={index}
+            index={order}
             className={className}>
             {(provided, snapshot) => {
                 return (
-                    <div
+                    <ItemDiv
                         ref={provided.innerRef}
                         snapshot={snapshot}
                         {...provided.draggableProps}
@@ -117,21 +97,18 @@ export default function Item({ item, index, droppableId }) {
                             className[1]
                         )}
                     >
-                        <ItemDiv>
-                            <div>
-                                <span>{getUpdateDateTime(item.publishedAt)}</span>
-                                {item.pageView !== undefined && <>
-                                    <br /><span>人氣：{item.pageView}</span>
-                                </>
-                                }
-                            </div>
-                            <span className={'ellipsis lineClamp3'}>{item.title}</span>
-                            <span>{item.serialNumber}</span>
-                            <Icon icon="drag" />
-                            {droppableId === 'list' && <span>{index + 1}</span>}
-                        </ItemDiv>
-                        {/* <TimeAvatar>{item.score}</TimeAvatar> */}
-                    </div>)
+                        <div>
+                            <span>{getUpdateDateTime(item.publishedAt)}</span>
+                            {item.pageView !== undefined && <>
+                                <br /><span>人氣：{item.pageView}</span>
+                            </>}
+                        </div>
+                        <span className={'ellipsis lineClamp3'}>{item.title}</span>
+                        <span>{item.serialNumber}</span>
+                        {dragIcon}
+                        {droppableId === 'list' && <span>{order + 1}</span>}
+                    </ItemDiv>
+                )
             }}
         </Draggable >);
 }

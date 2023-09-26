@@ -24,8 +24,11 @@ import MediaModal from "@components/Modal/MediaModal";
 import { useCallback } from "react";
 import { getSelectedBanner } from "../../reducers/GetBannerReducer";
 
-// const InnerRowHeader = React.memo(RowHeader)
+const InnerRowHeader = React.memo(RowHeader)
 // const InnerRowBody = React.memo(RowBody)
+
+const InnerBannerButtonList = React.memo(BannerButtonList);
+const InnerBannerSearchForm = React.memo(BannerSearchForm);
 
 export default function BannerRightBody({ headerMap }) {
 
@@ -84,14 +87,14 @@ export default function BannerRightBody({ headerMap }) {
     }, [handleOpen, setMediaInfo])
 
     return <CardBody>
-        <BannerSearchForm />
-        <BannerButtonList
+        <InnerBannerSearchForm />
+        <InnerBannerButtonList
             currentPage={currentPage}
             totalPage={totalPage}
             totalCount={totalCount}
         />
         <form className='view-list-form'>
-            <RowHeader
+            <InnerRowHeader
                 headerConfig={headerMap}
                 selectedPatchKey={selectedPatchKey} />
             <RowBody

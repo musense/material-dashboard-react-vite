@@ -1,11 +1,19 @@
 import React, { useCallback, useMemo } from "react";
-import { shallowEqual, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as GetEditorAction from '../../actions/GetEditorAction';
 import { useNavigate } from 'react-router-dom';
 import Stack from "@mui/material/Stack";
-import Button from '@mui/material/Button';
 import PageButtonList from "@components/PageButtonList/PageButtonList";
-import { Typography } from "@mui/material";
+import PrevButton from "../../components/SearchForm/PrevButton";
+import NextButton from "../../components/SearchForm/NextButton";
+import CreateEditorButton from "../../components/SearchForm/CreateEditorButton";
+import SummedUpText from "../../components/SearchForm/SummedUpText";
+
+const InnerPageButtonList = React.memo(PageButtonList)
+const InnerPrevButton = React.memo(PrevButton)
+const InnerNextButton = React.memo(NextButton)
+const InnerCreateEditorButton = React.memo(CreateEditorButton)
+const InnerSummedUpText = React.memo(SummedUpText)
 
 export default function EditorListButtonList({
     currentPage,
@@ -62,53 +70,4 @@ export default function EditorListButtonList({
             totalCount={totalCount}
         />
     </Stack>;
-}
-const InnerPageButtonList = React.memo(PageButtonList)
-const InnerPrevButton = React.memo(PrevButton)
-const InnerNextButton = React.memo(NextButton)
-const InnerCreateEditorButton = React.memo(CreateEditorButton)
-const InnerSummedUpText = React.memo(SummedUpText)
-
-function SummedUpText({ totalCount }) {
-    return <Typography sx={{ fontSize: 16 }}>
-        合計：{totalCount}筆
-    </Typography>;
-}
-
-function NextButton({
-    buttonProps,
-    currentPage,
-    totalPage,
-    onPageButtonClick
-}) {
-    return <Button
-        {...buttonProps}
-        disabled={currentPage === totalPage}
-        onClick={() => onPageButtonClick(currentPage + 1)}>
-        下一頁
-    </Button>;
-}
-
-function CreateEditorButton({
-    buttonProps,
-    onAddNew
-}) {
-    return <Button
-        {...buttonProps}
-        onClick={onAddNew}>
-        新增文章
-    </Button>;
-}
-
-function PrevButton({
-    buttonProps,
-    currentPage,
-    onPageButtonClick
-}) {
-    return <Button
-        {...buttonProps}
-        disabled={currentPage === 1}
-        onClick={() => onPageButtonClick(currentPage - 1)}>
-        上一頁
-    </Button>;
 }

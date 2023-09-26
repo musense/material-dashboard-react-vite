@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import * as GetBannerAction from '../../actions/GetBannerAction';
 import { useDispatch } from 'react-redux';
 
+const InnerDateSelector = React.memo(DateSelector)
+
 const style = {
     width: '100%',
     height: 'fit-content',
@@ -61,7 +63,7 @@ export default function BannerSearchForm() {
                 <input type="text" name='title' />
             </div>
 
-            <DateSelector
+            <InnerDateSelector
                 width={'160px'}
                 height={'40px'}
             />

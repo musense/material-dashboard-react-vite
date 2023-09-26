@@ -1,24 +1,17 @@
 import React, { useCallback, useEffect } from 'react';
-import Card from "@components/Card/Card.jsx";
-import CardBody from "@components/Card/CardBody.jsx";
-import CardFooter from "@components/Card/CardFooter.jsx";
-import CardHeader from "@components/Card/CardHeader.jsx";
-import CardIcon from "@components/Card/CardIcon.jsx";
 import CustomTabs from "@components/CustomTabs/CustomTabs.jsx";
-import GridContainer from "@components/Grid/GridContainer.jsx";
-import GridItem from "@components/Grid/GridItem.jsx";
 
 import { useDispatch, useSelector } from 'react-redux';
 import searchMap from '../../hook/useQuery.js';
 import * as GetEditorAction from "../../actions/GetEditorAction.js";
 import { getHotList, getNotHotList, getNotRecommendList, getNotTopList, getRecommendList, getTopList } from '../../reducers/GetEditorReducer.js';
 import EditorTypeList from './EditorTypeList.jsx';
-import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
+import { useNavigate, createSearchParams } from "react-router-dom";
+
+const InnerEditorTypeList = React.memo(EditorTypeList)
 
 export default function EditorTabs() {
 
-    const location = useLocation();
-    console.log("🚀 ~ file: EditorTabs.jsx:21 ~ EditorTabs ~ location:", location)
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -29,9 +22,8 @@ export default function EditorTabs() {
     const recommendList = useSelector(getRecommendList)
     const notRecommendList = useSelector(getNotRecommendList)
 
-    const search = new searchMap()
+    const search = searchMap()
     const type = search.get('type') ?? 'top'
-    console.log("🚀 ~ file: EditorTabs.jsx:34 ~ EditorTabs ~ type:", type)
 
     const GetDefaultTypeList = useCallback((actionType) => {
         if (actionType === '') return
@@ -76,6 +68,18 @@ export default function EditorTabs() {
         }
     }, [GetDefaultNotTypeList, GetDefaultTypeList, type]);
 
+    const onTabClickHandler = useCallback((targetType, searchType) => {
+        console.log("🚀 ~ file: EditorTabs.jsx:72 ~ onTabClickHandler ~ searchType:", searchType)
+        console.log("🚀 ~ file: EditorTabs.jsx:72 ~ onTabClickHandler ~ targetType:", targetType)
+        if (searchType === targetType) return
+        navigate({
+            pathname: ".",
+            search: createSearchParams({
+                type: targetType
+            }).toString()
+        })
+    }, [navigate])
+
     return (
         <CustomTabs
             headerColor="primary"
@@ -84,14 +88,9 @@ export default function EditorTabs() {
                 {
                     color: "primary",
                     tabName: "置頂文章",
-                    onClick: () => navigate({
-                        pathname: ".",
-                        search: createSearchParams({
-                            type: "top"
-                        }).toString()
-                    }),
+                    onClick: () => onTabClickHandler('top', type),
                     tabContent: (
-                        <EditorTypeList
+                        <InnerEditorTypeList
                             type={'top'}
                             notList={notTopList}
                             list={topList}
@@ -101,14 +100,9 @@ export default function EditorTabs() {
                 {
                     color: "primary",
                     tabName: "熱門文章",
-                    onClick: () => navigate({
-                        pathname: ".",
-                        search: createSearchParams({
-                            type: "popular"
-                        }).toString()
-                    }),
+                    onClick: () => onTabClickHandler('popular', type),
                     tabContent: (
-                        <EditorTypeList
+                        <InnerEditorTypeList
                             type={'popular'}
                             notList={notHotList}
                             list={hotList} />
@@ -117,14 +111,9 @@ export default function EditorTabs() {
                 {
                     color: "primary",
                     tabName: "推薦文章",
-                    onClick: () => navigate({
-                        pathname: ".",
-                        search: createSearchParams({
-                            type: "recommend"
-                        }).toString()
-                    }),
+                    onClick: () => onTabClickHandler('recommend', type),
                     tabContent: (
-                        <EditorTypeList
+                        <InnerEditorTypeList
                             type={'recommend'}
                             notList={notRecommendList}
                             list={recommendList} />
@@ -135,8 +124,5 @@ export default function EditorTabs() {
     )
 
 }
-
-
-
 
 

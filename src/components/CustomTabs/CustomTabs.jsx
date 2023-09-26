@@ -16,6 +16,7 @@ import CardHeader from "@components/Card/CardHeader.jsx";
 import customTabsStyle from "@assets/jss/material-dashboard-react/components/customTabsStyle.jsx";
 
 
+// eslint-disable-next-line react-refresh/only-export-components
 function CustomTabs({ ...props }) {
   const [value, setValue] = useState(0);
 
@@ -27,10 +28,9 @@ function CustomTabs({ ...props }) {
     title,
     color,
     className,
-    onClick,
   } = props;
 
-  const handleChange = (e, newValue) => setValue(newValue)
+  const handleChange = useCallback((e, newValue) => setValue(newValue), [])
 
   const cardTitle = classNames({
     [classes.cardTitle]: true
@@ -109,4 +109,5 @@ CustomTabs.propTypes = {
   plainTabs: PropTypes.bool,
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default withStyles(customTabsStyle)(CustomTabs);

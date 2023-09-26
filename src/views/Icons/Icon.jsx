@@ -70,11 +70,6 @@ const iconList = {
 
 }
 
-const Icon = (props) => {
-    const { icon } = props
-    return (
-        iconList[icon]
-    )
-}
+const Icon = ({ icon }) => iconList[icon]
 
 export default Icon;

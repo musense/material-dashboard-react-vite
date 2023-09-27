@@ -232,9 +232,22 @@ input {
 
 .view-list-form .flex-3 {
   flex-grow: 3;
+}
+
+.view-list-form .left-wrap {
   text-align: left;
   white-space: pre-wrap;
 }
+
+.view-list-form .flex-4 {
+  flex-grow: 4;
+}
+
+.view-list-form .flex-5 {
+  flex-grow: 5;
+}
+
+
 
 .view-list-form .is-popular-tag {
   font-weight: bolder;

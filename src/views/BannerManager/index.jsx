@@ -14,32 +14,32 @@ const BannerDispatchMessage = [
 const headerMap = {
     headerRow: [
         { name: "序號", patchKey: "serialNumber", type: "number", className: "flex-1" },
-        { name: "Banner名稱", patchKey: "name", type: "string", className: "flex-2" },
+        { name: "Banner名稱", patchKey: "name", type: "string", className: "flex-3" },
         {
             name: "圖片/影片",
             src: "homeImagePath",
             checkKey: "contentImagePath",
             alt: "hyperlink",
             type: "image",
-            className: "flex-2 image-container"
+            className: "flex-3 image-container"
         },
         { name: "排序", patchKey: "sort", type: "number", className: "flex-1" },
-        { name: "超連結", patchKey: "hyperlink", type: "string", className: "flex-2" },
+        { name: "超連結", patchKey: "hyperlink", type: "string", className: "flex-3" },
         {
             name: "排程時間",
             patchKey: "startDate",
             checkKey: ["eternal"],
             showKeys: ["startDate", "endDate"],
             type: "dateps",
-            className: "flex-2"
+            className: "flex-3"
         },
-        { name: "狀態", patchKey: "status", type: "string", className: "flex-1" },
+        { name: "狀態", patchKey: "status", type: "string", className: "flex-2" },
         {
             type: "__edit_cell__",
             copyText: "hyperlink",
             editType: GetBannerAction.EDITING_BANNER,
             // cancelEditType: GetBannerAction.CANCEL_EDITING_BANNER,
-            className: "flex-1"
+            className: "flex-3"
         }
     ],
     patchType: GetBannerAction.SHOW_BANNER_LIST_SORTING,

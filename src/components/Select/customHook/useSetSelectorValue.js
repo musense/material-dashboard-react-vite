@@ -6,30 +6,34 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
     const setTransform = useCallback((selectedValue) => {
         if (!selectedValue || selectedValue.length === 0) return;
         if (isMulti) {
-            return selectedValue.map(selected => ({
+            const transformedValue = selectedValue.map(selected => ({
                 _id: selected.value,
                 name: selected.label,
-                [selected.__isNew__ ? '__isNew__' : '']: true
+                ...selected.__isNew__ && { '__isNew__': true },
             }))
+
+            return transformedValue
         }
         return {
             _id: selectedValue.value,
             name: selectedValue.label,
-            [selectedValue.__isNew__ ? '__isNew__' : '']: true
+            ...selected.__isNew__ && { '__isNew__': true }
         }
-    }, [isMulti])
+    }, [isMulti, selected.__isNew__])
 
     const transformedSelected = useMemo(() => {
         if (!defaultSelected || defaultSelected.length === 0) return null;
         if (isMulti) {
             return defaultSelected.map((selected) => {
                 return {
+                    ...selected,
                     value: selected._id,
                     label: selected.name
                 }
             })
         }
         return {
+            ...defaultSelected,
             value: defaultSelected._id,
             label: defaultSelected.name
         }

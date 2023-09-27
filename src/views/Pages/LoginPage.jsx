@@ -84,7 +84,7 @@ function LoginPage(props) {
       type: GetUserAction.REGISTER_USER_ERROR_RESET
     })
     if (success) {
-      navigate('/admin/editorList', { replace: true })
+      navigate('/admin/editorList/', { replace: true })
     }
   }, [dispatch, navigate, success]);
 

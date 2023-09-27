@@ -9,19 +9,16 @@ jobs:
       - run: yarn install
 
   deploy:
-    docker:
-      - image: google/cloud-sdk
+    machine:
+      enabled: true
     steps:
-      - run:
-          name: Authenticate gcloud
-          command: |
-            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
-            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+      - add_ssh_keys:
+          fingerprints:
+            - $VM_SSH_FINGERPRINT
       - run:
           name: Deploy to GCP Compute Engine
           command: |
-            gcloud compute ssh --quiet "dino_wu@uat-dashboard" --zone "asia-east1-b" --project "uat-environment-387601" --command="cd /home/dino_wu/material-dashboard-react-vite/ && sudo git pull && sudo rm -r /var/www/oogiriinfoBuild/ && sudo yarn install && sudo yarn build:staging:oogiri && sudo mv dist oogiriinfoBuild && sudo mv oogiriinfoBuild /var/www/" -- -l dino_wu
+            ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP "cd /home/dino_wu/material-dashboard-react-vite/ && sudo git pull && sudo yarn install && sudo yarn build:staging:oogiri && sudo rm -r /var/www/oogiriinfoBuild/ && sudo mv dist oogiriinfoBuild && sudo mv oogiriinfoBuild /var/www/"
 
 workflows:
   build-and-deploy:

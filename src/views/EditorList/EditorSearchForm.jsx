@@ -27,6 +27,7 @@ const style = {
 
 export default function EditorSearchForm() {
 
+    const disableRoute = import.meta.env.VITE_DISABLE_ROUTE_NAME
     const dispatch = useDispatch();
     const title = useSelector((state) => state.getSearchReducer.title);
     const categories = useSelector((state) => state.getSearchReducer.categories);
@@ -131,7 +132,7 @@ export default function EditorSearchForm() {
                 <input type="text" name='title'
                     value={title} onChange={e => onSearchFormPropertyChange(e.target.value, 'title')} />
             </div>
-            <div >
+            {disableRoute !== '文章分類管理' && <div >
                 <label htmlFor="classification">分類</label>
                 <InnerSingleClassificationSelect
                     defaultSelected={categories}
@@ -139,7 +140,7 @@ export default function EditorSearchForm() {
                     height={'34px'}
                     setState={onClassificationChange}
                 />
-            </div>
+            </div>}
             <div >
                 <label htmlFor="classification">狀態</label>
                 <InnerSingleStatusSelect

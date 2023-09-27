@@ -10,9 +10,9 @@ import DetailFormButtonList from "./DetailFormButtonList";
 import MyScrollbar from "@components/MyScrollbar/MyScrollbar";
 
 
-
 const DetailForm = ({ createType }) => {
 
+    const disableRoute = import.meta.env.VITE_DISABLE_ROUTE_NAME
     const dispatch = useDispatch();
 
     const headTitle = useSelector((state) => state.getSlateReducer.detailForm?.webHeader?.headTitle);
@@ -68,9 +68,9 @@ const DetailForm = ({ createType }) => {
                 <Tags
                     tags={tags}
                     onPropertyChange={onPropertyChange} />
-                <Classification
+                {disableRoute !== '文章分類管理' && <Classification
                     categories={categories[0]}
-                    onPropertyChange={onPropertyChange} />
+                    onPropertyChange={onPropertyChange} />}
                 <Media
                     onPropertyChange={onPropertyChange}
                     onShowUrlChange={onShowUrlChange}

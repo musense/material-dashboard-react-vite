@@ -58,10 +58,10 @@ function LoginPage(props) {
   const login = useCallback((e) => {
     e.preventDefault();
 
-    const fields = ['username', 'password'];
+    const fields = ['email', 'password'];
     const formElements = e.target.elements;
 
-    rememberMeStorageSetter(formElements.username.value);
+    rememberMeStorageSetter(formElements.email.value);
 
     const formValues = fields
       .map((field) => ({
@@ -72,7 +72,7 @@ function LoginPage(props) {
     dispatch({
       type: GetUserAction.LOGIN_USER,
       payload: {
-        username: formValues.username,
+        username: formValues.email,
         password: formValues.password,
       },
     });

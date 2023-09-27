@@ -11,8 +11,8 @@ export default function useRememberMe(loginFormRef) {
             const loginForm = loginFormRef.current;
             if (localStorage.getItem('username')) {
                 setRememberMeChecked(true)
-                loginForm.username.focus()
-                loginForm.username.value = localStorage.getItem('username') || '';
+                loginForm.email.focus()
+                loginForm.email.value = localStorage.getItem('username') || '';
             }
         }
     }, [loginFormRef]);

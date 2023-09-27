@@ -16,7 +16,7 @@ export default function EmailInput({
         }}
         inputProps={{
             required: true,
-            name: 'username',
+            name: 'email',
             endAdornment: icon,
         }} />;
 }

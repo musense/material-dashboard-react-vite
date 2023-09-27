@@ -65,6 +65,7 @@ function RegisterPage(props) {
     console.group(`register!!!`);
     console.table(formValues);
     console.groupEnd(`register!!!`);
+
     dispatch({
       type: REGISTER_USER,
       payload: {
@@ -87,7 +88,7 @@ function RegisterPage(props) {
 
   return (
     <div className={classes.container}>
-      <GridContainer justify='center'>
+      <GridContainer justifyContent='center'>
         <GridItem xs={12} sm={6} md={4}>
           <form onSubmit={register}>
             <Card className={classes.cardAnimaton}>

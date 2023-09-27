@@ -17,6 +17,7 @@ export default function PasswordInput({
         inputProps={{
             type: 'password',
             required: true,
+            name: 'password',
             endAdornment: icon,
         }} />;
 }

@@ -87,7 +87,6 @@ export default function EditorListBody({ headerMap }) {
 
     const {
         open: openDialog,
-        handleOpen: handleOpenDialog,
         handleClose: handleCloseDialog
     } = useModal(title)
 

@@ -17,7 +17,7 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
         return {
             _id: selectedValue.value,
             name: selectedValue.label,
-            ...selected.__isNew__ && { '__isNew__': true }
+            ...selectedValue.__isNew__ && { '__isNew__': true }
         }
     }, [isMulti])
 

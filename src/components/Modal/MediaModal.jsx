@@ -42,13 +42,13 @@ export default function MediaModal({ open, handleClose, mediaInfo }) {
 
     useEffect(() => {
         if (!mediaInfo) return
-        if (mediaInfo.contentImagePath.indexOf('youtube') !== -1) {
+        if (mediaInfo.media.contentImagePath.indexOf('youtube') !== -1) {
             // const src = getProperty('src');
             setIsImage(false)
-            setIframeUrl(mediaInfo.contentImagePath)
+            setIframeUrl(mediaInfo.media.contentImagePath)
         } else {
             setIsImage(true)
-            setIframeUrl(mediaInfo.contentImagePath)
+            setIframeUrl(mediaInfo.media.contentImagePath)
         }
 
     }, [mediaInfo]);

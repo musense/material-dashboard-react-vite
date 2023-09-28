@@ -55,11 +55,11 @@ function EditorList() {
     if (reDispatchMessage.includes(serverMessage)) {
       dispatch({ type: GetEditorAction.REQUEST_EDITOR })
     }
-  }, [serverMessage]);
+  }, [dispatch, serverMessage]);
 
   useEffect(() => {
     dispatch({ type: GetEditorAction.REQUEST_EDITOR });
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (disableRoute !== '文章分類管理') {

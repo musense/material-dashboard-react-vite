@@ -106,6 +106,12 @@ export default function useModalResult({
                 setSuccess(false)
                 return
             }
+            case 'duplicate tag name error': {
+                setTitle('Failed!')
+                setContent('標籤名稱不可重複！')
+                setSuccess(false)
+                return
+            }
             case 'add successfully': {
                 setTitle('Success')
                 setContent(`${name}新增成功！`)

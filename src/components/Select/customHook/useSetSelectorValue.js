@@ -19,7 +19,7 @@ export default function useSetSelectorValue(defaultSelected, isMulti) {
             name: selectedValue.label,
             ...selected.__isNew__ && { '__isNew__': true }
         }
-    }, [isMulti, selected.__isNew__])
+    }, [isMulti])
 
     const transformedSelected = useMemo(() => {
         if (!defaultSelected || defaultSelected.length === 0) return null;

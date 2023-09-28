@@ -92,25 +92,25 @@ export default function BodyRow({
                     </BodyCell>
                 }
                 case "image": {
-                    let imageSrc, imageTitle, imageAlt
+                    let imageSmallImage, imageLargeImage, imageAlt
                     if (configItem.src?.includes(".")) {
                         const splitSrc = configItem.src.split(".")
                         const splitCheckKey = configItem.checkKey.split(".")
                         const splitAlt = configItem.alt.split(".")
-                        imageSrc = item[splitSrc[0]][splitSrc[1]]
-                        imageTitle = item[splitCheckKey[0]][splitCheckKey[1]]
+                        imageSmallImage = item[splitSrc[0]][splitSrc[1]]
+                        imageLargeImage = item[splitCheckKey[0]][splitCheckKey[1]]
                         imageAlt = item[splitAlt[0]][splitAlt[1]]
                     } else {
-                        imageSrc = item[configItem.src]
-                        imageTitle = item[configItem.checkKey]
+                        imageSmallImage = item[configItem.src]
+                        imageLargeImage = item[configItem.checkKey]
                         imageAlt = item[configItem.alt]
                     }
                     return <BodyCell key={index} className={configItem.className}>
-                        {item[configItem.checkKey] !== ''
+                        {imageSmallImage !== ''
                             ? (
                                 <img
-                                    src={imageSrc}
-                                    title={imageTitle}
+                                    src={imageSmallImage}
+                                    title={imageLargeImage}
                                     alt={imageAlt}
                                     onClick={e => setMediaInfo(e, item)} />
                             ) : '無圖片/縮圖'}

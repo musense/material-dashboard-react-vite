@@ -112,7 +112,7 @@ const ImageElement = ({ attributes, children, element }) => {
             canvas.width = img.width / 2
             canvas.height = img.height / 2
             context.drawImage(img, 0, 0, canvas.width, canvas.height)
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.9)
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.5)
             setCompressedDataUrl(compressedDataUrl)
         }
     }, [element.url])

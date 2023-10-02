@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Transforms } from 'slate'
 import {
@@ -97,11 +97,25 @@ const Badge = ({ attributes, children }) => {
         </span>
     )
 }
-
-const Image = ({ attributes, children, element }) => {
+const ImageElement = ({ attributes, children, element }) => {
     const editor = useSlateStatic()
     const path = ReactEditor.findPath(editor, element)
+    const [compressedDataUrl, setCompressedDataUrl] = useState('');
+    const canvasRef = useRef(null)
 
+    useEffect(() => {
+        const img = new Image()
+        img.src = element.url
+        img.onload = function () {
+            const canvas = canvasRef.current
+            const context = canvas.getContext('2d')
+            canvas.width = img.width / 2
+            canvas.height = img.height / 2
+            context.drawImage(img, 0, 0, canvas.width, canvas.height)
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.9)
+            setCompressedDataUrl(compressedDataUrl)
+        }
+    }, [element.url])
     const selected = useSelected()
     const focused = useFocused()
     return (
@@ -113,12 +127,13 @@ const Image = ({ attributes, children, element }) => {
             position: relative;
           `}
             >
-                <a href={element.href}
-                    title={element.href || element.alt}
+                <a href={compressedDataUrl}
+                    title={compressedDataUrl || element.alt}
                     rel="noreferrer noopener"
                     target="_blank">
-                    <img
-                        src={element.url}
+                    <canvas
+                        ref={canvasRef}
+                        src={compressedDataUrl}
                         alt={element.alt}
                         className={css`
               display   : block;
@@ -264,7 +279,7 @@ export const Element = (props) => {
                 </ul>
             )
         case 'image':
-            return <Image
+            return <ImageElement
                 element={element}
                 attributes={attributes}
                 children={children}

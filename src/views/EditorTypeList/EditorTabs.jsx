@@ -4,12 +4,9 @@ import CustomTabs from "../../components/CustomTabs/CustomTabs.jsx";
 import { useDispatch, useSelector } from 'react-redux';
 import searchMap from '../../hook/useQuery.js';
 import * as GetEditorTypeAction from "../../actions/GetEditorTypeAction.js";
-import { getHotList, getNotHotList, getNotRecommendList, getNotTopList, getRecommendList, getTopList, getErrorMessage } from '../../reducers/GetEditorTypeReducer.js';
+import { getHotList, getNotHotList, getNotRecommendList, getNotTopList, getRecommendList, getTopList } from '../../reducers/GetEditorTypeReducer.js';
 import EditorTypeList from './EditorTypeList.jsx';
 import { useNavigate, createSearchParams } from "react-router-dom";
-
-const InnerEditorTypeList = React.memo(EditorTypeList)
-
 
 export default function EditorTabs() {
 
@@ -23,7 +20,6 @@ export default function EditorTabs() {
     const recommendList = useSelector(getRecommendList)
     const notRecommendList = useSelector(getNotRecommendList)
 
-    const serverErrorMessage = useSelector(getErrorMessage)
 
     const search = searchMap()
     const type = search.get('type') ?? 'top'
@@ -93,11 +89,10 @@ export default function EditorTabs() {
                     tabName: "置頂文章",
                     onClick: () => onTabClickHandler('top', type),
                     tabContent: (
-                        <InnerEditorTypeList
+                        <EditorTypeList
                             type={'top'}
                             notList={notTopList}
                             list={topList}
-                            errorMessage={serverErrorMessage}
                         />
                     ),
                 },
@@ -106,11 +101,10 @@ export default function EditorTabs() {
                     tabName: "熱門文章",
                     onClick: () => onTabClickHandler('popular', type),
                     tabContent: (
-                        <InnerEditorTypeList
+                        <EditorTypeList
                             type={'popular'}
                             notList={notHotList}
                             list={hotList}
-                            errorMessage={serverErrorMessage}
                         />
                     ),
                 },
@@ -119,11 +113,10 @@ export default function EditorTabs() {
                     tabName: "推薦文章",
                     onClick: () => onTabClickHandler('recommend', type),
                     tabContent: (
-                        <InnerEditorTypeList
+                        <EditorTypeList
                             type={'recommend'}
                             notList={notRecommendList}
                             list={recommendList}
-                            errorMessage={serverErrorMessage}
                         />
                     ),
                 },

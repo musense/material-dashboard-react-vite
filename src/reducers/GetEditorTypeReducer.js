@@ -9,6 +9,7 @@ const initialState = {
     notHotTitleState: null,
     recommendTitleState: null,
     notRecommendTitleState: null,
+    type: null,
     currentPage: null,
     totalCount: null,
     errorMessage: null,
@@ -80,22 +81,32 @@ const getEditorTypeReducer = (state = initialState, action) => {
                 ...state,
                 errorMessage: errorMessage.updateSuccess,
             }
+        case GetEditorTypeAction.SET_MODAL_CONTEXT:
+            return {
+                ...state,
+                type: action.payload.type,
+            }
         case GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST_FAIL:
             return {
                 ...state,
                 errorMessage: action.payload.errorMessage ?? errorMessage.updateFail,
+            }
+        case "SET_ERROR_MESSAGE":
+            return {
+                ...state,
+                errorMessage: action.payload.message
             }
         case "RESET_STATE_DATA": {
             return {
                 ...initialState,
             }
         }
-        case "ON_MODAL_CLOSE": {
-            return {
-                ...state,
-                errorMessage: null,
-            }
-        }
+        // case "ON_MODAL_CLOSE": {
+        //     return {
+        //         ...state,
+        //         errorMessage: null,
+        //     }
+        // }
         default: {
             return {
                 ...state,

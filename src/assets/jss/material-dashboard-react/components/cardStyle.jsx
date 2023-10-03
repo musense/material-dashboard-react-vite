@@ -23,6 +23,7 @@ const cardStyle = {
   },
   tabs: {
     marginTop: "50px",
+    marginBottom: "0",
   },
   cardPlain: {
     background: "transparent",

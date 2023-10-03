@@ -3,7 +3,10 @@ import styles from './ContentFilterInput.module.css'
 import * as GetEditorTypeAction from "../../actions/GetEditorTypeAction.js";
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function ContentsFilterInput({ type }) {
+export default function ContentsFilterInput({
+    type,
+    className
+}) {
     const inputRef = useRef(null);
     const dispatch = useDispatch()
     const [lastSentValue, setLastSentValue] = useState('');
@@ -38,7 +41,10 @@ export default function ContentsFilterInput({ type }) {
 
     }, [inputRef]);
 
-    return <div className={styles['content-filter-container']}>
+    return <div className={`
+        ${styles['content-filter-container']} 
+        ${className ? styles[className] : ''}
+    `}>
         <div>
             <label htmlFor="typeTitle">標題</label>
             <input

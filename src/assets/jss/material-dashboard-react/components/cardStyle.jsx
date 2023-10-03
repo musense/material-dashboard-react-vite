@@ -8,7 +8,7 @@ const cardStyle = {
   card: {
     border: "0",
     marginBottom: "30px",
-    marginTop: "30px",
+    marginTop: "35px",
     borderRadius: "6px",
     color: "rgba(" + hexToRgb(blackColor) + ", 0.87)",
     background: whiteColor,
@@ -19,7 +19,10 @@ const cardStyle = {
     flexDirection: "column",
     minWidth: "0",
     wordWrap: "break-word",
-    fontSize: ".875rem"
+    fontSize: ".875rem",
+  },
+  tabs: {
+    marginTop: "50px",
   },
   cardPlain: {
     background: "transparent",

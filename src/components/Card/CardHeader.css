@@ -2,30 +2,13 @@
     width: unset !important;
     background: unset !important;
     box-shadow: unset !important;
+    margin-top: -50px !important;
+    margin-left: unset !important;
 }
 
 .CardHeader-tabs>div {
     overflow: visible !important;
 }
-
-.CardHeader-tabs>div>div>div {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-}
-
-.CardHeader-tabs button {
-    border-radius: 3px;
-    width: 200px !important;
-    height: 50px !important;
-    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px rgba(156, 39, 176, .4) !important;
-    transition: all 0.2s ease-in-out;
-}
-
-/* .CardHeader-tabs button:hover,
-.CardHeader-tabs button.Mui-selected {
-    bottom: 10px !important;
-} */
 
 .CardHeader-tabs button>span:first-child {
     font-size: 1.3em;

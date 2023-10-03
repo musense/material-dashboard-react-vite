@@ -33,6 +33,7 @@ function CustomTabs({ ...props }) {
     className,
     search,
   } = props;
+  console.log("🚀 ~ file: CustomTabs.jsx:36 ~ CustomTabs ~ classes:", classes)
 
   const [value, setValue] = useState(0);
 
@@ -49,7 +50,7 @@ function CustomTabs({ ...props }) {
   }, [search]);
 
   return (
-    <Card plain={plainTabs}>
+    <Card plain={plainTabs} tabs={true} >
       <CardHeader color={headerColor} plain={plainTabs} className={className}>
         {title !== undefined ? <div className={cardTitle}>{title}</div> : null}
         <Tabs
@@ -59,8 +60,10 @@ function CustomTabs({ ...props }) {
             root: classes.tabsRoot,
             indicator: classes.displayNone,
             scrollButtons: classes.displayNone,
+            fixed: classes.overflowVisible,
+            flexContainer: classes.flexContainer
           }}
-          variant="scrollable"
+          // variant="scrollable"
           scrollButtons="auto"
         >
           {tabs.map((prop, key) => {
@@ -74,8 +77,6 @@ function CustomTabs({ ...props }) {
               <Tab
                 classes={{
                   root: classes.tabRootButton,
-                  labelContainer: classes.tabLabelContainer,
-                  label: classes.tabLabel,
                   selected: classes.tabSelected,
                   wrapper: classes.tabWrapper,
                 }}

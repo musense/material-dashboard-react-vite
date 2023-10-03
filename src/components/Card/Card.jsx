@@ -12,10 +12,12 @@ function Card({ ...props }) {
     plain,
     profile,
     chart,
+    tabs,
     ...rest
   } = props;
   const cardClasses = classNames({
     [classes.card]: true,
+    [classes.tabs]: tabs,
     [classes.cardPlain]: plain,
     [classes.cardProfile]: profile,
     [classes.cardChart]: chart,

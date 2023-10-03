@@ -15,6 +15,7 @@ import ResizableTable from '../Table/Resizable/ResizableTable'
 import ResizableRow from '../Table/Resizable/ResizableRow'
 import ResizableCell from '../Table/Resizable/ResizableCell'
 import HtmlCode from '../CodeToText/HtmlCode'
+import styled from 'styled-components'
 
 const Link = ({ attributes, children, element }) => {
     const selected = useSelected()
@@ -97,137 +98,152 @@ const Badge = ({ attributes, children }) => {
         </span>
     )
 }
+
+const ContentEditableDiv = styled.div`
+  position: relative;
+`
+
+const ImageHref = styled.a``
+
+const ImageCanvas = styled.img`
+    display   : block;
+    max-height: 20em;
+    ${(props) =>
+        props.$selected && props.$focused
+            ? `box-shadow: '0 0 0 3px #B4D5FF'`
+            : `box-shadow: 'none'`
+    };
+`
+
+const ImageButtonContainer = styled.div`
+display: 'inline';
+position: absolute;
+top: 0.5em;
+left: 0.5em;
+width: fit-content;
+height: fit-content;
+display: flex;
+align-items: center;
+gap: 1rem;
+`
+
+const ImageButton = styled(Button)`
+width: 30px;
+height: 30px;
+background-color: white;
+display: flex;
+justify-content: center;
+align-items: center;
+`
+
 const ImageElement = ({ attributes, children, element }) => {
     const editor = useSlateStatic()
     const path = ReactEditor.findPath(editor, element)
     const [compressedDataUrl, setCompressedDataUrl] = useState('');
-    const canvasRef = useRef(null)
 
     useEffect(() => {
         const img = new Image()
         img.src = element.url
         img.onload = function () {
-            const canvas = canvasRef.current
+            const canvas = document.createElement('canvas')
             const context = canvas.getContext('2d')
             canvas.width = img.width / 2
             canvas.height = img.height / 2
             context.drawImage(img, 0, 0, canvas.width, canvas.height)
-            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.5)
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8)
             setCompressedDataUrl(compressedDataUrl)
         }
-    }, [element.url])
+    }, [element])
     const selected = useSelected()
     const focused = useFocused()
+    const trashCanButton = <ImageButton
+        active
+        onClick={() => Transforms.removeNodes(editor, { at: path })}
+    >
+        <Icon icon={'trashCan'} />
+    </ImageButton>
+    const altTextButton = <ImageButton
+        active
+        onClick={() => {
+            const alt = prompt(`請輸入替代文字： ${element.alt ? `\n目前替代文字: ${element.alt}` : ''} `)
+            if (!alt) return
+            const imageAlt = {
+                type: 'image',
+                alt,
+                children: { text: '' }
+            }
+            Transforms.setNodes(editor, imageAlt)
+        }}
+    >
+        <Icon icon={'edit'} />
+    </ImageButton>
+    const removeAltTextButton = <ImageButton
+        active
+        onClick={() => {
+            const alt = null
+            const imageAlt = {
+                type: 'image',
+                alt,
+                children: { text: '' }
+            }
+            Transforms.setNodes(editor, imageAlt)
+        }}
+    >
+        <Icon icon={'editOff'} />
+    </ImageButton>
+    const hrefButton = <ImageButton
+        active
+        onClick={() => {
+            const href = prompt(`請輸入超連結： ${element.href ? `\n目前超連結: ${element.href}` : ''} `)
+            if (!href) return
+            const imageHref = {
+                type: 'image',
+                href,
+                children: { text: '' }
+            }
+            Transforms.setNodes(editor, imageHref)
+        }}
+    >
+        <Icon icon={'link'} />
+    </ImageButton>
+    const removeHrefButton = <ImageButton
+        active
+        onClick={() => {
+            const href = null
+            const imageHref = {
+                type: 'image',
+                href,
+                children: { text: '' }
+            }
+            Transforms.setNodes(editor, imageHref)
+        }}
+    >
+        <Icon icon={'linkOff'} />
+    </ImageButton>
     return (
         <div {...attributes}>
             {children}
-            <div
-                contentEditable={false}
-                className={css`
-            position: relative;
-          `}
-            >
-                <a href={compressedDataUrl}
-                    title={compressedDataUrl || element.alt}
+            <ContentEditableDiv contentEditable={false}>
+                <ImageButtonContainer>
+                    {trashCanButton}
+                    {altTextButton}
+                    {element.alt && removeAltTextButton}
+                    {hrefButton}
+                    {element.href && removeHrefButton}
+                </ImageButtonContainer>
+                <ImageHref href={element.href}
+                    title={element.href || element.alt}
                     rel="noreferrer noopener"
-                    target="_blank">
-                    <canvas
-                        ref={canvasRef}
+                    target="_blank"
+                >
+                    <ImageCanvas
                         src={compressedDataUrl}
                         alt={element.alt}
-                        className={css`
-              display   : block;
-              max-width : 100%;
-              max-height: 20em;
-              box-shadow: ${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'};
-            `}
+                        $selected={selected}
+                        $focused={focused}
                     />
-                </a>
-                <div className={css`
-                display    : ${selected && focused ? 'inline' : 'none'};
-                position   : absolute;
-                top        : 0.5em;
-                left       : 0.5em;
-                width      : fit-content;
-                height     : fit-content;
-                display    : flex;
-                align-items: center;             
-                gap        : 1rem;
-                & > span {
-                    width      : 30px;
-                    height     : 30px;
-                    background-color: white;
-                    display     : flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-              `}>
-                    <Button
-                        active
-                        onClick={() => Transforms.removeNodes(editor, { at: path })}
-                    >
-                        <Icon icon={'trashCan'} />
-                    </Button>
-                    <Button
-                        active
-                        onClick={() => {
-                            const alt = prompt(`請輸入替代文字： ${element.alt ? `\n目前替代文字: ${element.alt}` : ''}`)
-                            if (!alt) return
-                            const imageAlt = {
-                                type: 'image',
-                                alt,
-                                children: { text: '' }
-                            }
-                            Transforms.setNodes(editor, imageAlt)
-                        }}
-                    >
-                        <Icon icon={'edit'} />
-                    </Button>
-                    {element.alt && <Button
-                        active
-                        onClick={() => {
-                            const alt = null
-                            const imageAlt = {
-                                type: 'image',
-                                alt,
-                                children: { text: '' }
-                            }
-                            Transforms.setNodes(editor, imageAlt)
-                        }}
-                    >
-                        <Icon icon={'editOff'} />
-                    </Button>}
-                    <Button
-                        active
-                        onClick={() => {
-                            const href = prompt(`請輸入超連結： ${element.href ? `\n目前超連結: ${element.href}` : ''}`)
-                            if (!href) return
-                            const imageHref = {
-                                type: 'image',
-                                href,
-                                children: { text: '' }
-                            }
-                            Transforms.setNodes(editor, imageHref)
-                        }}
-                    >
-                        <Icon icon={'link'} />
-                    </Button>
-                    {element.href && <Button
-                        active
-                        onClick={() => {
-                            const href = null
-                            const imageHref = {
-                                type: 'image',
-                                href,
-                                children: { text: '' }
-                            }
-                            Transforms.setNodes(editor, imageHref)
-                        }}
-                    >
-                        <Icon icon={'linkOff'} />
-                    </Button>}
-                </div>
-            </div>
+                </ImageHref>
+            </ContentEditableDiv>
         </div>
     )
 }

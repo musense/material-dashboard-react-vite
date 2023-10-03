@@ -25,7 +25,7 @@ const DropHeader = styled.div`
     &>div{
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: center;
         align-items: stretch;
         border-radius: 5px;
     }

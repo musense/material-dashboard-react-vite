@@ -89,7 +89,7 @@ function CustomTabs({ ...props }) {
           })}
         </Tabs>
       </CardHeader>
-      <CardBody>
+      <CardBody tabs={true}>
         {tabs.map((prop, key) => {
           if (key === value) {
             return <div key={key}>{prop.tabContent}</div>;

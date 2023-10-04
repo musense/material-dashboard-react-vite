@@ -103,7 +103,7 @@ export default function Item({
                                 <br /><span>人氣：{item.pageView}</span>
                             </>}
                         </div>
-                        <span className={'ellipsis lineClamp3'}>{item.title}</span>
+                        <span className={'ellipsis lineClamp2'}>{item.title}</span>
                         <span>{item.serialNumber}</span>
                         {dragIcon}
                         {droppableId === 'list' && <span>{order + 1}</span>}

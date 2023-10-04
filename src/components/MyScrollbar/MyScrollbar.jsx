@@ -9,7 +9,9 @@ function InnerMyScrollbar({
     height = '',
 }, ref) {
     return (
-        <div ref={ref} className={styles['my-scrollbar']} style={{ height: height }}>
+        <div ref={ref} className={styles['my-scrollbar']} style={{
+            height: height,
+        }}>
             <PerfectScrollBar
                 component={component}
             // suppressScrollX={true}

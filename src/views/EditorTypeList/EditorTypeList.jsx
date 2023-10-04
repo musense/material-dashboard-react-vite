@@ -7,21 +7,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import MessageDialog from "../../components/Modal/MessageDialog";
 import useModal from "../../hook/useModal";
 import useModalResult from "../../hook/useModalResult";
-import { getErrorMessage as getServerErrorMessage } from "../../reducers/GetEditorTypeReducer";
 import getErrorMessage from "../../utils/getErrorMessage";
 import CustomDragContext from "./CustomDragContext";
 
 export const borderRadius = 2;
 
 const DropContainer = styled.div`
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
     width: fit-content;
+    margin: 0 auto;
+    gap: 10px;
 `
 const DropHeader = styled.div`
     display: flex;
     flex-direction: row;
     gap: 200px;
-    margin-bottom: 10px;
     &>div{
         display: flex;
         flex-direction: column;
@@ -30,15 +33,17 @@ const DropHeader = styled.div`
         border-radius: 5px;
     }
 `
-const DropBody = DropHeader
-
-
+const DropBody = styled(DropHeader)`
+    height: fit-content;
+    &>div{
+        justify-content: flex-start;
+    }
+`
 const ButtonWrapper = styled.div`
     position: relative;
     width: 500px;
     text-align: right;
 `
-
 const SubmitButton = styled.button`
     border: none;
     height: 1.8rem;
@@ -51,7 +56,6 @@ const SubmitButton = styled.button`
         background-color: violet;
     }
 `
-
 const InnerContentsFilterInput = React.memo(ContentsFilterInput)
 
 export default function EditorTypeList({

@@ -66,7 +66,7 @@ const iconList = {
     contentPaste: <MdContentPaste size={20} color='white' />,
     note: <MdOutlineStickyNote2 size={25} />,
     drag: <MdOutlineDragIndicator size={20} />,
-    question: <BsQuestionCircle size={15} />
+    question: <BsQuestionCircle size={12} />
 
 }
 

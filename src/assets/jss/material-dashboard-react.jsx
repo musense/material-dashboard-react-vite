@@ -62,7 +62,7 @@ const container = {
   paddingLeft: "15px",
   marginRight: "auto",
   marginLeft: "auto",
-  // height: '100%',
+  height: '100%',
 };
 
 const defaultFont = {

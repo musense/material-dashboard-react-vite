@@ -70,9 +70,8 @@ export default function DroppableContainer({
     state,
     type,
 }) {
-
     const [count, setCount] = useState(6);
-    const [draggableHeight, setDraggableHeight] = useState(80);
+    const draggableHeight = 80;
     const gap = 8
 
     useEffect(() => {
@@ -83,7 +82,6 @@ export default function DroppableContainer({
             // fit-content
             setCount(0)
         }
-        setDraggableHeight(80)
         return
     }, [type, state, droppableId]);
     return <Droppable droppableId={droppableId}>

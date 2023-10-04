@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import CustomTabs from "../../components/CustomTabs/CustomTabs.jsx";
-
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import searchMap from '../../hook/useQuery.js';
 import * as GetEditorTypeAction from "../../actions/GetEditorTypeAction.js";
-import { getHotList, getNotHotList, getNotRecommendList, getNotTopList, getRecommendList, getTopList } from '../../reducers/GetEditorTypeReducer.js';
 import EditorTypeList from './EditorTypeList.jsx';
 import { useNavigate, createSearchParams } from "react-router-dom";
 
@@ -12,14 +10,6 @@ export default function EditorTabs() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const topList = useSelector(getTopList)
-    const notTopList = useSelector(getNotTopList)
-    const hotList = useSelector(getHotList)
-    const notHotList = useSelector(getNotHotList)
-    const recommendList = useSelector(getRecommendList)
-    const notRecommendList = useSelector(getNotRecommendList)
-
 
     const search = searchMap()
     const type = search.get('type') ?? 'top'
@@ -88,37 +78,19 @@ export default function EditorTabs() {
                     color: "primary",
                     tabName: "置頂文章",
                     onClick: () => onTabClickHandler('top', type),
-                    tabContent: (
-                        <EditorTypeList
-                            type={'top'}
-                            notList={notTopList}
-                            list={topList}
-                        />
-                    ),
+                    tabContent: <EditorTypeList type={'top'} />,
                 },
                 {
                     color: "primary",
                     tabName: "熱門文章",
                     onClick: () => onTabClickHandler('popular', type),
-                    tabContent: (
-                        <EditorTypeList
-                            type={'popular'}
-                            notList={notHotList}
-                            list={hotList}
-                        />
-                    ),
+                    tabContent: <EditorTypeList type={'popular'} />,
                 },
                 {
                     color: "primary",
                     tabName: "推薦文章",
                     onClick: () => onTabClickHandler('recommend', type),
-                    tabContent: (
-                        <EditorTypeList
-                            type={'recommend'}
-                            notList={notRecommendList}
-                            list={recommendList}
-                        />
-                    ),
+                    tabContent: <EditorTypeList type={'recommend'} />,
                 },
             ]}
         />

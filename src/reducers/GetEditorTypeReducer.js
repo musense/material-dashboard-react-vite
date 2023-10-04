@@ -9,6 +9,8 @@ const initialState = {
     notHotTitleState: null,
     recommendTitleState: null,
     notRecommendTitleState: null,
+    list: null,
+    notList: null,
     type: null,
     currentPage: null,
     totalCount: null,
@@ -19,62 +21,116 @@ const getEditorTypeReducer = (state = initialState, action) => {
         case GetEditorTypeAction.REQUEST_TOP_EDITOR_SUCCESS:
             return {
                 ...state,
-                topTitleState: {
-                    list: action.payload.topTitleList,
-                    currentPage: action.payload.currentPage,
-                    totalCount: action.payload.totalCount,
-                    errorMessage: errorMessage.getFinish,
-                },
+                list: {
+                    ...state.list,
+                    top: {
+                        list: action.payload.topTitleList,
+                        currentPage: action.payload.currentPage,
+                        totalCount: action.payload.totalCount,
+                        errorMessage: errorMessage.getFinish,
+                    }
+                }
+                // topTitleState: {
+                //     list: action.payload.topTitleList,
+                //     currentPage: action.payload.currentPage,
+                //     totalCount: action.payload.totalCount,
+                //     errorMessage: errorMessage.getFinish,
+                // },
             }
         case GetEditorTypeAction.REQUEST_NOT_TOP_EDITOR_SUCCESS:
             return {
                 ...state,
-                notTopTitleState: {
-                    list: action.payload.notTopTitleList,
-                    currentPage: action.payload.currentPage,
-                    totalCount: action.payload.totalCount,
-                    errorMessage: errorMessage.getFinish,
-                },
+                notList: {
+                    ...state.notList,
+                    top: {
+                        list: action.payload.notTopTitleList,
+                        currentPage: action.payload.currentPage,
+                        totalCount: action.payload.totalCount,
+                        errorMessage: errorMessage.getFinish,
+                    }
+                }
+                // notTopTitleState: {
+                //     list: action.payload.notTopTitleList,
+                //     currentPage: action.payload.currentPage,
+                //     totalCount: action.payload.totalCount,
+                //     errorMessage: errorMessage.getFinish,
+                // },
             }
         case GetEditorTypeAction.REQUEST_HOT_EDITOR_SUCCESS:
             return {
                 ...state,
-                hotTitleState: {
-                    list: action.payload.hotTitleList,
-                    currentPage: action.payload.currentPage,
-                    totalCount: action.payload.totalCount,
-                    errorMessage: errorMessage.getFinish,
-                },
+                list: {
+                    ...state.list,
+                    popular: {
+                        list: action.payload.hotTitleList,
+                        currentPage: action.payload.currentPage,
+                        totalCount: action.payload.totalCount,
+                        errorMessage: errorMessage.getFinish,
+                    }
+                }
+                // hotTitleState: {
+                //     list: action.payload.hotTitleList,
+                //     currentPage: action.payload.currentPage,
+                //     totalCount: action.payload.totalCount,
+                //     errorMessage: errorMessage.getFinish,
+                // },
             }
         case GetEditorTypeAction.REQUEST_NOT_HOT_EDITOR_SUCCESS:
             return {
                 ...state,
-                notHotTitleState: {
-                    list: action.payload.notHotTitleList,
-                    currentPage: action.payload.currentPage,
-                    totalCount: action.payload.totalCount,
-                    errorMessage: errorMessage.getFinish,
-                },
+                notList: {
+                    ...state.notList,
+                    popular: {
+                        list: action.payload.notHotTitleList,
+                        currentPage: action.payload.currentPage,
+                        totalCount: action.payload.totalCount,
+                        errorMessage: errorMessage.getFinish,
+                    }
+                }
+                // notHotTitleState: {
+                //     list: action.payload.notHotTitleList,
+                //     currentPage: action.payload.currentPage,
+                //     totalCount: action.payload.totalCount,
+                //     errorMessage: errorMessage.getFinish,
+                // },
             }
         case GetEditorTypeAction.REQUEST_RECOMMEND_EDITOR_SUCCESS:
             return {
                 ...state,
-                recommendTitleState: {
-                    list: action.payload.recommendTitleList,
-                    currentPage: action.payload.currentPage,
-                    totalCount: action.payload.totalCount,
-                    errorMessage: errorMessage.getFinish,
-                },
+                list: {
+                    ...state.list,
+                    recommend: {
+                        list: action.payload.recommendTitleList,
+                        currentPage: action.payload.currentPage,
+                        totalCount: action.payload.totalCount,
+                        errorMessage: errorMessage.getFinish,
+                    }
+                }
+                // recommendTitleState: {
+                //     list: action.payload.recommendTitleList,
+                //     currentPage: action.payload.currentPage,
+                //     totalCount: action.payload.totalCount,
+                //     errorMessage: errorMessage.getFinish,
+                // },
             }
         case GetEditorTypeAction.REQUEST_NOT_RECOMMEND_EDITOR_SUCCESS:
             return {
                 ...state,
-                notRecommendTitleState: {
-                    list: action.payload.notRecommendTitleList,
-                    currentPage: action.payload.currentPage,
-                    totalCount: action.payload.totalCount,
-                    errorMessage: errorMessage.getFinish,
-                },
+                notList: {
+                    ...state.notList,
+                    recommend: {
+                        list: action.payload.notRecommendTitleList,
+                        currentPage: action.payload.currentPage,
+                        totalCount: action.payload.totalCount,
+                        errorMessage: errorMessage.getFinish,
+                    }
+                }
+                // notRecommendTitleState: {
+                //     list: action.payload.notRecommendTitleList,
+                //     currentPage: action.payload.currentPage,
+                //     totalCount: action.payload.totalCount,
+                //     errorMessage: errorMessage.getFinish,
+                // },
             }
         case GetEditorTypeAction.BUNCH_MODIFY_TYPE_LIST_SUCCESS:
             return {
@@ -117,64 +173,77 @@ const getEditorTypeReducer = (state = initialState, action) => {
 
 export default getEditorTypeReducer
 
-const getTopState = state => state.getEditorTypeReducer.topTitleState
-const getNotTopState = state => state.getEditorTypeReducer.notTopTitleState
+const getList = state => state.getEditorTypeReducer.list
+const getNotList = state => state.getEditorTypeReducer.notList
 
 const getTopList = createSelector(
-    [getTopState],
+    [getList],
     (state) => {
         console.log("🚀 ~ file: GetEditorTypeReducer.js:236 ~ state:", state)
-        return state?.list
+        return state?.top?.list
     }
 )
 
 const getNotTopList = createSelector(
-    [getNotTopState],
+    [getNotList],
     (state) => {
         console.log("🚀 ~ file: GetEditorTypeReducer.js:244 ~ state:", state)
-        return state?.list
+        return state?.top?.list
     }
 )
-
-const getHotState = state => state.getEditorTypeReducer.hotTitleState
-const getNotHotState = state => state.getEditorTypeReducer.notHotTitleState
-
 const getHotList = createSelector(
-    [getHotState],
+    [getList],
     (state) => {
         console.log("🚀 ~ file: GetEditorTypeReducer.js:236 ~ state:", state)
-        return state?.list
+        return state?.popular?.list
     }
 )
 
 const getNotHotList = createSelector(
-    [getNotHotState],
+    [getNotList],
     (state) => {
         console.log("🚀 ~ file: GetEditorTypeReducer.js:244 ~ state:", state)
-        return state?.list
+        return state?.popular?.list
     }
 )
-
-const getRecommendState = state => state.getEditorTypeReducer.recommendTitleState
-const getNotRecommendState = state => state.getEditorTypeReducer.notRecommendTitleState
-
 const getRecommendList = createSelector(
-    [getRecommendState],
+    [getList],
     (state) => {
         console.log("🚀 ~ file: GetEditorTypeReducer.js:236 ~ state:", state)
-        return state?.list
+        return state?.recommend?.list
     }
 )
 
 const getNotRecommendList = createSelector(
-    [getNotRecommendState],
+    [getNotList],
     (state) => {
         console.log("🚀 ~ file: GetEditorTypeReducer.js:244 ~ state:", state)
-        return state?.list
+        return state?.recommend?.list
     }
 )
 
+const getTypeList = createSelector(
+    [getList, (state, type) => type],
+    (list, type) => {
+        console.log("🚀 ~ file: GetEditorTypeReducer.js:232 ~ getTypeList:", { list: list, type })
+        if (!type) return []
+        return list ? list[type]?.list : []
+    }
+)
+
+const getTypeNotList = createSelector(
+    [getNotList, (state, type) => type],
+    (notList, type) => {
+        console.log("🚀 ~ file: GetEditorTypeReducer.js:240 ~ getTypeNotList:", { notList: notList, type })
+        if (!type) return []
+        return notList ? notList[type]?.list : []
+    }
+)
+
+
+
 const getErrorMessage = state => state.getEditorTypeReducer.errorMessage
+
 
 export {
     getTopList,
@@ -183,5 +252,7 @@ export {
     getNotHotList,
     getRecommendList,
     getNotRecommendList,
-    getErrorMessage
+    getErrorMessage,
+    getTypeList,
+    getTypeNotList
 }

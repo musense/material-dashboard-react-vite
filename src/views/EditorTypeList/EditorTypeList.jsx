@@ -10,6 +10,11 @@ import useModalResult from "../../hook/useModalResult";
 import getErrorMessage from "../../utils/getErrorMessage";
 import CustomDragContext from "./CustomDragContext";
 
+import {
+    getTypeList,
+    getTypeNotList
+} from '../../reducers/GetEditorTypeReducer.js';
+
 export const borderRadius = 2;
 
 const DropContainer = styled.div`
@@ -58,29 +63,29 @@ const SubmitButton = styled.button`
 `
 const InnerContentsFilterInput = React.memo(ContentsFilterInput)
 
-export default function EditorTypeList({
-    type,
-    notList,
-    list,
-}) {
+export default function EditorTypeList({ type }) {
+    const list = useSelector(state => getTypeList(state, type));
+    const notList = useSelector(state => getTypeNotList(state, type));
 
     const dispatch = useDispatch();
     const modalMessageType = useSelector(state => state.getEditorTypeReducer.type);
     const serverMessage = useSelector(state => state.getEditorTypeReducer.errorMessage);
-    console.log("🚀 ~ file: EditorTypeList.jsx:66 ~ serverMessage:", serverMessage)
     const [lastDispatchList, setLastDispatchList] = useState([]);
     const [dispatchList, setDispatchList] = useState([]);
+    const [readyToDispatchKeyList, setReadyToDispatchKeyList] = useState([]);
+
     const [removeList, setRemoveList] = useState([]);
     const [state, setState] = useState(
         {
-            list: {
+            notList: {
                 items: []
             },
-            notList: {
+            list: {
                 items: []
             },
         }
     );
+    console.log("🚀 ~ file: EditorTypeList.jsx:89 ~ EditorTypeList ~ state:", state)
 
     const setDispatchListFunction = useCallback((list) => {
         const sortingList = list.map((item, index) => {
@@ -88,33 +93,41 @@ export default function EditorTypeList({
                 [item._id]: index + 1
             });
         });
+        const readyToDispatchKeyList = list.reduce((acc, curr) => {
+            return [
+                ...acc,
+                curr._id
+            ]
+        }, [])
+        setReadyToDispatchKeyList(readyToDispatchKeyList)
         setDispatchList(sortingList);
     }, [])
 
     useEffect(() => {
-        if (notList) {
-            setState(prevState => ({
-                notList: {
-                    items: [...notList]
-                },
-                list: {
-                    items: prevState.list.items
-                }
-            }))
-        }
         if (list) {
             setState(prevState => ({
-                notList: {
-                    items: prevState.notList.items
-                },
+                ...prevState,
                 list: {
                     items: [...list]
                 }
             }))
             setDispatchListFunction(list);
         }
+    }, [list, setDispatchListFunction])
 
-    }, [notList, list, setDispatchListFunction]);
+    useEffect(() => {
+        if (notList) {
+            setState(prevState => {
+                const filteredNotList = notList.filter(notItem => !readyToDispatchKeyList.includes(notItem._id));
+                return {
+                    ...prevState,
+                    notList: {
+                        items: [...filteredNotList]
+                    }
+                }
+            })
+        }
+    }, [notList, readyToDispatchKeyList]);
 
     const onDragEnd = useCallback((result) => {
         const { source, destination } = result;
@@ -198,7 +211,6 @@ export default function EditorTypeList({
             ...removeList
         ])
     }, [dispatch, dispatchList, removeList, type, lastDispatchList])
-
 
 
     const [modalTitle, setModalTitle] = useState('');

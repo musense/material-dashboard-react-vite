@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components'
 import Icon from "../Icons/Icon";
@@ -15,9 +15,12 @@ const getItemStyle = (isDragging, draggableStyle, type, sorting) => {
         margin: `0 0 ${grid}px 0`,
         textAlign: "center",
         borderRadius: "5px",
-        // change background colour if dragging
-        background: isDragging ? "lightgreen" : "white",
+        background: "white",
 
+        boxShadow:
+            isDragging
+                ? "-4px 4px 5px 0 rgb(0 0 0 / 0.2)"
+                : "none",
 
         opacity: type === 'topSorting'
             ? sorting > 2 && transparency
@@ -97,12 +100,19 @@ export default function Item({
                             className[1]
                         )}
                     >
-                        <div>
-                            <span>{getUpdateDateTime(item.publishedAt)}</span>
-                            {item.pageView !== undefined && <>
-                                <br /><span>人氣：{item.pageView}</span>
-                            </>}
-                        </div>
+                        {item.pageView !== undefined
+                            ? (
+                                <div style={{ width: '170px' }}>
+                                    <span style={{ whiteSpace: 'nowrap' }}>{getUpdateDateTime(item.publishedAt)}</span>
+                                    <br /><span>人氣：{item.pageView}</span>
+                                </div>
+                            )
+                            : (
+                                <div>
+                                    <span>{getUpdateDateTime(item.publishedAt)}</span>
+                                </div>
+                            )
+                        }
                         <span className={'ellipsis lineClamp2'}>{item.title}</span>
                         <span>{item.serialNumber}</span>
                         {dragIcon}

@@ -15,7 +15,7 @@ export const borderRadius = 2;
 const DropContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     height: 100%;
     width: fit-content;
     margin: 0 auto;

@@ -9,6 +9,7 @@ import * as GetEditorTypeAction from "../../actions/GetEditorTypeAction.js";
 
 const DroppableWrapper = styled.div`
   padding: ${grid}px;
+  padding-bottom: 0;
   width: 500px;
   flex-grow: 1;
   justify-content: flex-start;
@@ -18,8 +19,8 @@ const DroppableWrapper = styled.div`
 
   ${(props) =>
         props.isDraggingOver
-            ? `background-color: lightblue`
-            : `background-color: lightgrey`
+            ? `background-color: lightgreen`
+            : `background-color: #e3e3e3`
     };
 `;
 const ItemList = ({ items, droppableId }) => {
@@ -33,17 +34,21 @@ const ItemList = ({ items, droppableId }) => {
     ))
 }
 const TitleH2 = styled.h2`
+    color:#666;
     position: relative;
     width: fit-content;
     text-align: center;
-    margin: 0;
+    margin:0;
+    margin-bottom: ${grid}px;
     align-self: flex-start;
     user-select: none;
     font-weight: bold;
     font-size: 1.8em;
-
+    font-family: Microsoft JhengHei, Roboto, Helvetica, Arial, sans-serif;
     &>button{
         position: absolute;
+        display: flex;
+        align-items: center;
         top: 50%;
         right: -25px;
         transform: translateY(-50%);
@@ -72,17 +77,6 @@ export default function DroppableContainer({
 
     useEffect(() => {
         const count = state[droppableId].items.length
-        if (type === 'popular') {
-            if (count >= 5) {
-                setCount(5)
-            } else {
-                // fit-content
-                setCount(0)
-            }
-            setDraggableHeight(104)
-            return
-        }
-        // top or recommend
         if (count >= 6) {
             setCount(6)
         } else {

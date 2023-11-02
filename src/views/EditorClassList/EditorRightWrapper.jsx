@@ -13,7 +13,7 @@ import EditorHeader from './EditorHeader';
 import MessageDialog from '@components/Modal/MessageDialog';
 import RowHeader from '../../components/RowHeader/RowHeader';
 // import RowBody from './RowBody';
-import RowBody from './../../components/RowBody/Rowbody';
+import RowBody from './../../components/RowBody/RowBody';
 import useModal from '../../hook/useModal';
 import useModalResult from '../../hook/useModalResult';
 import useDeleteSelectedRow from '@hook/useDeleteSelectedRow';

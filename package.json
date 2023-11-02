@@ -8,6 +8,8 @@
     "dev:mu": "env-cmd -f environments/dev/.env.mu.development vite --host backstage.wilsonwan.com --port 80",
     "dev:oogiri": "env-cmd -f environments/dev/.env.oogiri.development vite --host backstage.wilsonwan.com --port 8080",
     "build": "tsc && vite build",
+    "build:dev:mu": "env-cmd -f environments/dev/.env.mu.development yarn build",
+    "build:dev:oogiri": "env-cmd -f environments/dev/.env.oogiri.development yarn build",
     "build:staging:mu": "env-cmd -f environments/staging/.env.mu.staging yarn build",
     "build:staging:oogiri": "env-cmd -f environments/staging/.env.oogiri.staging yarn build",
     "build:prod:mu": "env-cmd -f environments/production/.env.mu.production yarn build",

@@ -1,0 +1,13 @@
+.circleci
+.git
+.vscode
+dist
+environments
+node_modules
+
+.eslintrc.cjs
+.gitignore
+docker-compose.yml
+Dockerfile
+package.json
+README.md

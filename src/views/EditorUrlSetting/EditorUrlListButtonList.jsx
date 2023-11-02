@@ -15,15 +15,11 @@ const InnerNextButton = React.memo(NextButton)
 const InnerCreateEditorButton = React.memo(CreateEditorButton)
 const InnerSummedUpText = React.memo(SummedUpText)
 
-export const buttonProps = {
-  color: 'info',
-  size: 'small',
-  variant: 'contained',
-}
 export default function EditorListButtonList({
   currentPage,
   totalPage,
-  totalCount
+  totalCount,
+  createButton = true
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,14 +39,19 @@ export default function EditorListButtonList({
     })
   }, [dispatch])
 
+  const buttonProps = useMemo(() => ({
+    color: 'info',
+    size: 'small',
+    variant: 'contained',
+  }), [])
 
   return <Stack spacing={2} direction={'row'}
     display={'flex'} useFlexGap flexWrap="wrap"
     alignItems={'center'} sx={{ my: '1rem' }}>
-    <InnerCreateEditorButton
+    {createButton && <InnerCreateEditorButton
       buttonProps={buttonProps}
       onAddNew={onAddNew}
-    />
+    />}
     <InnerPrevButton
       buttonProps={buttonProps}
       currentPage={currentPage}

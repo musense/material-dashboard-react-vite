@@ -21,7 +21,7 @@ const headerMap = {
       type: "image",
       className: "flex-2 image-container"
     },
-    { name: "標題", patchKey: "content.title", className: "flex-3 left-wrap", type: "stringl" },
+    { name: "標題", patchKey: "content.title", className: "flex-3 left-wrap", type: "stringl5lines" },
     { name: "瀏覽數", patchKey: "pageView", type: "number" },
     {
       name: "狀態",
@@ -29,7 +29,7 @@ const headerMap = {
       checkKey: ["isPublished", "isScheduled"],
       showKeys: ["publishDate", "scheduleTime"],
       className: "flex-2",
-      type: "stringd"
+      type: "stringdp"
     },
     { name: "更新日期", patchKey: "updateDate", className: "flex-2", type: "date" },
     {

@@ -26,7 +26,12 @@ export default function HeaderCell({
     })
   }
   let inputProps = {
-    value: dataType === '__edit_cell__' ? '編輯' : name,
+    value:
+      dataType === '__edit_cell__'
+        ? '編輯'
+        : dataType === '__checkbox__'
+          ? '選擇'
+          : name
   }
 
   if (patchKey) {
@@ -37,7 +42,6 @@ export default function HeaderCell({
     }
   }
 
-
   const icon = (patchKey) => {
     if (!patchKey) return null
     const iconName = sortingDirection === 'asc' ? 'arrowDown' : 'arrowUp'
@@ -45,6 +49,13 @@ export default function HeaderCell({
   };
 
   const activeClassName = patchKey === selectedPatchKey ? 'active' : ''
+  if (dataType === '__checkbox__') {
+    return <div className={`header-cell ${className}`}>
+      <input id={'select-all'} type="checkbox" {...inputProps}
+        style={{ marginRight: '5px', width: 'auto', height: 'auto' }} />
+      <span {...inputProps}> {inputProps.value}</span>
+    </div>
+  }
   return <div className={`header-cell ${activeClassName} ${className}`}>
     <span {...inputProps}> {inputProps.value}</span>
     {icon(patchKey)}

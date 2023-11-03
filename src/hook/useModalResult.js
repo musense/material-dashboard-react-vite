@@ -310,6 +310,12 @@ export default function useModalResult({
         setSuccess(true)
         return
       }
+      case 'Invalid URL': {
+        setTitle('Error')
+        setContent(`網址錯誤！`)
+        setSuccess(false)
+        return
+      }
       case '--reset-error-message': {
         setTitle(null)
         setContent(null)

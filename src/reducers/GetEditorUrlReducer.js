@@ -54,7 +54,7 @@ const getEditorUrlReducer = (state = initialState, action) => {
     case GetEditorUrlAction.CHECK_EDITOR_URL_ALL_FAIL:
     case GetEditorUrlAction.UPDATE_EDITOR_URL_FAIL:
     case GetEditorUrlAction.AUTH_USER_FAIL: {
-      let errorMessage;
+      const { errorMessage } = action.payload;
       return {
         ...state,
         errorMessage: errorMessage

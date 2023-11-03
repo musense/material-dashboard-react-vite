@@ -3,7 +3,7 @@ import CardHeader from '@components/Card/CardHeader.jsx'
 const EditorUrlHeader = () => {
   return (
     <CardHeader color='primary'>
-      <h4>文章內網址設定</h4>
+      <h4>內文連結管理</h4>
     </CardHeader>
   )
 }

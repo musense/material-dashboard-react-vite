@@ -93,7 +93,7 @@ function RouterIndex() {
             },
             {
               path: "editorUrl",
-              name: "文章內網址設定",
+              name: "內文連結管理",
               showOnSideBar: true,
               element: <EditorUrlSetting />
             },

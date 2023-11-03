@@ -122,6 +122,12 @@ const EditorUrlBody = ({ headerMap }) => {
       return
     }
     dispatch({
+      type: GetEditorUrlAction.SET_ERROR_MESSAGE,
+      payload: {
+        message: 'url testing...'
+      }
+    })
+    dispatch({
       type: GetEditorUrlAction.CHECK_EDITOR_URL,
       payload: checkUrlList
     })

@@ -304,6 +304,12 @@ export default function useModalResult({
         setSuccess(false)
         return
       }
+      case 'url testing...': {
+        setTitle('網址測試中')
+        setContent(`......`)
+        setSuccess(true)
+        return
+      }
       case '--reset-error-message': {
         setTitle(null)
         setContent(null)

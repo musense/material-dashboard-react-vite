@@ -81,7 +81,7 @@ const EditorUrlBody = ({ headerMap }) => {
       }
     })
 
-    if (serverMessage === 'check successfully') {
+    if (serverMessage === 'check successfully' || selectedId) {
       setCheckUrlList([])
 
       selectAllCheckbox.checked = false
@@ -91,7 +91,7 @@ const EditorUrlBody = ({ headerMap }) => {
       }
     }
 
-  }, [serverMessage, showList]);
+  }, [serverMessage, showList, selectedId]);
 
   useEffect(() => {
     if (serverMessage === 'URL updated successfully') {

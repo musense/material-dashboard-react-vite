@@ -10,6 +10,9 @@ import useModalResult from '../../hook/useModalResult'
 import EditorUrlSearchForm from './EditorUrlSearchForm';
 import EditorUrlListButtonList from './EditorUrlListButtonList';
 import EditorUrlSubstitution from './EditorUrlSubstitution';
+import { Button } from '@mui/material'
+import * as GetEditorUrlAction from '../../actions/GetEditorUrlAction'
+import { buttonProps } from '../EditorList/EditorListButtonList'
 import {
   getEditorUrlList,
   getTotalPage,
@@ -17,12 +20,9 @@ import {
   getTotalCount,
   getEditorUrlShowList,
   getEditorUrlErrorMessage,
-  getSelectedPatchKey
-} from '@reducers/GetEditorUrlReducer'
-import { Button } from '@mui/material'
-import * as GetEditorUrlAction from '../../actions/GetEditorUrlAction'
-import { buttonProps } from '../EditorList/EditorListButtonList'
-import { getSelectedUrlId } from '../../reducers/GetEditorUrlReducer.js'
+  getSelectedPatchKey,
+  getSelectedUrlId
+} from '../../reducers/GetEditorUrlReducer.js'
 
 const InnerEditorUrlSearchForm = React.memo(EditorUrlSearchForm);
 const InnerEditorUrlListButtonList = React.memo(EditorUrlListButtonList);
@@ -144,7 +144,13 @@ const EditorUrlBody = ({ headerMap }) => {
         totalCount={totalCount}
         createButton={false}
       /> */}
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: '16px' }}>
+      <div style={{
+        height: '60px',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: '16px'
+      }}>
         <Button
           {...buttonProps}
           sx={{ mr: 'auto' }}

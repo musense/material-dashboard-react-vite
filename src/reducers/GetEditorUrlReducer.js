@@ -89,6 +89,7 @@ const getEditorUrlReducer = (state = initialState, action) => {
       state.editorUrlList.splice(editorIndex, 1, newEditorUrl)
       return {
         ...state,
+        showList: transformToShowList(state.editorUrlList),
         errorMessage: action.payload.message
       }
     case GetEditorUrlAction.CHECK_EDITOR_URL:
@@ -107,6 +108,7 @@ const getEditorUrlReducer = (state = initialState, action) => {
       }
       return {
         ...state,
+        showList: transformToShowList(state.editorUrlList),
         errorMessage: errorMessage.checkFinish
       }
     case GetEditorUrlAction.REQUEST_EDITOR_URL_SUCCESS:

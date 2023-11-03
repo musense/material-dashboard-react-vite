@@ -26,17 +26,20 @@ const initialState = {
 const getEditorUrlReducer = (state = initialState, action) => {
   switch (action.type) {
     case GetEditorUrlAction.SEARCH_EDITOR_URL_LIST:
-      const { url, createDate } = action.payload
-      const { startDate, endDate } = createDate
+      const { url,
+        // createDate 
+      } = action.payload
+      // const { startDate, endDate } = createDate
       let filteredData
       if (url === '') {
-        filteredData = state.editorUrlList.filter(
-          editorUrl => new Date(editorUrl.checkStatusUpdatedAt) >= new Date(startDate) && new Date(editorUrl.checkStatusUpdatedAt) <= new Date()
-        )
+        filteredData = [...state.editorUrlList]
+        // .filter(
+        //   editorUrl => new Date(editorUrl.checkStatusUpdatedAt) >= new Date(startDate) && new Date(editorUrl.checkStatusUpdatedAt) <= new Date()
+        // )
       } else {
         filteredData = state.editorUrlList.filter(
-          editorUrl => editorUrl.url.includes(url) &&
-            new Date(editorUrl.checkStatusUpdatedAt) >= new Date(startDate) && new Date(editorUrl.checkStatusUpdatedAt) <= new Date()
+          editorUrl => editorUrl.url.includes(url)
+          // && new Date(editorUrl.checkStatusUpdatedAt) >= new Date(startDate) && new Date(editorUrl.checkStatusUpdatedAt) <= new Date()
         )
       }
 

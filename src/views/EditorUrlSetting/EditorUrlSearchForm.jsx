@@ -37,39 +37,39 @@ export default function EditorSearchForm() {
 
   function onSearchEditorList(e) {
     e.preventDefault()
-    if (startDate === "Invalid Date" && endDate === "Invalid Date") {
-      dispatch({
-        type: GetEditorUrlAction.SET_ERROR_MESSAGE,
-        payload: {
-          message: "Please select create date"
-        }
-      })
-      return
-    }
-    if (startDate === "Invalid Date") {
-      dispatch({
-        type: GetEditorUrlAction.SET_ERROR_MESSAGE,
-        payload: {
-          message: "Please select start date"
-        }
-      })
-      return
-    }
-    if (endDate === "Invalid Date") {
-      dispatch({
-        type: GetEditorUrlAction.SET_ERROR_MESSAGE,
-        payload: {
-          message: "Please select end date"
-        }
-      })
-      return
-    }
+    // if (startDate === "Invalid Date" && endDate === "Invalid Date") {
+    //   dispatch({
+    //     type: GetEditorUrlAction.SET_ERROR_MESSAGE,
+    //     payload: {
+    //       message: "Please select create date"
+    //     }
+    //   })
+    //   return
+    // }
+    // if (startDate === "Invalid Date") {
+    //   dispatch({
+    //     type: GetEditorUrlAction.SET_ERROR_MESSAGE,
+    //     payload: {
+    //       message: "Please select start date"
+    //     }
+    //   })
+    //   return
+    // }
+    // if (endDate === "Invalid Date") {
+    //   dispatch({
+    //     type: GetEditorUrlAction.SET_ERROR_MESSAGE,
+    //     payload: {
+    //       message: "Please select end date"
+    //     }
+    //   })
+    //   return
+    // }
     const searchData = {
       url: url ?? '',
-      createDate: {
-        startDate: startDate,
-        endDate: endDate
-      }
+      // createDate: {
+      //   startDate: startDate,
+      //   endDate: endDate
+      // }
     }
     console.log("🚀 ~ file: EditorUrlList.jsx:136 ~ onSearchEditorList ~ searchData:", searchData)
 
@@ -94,13 +94,13 @@ export default function EditorSearchForm() {
   }, [dispatch])
 
 
-  const onStartDateChange = useCallback((value) => {
-    onSearchFormPropertyChange(value, 'startDate')
-  }, [onSearchFormPropertyChange])
+  // const onStartDateChange = useCallback((value) => {
+  //   onSearchFormPropertyChange(value, 'startDate')
+  // }, [onSearchFormPropertyChange])
 
-  const onEndDateChange = useCallback((value) => {
-    onSearchFormPropertyChange(value, 'endDate')
-  }, [onSearchFormPropertyChange])
+  // const onEndDateChange = useCallback((value) => {
+  //   onSearchFormPropertyChange(value, 'endDate')
+  // }, [onSearchFormPropertyChange])
 
   const reset = useCallback(() => {
     dispatch({
@@ -119,7 +119,7 @@ export default function EditorSearchForm() {
         <input type="text" name='url'
           value={url} onChange={e => onSearchFormPropertyChange(e.target.value, 'url')} />
       </div>
-      <InnerDateSelector
+      {/* <InnerDateSelector
         startDate={startDate}
         endDate={endDate}
         width={'160px'}
@@ -127,7 +127,7 @@ export default function EditorSearchForm() {
         onStartDateChange={onStartDateChange}
         onEndDateChange={onEndDateChange}
         title={'測試'}
-      />
+      /> */}
       <div className="button-list">
         <input type='button' value='重設' onClick={reset} />
         <input ref={submitRef} type="submit" value="查詢" />

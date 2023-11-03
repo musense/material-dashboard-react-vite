@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Button, Stack } from '@mui/material'
 import { useDispatch, useSelector } from "react-redux";
-import { getSelectedUrl, getSelectedUrlId } from "../../reducers/GetEditorUrlReducer";
+import { getSelectedUrl, getSelectedUrlId, getSubstitutionUrl } from "../../reducers/GetEditorUrlReducer";
 import { buttonProps } from "../EditorList/EditorListButtonList";
 import * as GetEditorUrlAction from "../../actions/GetEditorUrlAction";
 
@@ -16,9 +16,10 @@ const divStyle = {
 }
 
 export default function EditorUrlSubstitution() {
-  const [substitutionUrl, setSubstitutionUrl] = useState();
+  // const [substitutionUrl, setSubstitutionUrl] = useState();
   const selectedUrlId = useSelector(getSelectedUrlId)
   const selectedUrl = useSelector(getSelectedUrl) ?? ''
+  const substitutionUrl = useSelector(getSubstitutionUrl) ?? ''
 
   const dispatch = useDispatch();
 
@@ -36,6 +37,15 @@ export default function EditorUrlSubstitution() {
       }
     })
   }, [dispatch, selectedUrlId, substitutionUrl])
+
+  const setSubstitutionUrl = useCallback((url) => {
+    dispatch({
+      type: GetEditorUrlAction.SET_SUBSTITUTION_URL,
+      payload: {
+        substitutionUrl: url
+      }
+    })
+  }, [dispatch])
 
   const cancelEditing = useCallback(() => {
     dispatch({

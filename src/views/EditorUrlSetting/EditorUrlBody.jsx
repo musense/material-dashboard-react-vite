@@ -54,11 +54,6 @@ const EditorUrlBody = ({ headerMap }) => {
   console.log("🚀 ----------------------------------------------------------------------------🚀")
   console.log("🚀 ~ file: EditorUrlBody.jsx:52 ~ EditorUrlBody ~ checkUrlList:", checkUrlList)
   console.log("🚀 ----------------------------------------------------------------------------🚀")
-  useEffect(() => {
-
-  }, [serverMessage]);
-
-  // let checkBoxList
 
   useEffect(() => {
 
@@ -98,6 +93,13 @@ const EditorUrlBody = ({ headerMap }) => {
 
   }, [serverMessage, showList]);
 
+  useEffect(() => {
+    if (serverMessage === 'URL updated successfully') {
+      dispatch({
+        type: GetEditorUrlAction.CANCEL_EDITING_URL,
+      })
+    }
+  }, [dispatch, serverMessage]);
   const message = getErrorMessage(dialogMessage, serverMessage)
   const { title, content, success } = useModalResult({
     message,

@@ -16,6 +16,7 @@ const initialState = {
   },
   searchEditorUrlList: null,
   selectedEditorUrl: null,
+  substitutionUrl: null,
   selectedPatchKey: null,
   editorUrlList: null,
   showList: null,
@@ -81,10 +82,17 @@ const getEditorUrlReducer = (state = initialState, action) => {
           url: data.url,
         }
       }
+    case GetEditorUrlAction.SET_SUBSTITUTION_URL:
+      const { substitutionUrl } = action.payload
+      return {
+        ...state,
+        substitutionUrl: substitutionUrl
+      }
     case GetEditorUrlAction.CANCEL_EDITING_URL:
       return {
         ...state,
-        selectedEditorUrl: null
+        selectedEditorUrl: null,
+        substitutionUrl: null
       }
     case GetEditorUrlAction.UPDATE_EDITOR_URL_SUCCESS:
       const { newEditorUrl, oldUrlId } = action.payload
@@ -173,6 +181,8 @@ const getEditorUrlShowList = createSelector(
 const getSelectedUrl = state => state.getEditorUrlReducer.selectedEditorUrl &&
   state.getEditorUrlReducer.selectedEditorUrl.url
 
+const getSubstitutionUrl = state => state.getEditorUrlReducer.substitutionUrl
+
 const getSelectedUrlId = state => state.getEditorUrlReducer.selectedEditorUrl &&
   state.getEditorUrlReducer.selectedEditorUrl._id
 export {
@@ -185,6 +195,7 @@ export {
   getEditorUrlShowList,
   getSelectedUrl,
   getSelectedUrlId,
+  getSubstitutionUrl,
 }
 
 function transformToShowList(editorUrlList) {

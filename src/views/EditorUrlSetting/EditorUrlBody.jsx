@@ -145,11 +145,11 @@ const EditorUrlBody = ({ headerMap }) => {
         createButton={false}
       /> */}
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: '16px' }}>
-        <EditorUrlSubstitution />
         <Button
           {...buttonProps}
-          sx={{ ml: 'auto' }}
+          sx={{ mr: 'auto' }}
           onClick={checkUrlValidity}>測試</Button>
+        <EditorUrlSubstitution />
       </div>
       <form className='view-list-form'>
         <RowHeader

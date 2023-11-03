@@ -54,7 +54,7 @@ export default function EditorUrlSubstitution() {
   }, [dispatch])
 
   return <Stack
-    width={630}
+    width={'auto'}
     direction={'row'}
     alignItems={'stretch'}
     justifyContent={'space-between'}

@@ -96,7 +96,7 @@ const EditorUrlBody = ({ headerMap }) => {
       }
     }
 
-  }, [serverMessage]);
+  }, [serverMessage, showList]);
 
   const message = getErrorMessage(dialogMessage, serverMessage)
   const { title, content, success } = useModalResult({

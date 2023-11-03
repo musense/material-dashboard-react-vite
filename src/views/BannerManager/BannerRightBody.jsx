@@ -5,7 +5,7 @@ import CardBody from '@components/Card/CardBody.jsx';
 import BannerSearchForm from './BannerSearchForm';
 import MessageDialog from '../../components/Modal/MessageDialog';
 import RowHeader from '@components/RowHeader/RowHeader';
-import RowBody from './../../components/RowBody/Rowbody';
+import RowBody from './../../components/RowBody/RowBody';
 // import RowBody from './RowBody';
 import BannerButtonList from './BannerButtonList';
 import useModal from "../../hook/useModal";

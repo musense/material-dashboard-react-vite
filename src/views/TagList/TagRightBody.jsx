@@ -6,7 +6,7 @@ import TagSearchForm from './TagSearchForm';
 import MessageDialog from '../../components/Modal/MessageDialog';
 import RowHeader from '@components/RowHeader/RowHeader';
 // import RowBody from './RowBody';
-import RowBody from './../../components/RowBody/Rowbody';
+import RowBody from './../../components/RowBody/RowBody';
 import TagButtonList from './TagButtonList';
 import useModal from "../../hook/useModal";
 import useModalResult from "@hook/useModalResult";

@@ -87,7 +87,7 @@ function RouterIndex() {
               element: <NewIEditor />
             },
             {
-              path: ":id",
+              path: "update/:id",
               name: "編輯文章",
               element: <IEditor />,
             },

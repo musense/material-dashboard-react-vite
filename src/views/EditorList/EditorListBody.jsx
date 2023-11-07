@@ -61,7 +61,7 @@ export default function EditorListBody({ headerMap }) {
   }, [navigateCheckArray, errorMessage]);
   useEffect(() => {
     if (navigateCheckArray.length === 0) {
-      editor?._id && navigate(`/admin/editorList/${editor?._id}`)
+      editor?._id && navigate(`/admin/editorList/update/${editor?._id}`)
     }
   }, [navigateCheckArray, errorMessage, navigate, editor]);
 

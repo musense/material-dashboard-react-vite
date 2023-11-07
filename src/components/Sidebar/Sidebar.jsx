@@ -27,11 +27,16 @@ const Sidebar = ({ ...props }) => {
   const navigate = useNavigate();
 
   const [createType, setCreateType] = useState('');
+  const [pathName, setPathName] = useState('');
   useEffect(() => {
     if (location.pathname.includes('/editorList/new')) {
       setCreateType('add_new')
+      setPathName(location.pathname)
     } else if (location.pathname.includes('/editorList/update')) {
       setCreateType('update')
+      setPathName(location.pathname)
+    } else {
+      setPathName('')
     }
   }, [location]);
 
@@ -73,12 +78,10 @@ const Sidebar = ({ ...props }) => {
   const handleNavigation = useCallback((routePath, editorUpdatedState) => {
     console.log("🚀 ------------------------------------------------------------------🚀")
     console.log("🚀 ~ file: Sidebar.jsx:62 ~ Sidebar ~ editorUpdatedState:", editorUpdatedState)
+    console.log("🚀 ~ file: Sidebar.jsx:62 ~ handleNavigation ~ pathName:", pathName)
     console.log("🚀 ~ file: Sidebar.jsx:62 ~ handleNavigation ~ routePath:", routePath)
     console.log("🚀 -------------------------------------------------------------------🚀")
-    if (![
-      '/editorList/new',
-      '/editorList/update'
-    ].some(route => routePath.includes(route))) {
+    if (pathName !== routePath) {
       if (!editorUpdatedState) return navigate(routePath)
       const areYouSureYouWantToLeave = confirm('有未完成修改，確定要離開？');
       if (areYouSureYouWantToLeave) {
@@ -90,7 +93,7 @@ const Sidebar = ({ ...props }) => {
     else {
       navigate(routePath);
     }
-  }, [])
+  }, [pathName])
   const router = useMemo(() => {
     return routesOnSideBar.map((route, key) => {
       return (

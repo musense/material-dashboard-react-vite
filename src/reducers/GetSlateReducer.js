@@ -1,6 +1,7 @@
 import * as GetSlateAction from './../actions/GetSlateAction';
 import recurseCheckAndDelete from '../utils/recurseCheckAndDelete';
 import generateErrorMessage from '../utils/generateErrorMessage';
+import { createSelector } from 'reselect';
 
 const initialState = {
   contentForm: {
@@ -204,3 +205,40 @@ const getSlateReducer = (state = initialState, action) => {
 }
 
 export default getSlateReducer
+
+const getEditorForm = state => ({
+  ...state.getSlateReducer.contentForm,
+  ...state.getSlateReducer.detailForm,
+})
+
+const getUpdateInitialForm = state => ({
+  ...(state.getSlateReducer.updateInitialState && state.getSlateReducer.updateInitialState.contentForm),
+  ...(state.getSlateReducer.updateInitialState && state.getSlateReducer.updateInitialState.detailForm)
+})
+
+const getEditorUpdated = createSelector(
+  [getEditorForm, getUpdateInitialForm, (state, createType) => (createType)],
+  (form, updateInitialForm, createType) => {
+    if (createType === '') return false
+    // console.log("🚀 ----------------------------------------------🚀")
+    // console.log("🚀 ~ file: GetSlateReducer.js:222 ~ form:", form)
+    // console.log("🚀 ~ file: GetSlateReducer.js:222 ~ updateInitialForm:", updateInitialForm)
+    // console.log("🚀 ~ file: GetSlateReducer.js:222 ~ createType:", createType)
+    // console.log("🚀 ----------------------------------------------------------🚀")
+    const cachedInitialState = createType === 'add_new'
+      ? { ...initialState.contentForm, ...initialState.detailForm }
+      : { ...updateInitialForm }
+    const trimmedState = recurseCheckAndDelete(form, cachedInitialState, createType)
+    // console.log("🚀 --------------------------------------------------------------🚀")
+    // console.log("🚀 ~ file: GetSlateReducer.js:222 ~ trimmedState:", trimmedState)
+    console.log("🚀 ~ file: GetSlateReducer.js:222 ~ Object.keys(trimmedState).length:", Object.keys(trimmedState).length)
+    // console.log("🚀 --------------------------------------------------------------🚀")
+
+    return Object.keys(trimmedState).length > 0 ? true : false
+  }
+)
+
+
+export {
+  getEditorUpdated
+}

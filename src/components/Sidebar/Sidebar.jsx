@@ -1,7 +1,7 @@
-import React, { Suspense, useCallback, useMemo } from 'react';
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Drawer from '@mui/material/Drawer';
@@ -15,6 +15,7 @@ import sidebarStyle from '@assets/jss/material-dashboard-react/components/sideba
 import { useSelector } from "react-redux";
 import { getShowOnSideBarRoutes } from "../../reducers/GetConfigReducer.js";
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary.jsx';
+import { getEditorUpdated } from '../../reducers/GetSlateReducer.js';
 
 const LazyLogoImage = /* @vite-ignore */React.lazy(() => import('./LogoImage'));
 
@@ -23,6 +24,22 @@ const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)
   const mainSiteUrl = import.meta.env.VITE_MAIN_URL
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const [createType, setCreateType] = useState('');
+  useEffect(() => {
+    if (location.pathname.includes('/editorList/new')) {
+      setCreateType('add_new')
+    } else if (location.pathname.includes('/editorList/update')) {
+      setCreateType('update')
+    }
+  }, [location]);
+
+  const editorUpdated = useSelector(state => getEditorUpdated(state, createType))
+  const [editorUpdatedState, setEditorUpdatedState] = useState(false);
+  useEffect(() => {
+    setEditorUpdatedState(editorUpdated)
+  }, [editorUpdated]);
   const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
   console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)
   const activeRoute = useCallback((routeName) => {
@@ -37,9 +54,7 @@ const Sidebar = ({ ...props }) => {
   } = props;
   console.log("🚀 ~ file: Sidebar.jsx:38 ~ Sidebar ~ classes:", classes)
 
-  const item = useCallback((routeName,
-    routePath
-  ) => {
+  const item = useCallback((routeName, routePath) => {
     return <ListItem button
       className={classes.itemLink + classNames({
         [' ' + classes[color]]: activeRoute(routePath),
@@ -55,20 +70,42 @@ const Sidebar = ({ ...props }) => {
     </ListItem>
   }, [activeRoute, classes, color])
 
+  const handleNavigation = useCallback((routePath, editorUpdatedState) => {
+    console.log("🚀 ------------------------------------------------------------------🚀")
+    console.log("🚀 ~ file: Sidebar.jsx:62 ~ Sidebar ~ editorUpdatedState:", editorUpdatedState)
+    console.log("🚀 ~ file: Sidebar.jsx:62 ~ handleNavigation ~ routePath:", routePath)
+    console.log("🚀 -------------------------------------------------------------------🚀")
+    if (![
+      '/editorList/new',
+      '/editorList/update'
+    ].some(route => routePath.includes(route))) {
+      if (!editorUpdatedState) return navigate(routePath)
+      const areYouSureYouWantToLeave = confirm('有未完成修改，確定要離開？');
+      if (areYouSureYouWantToLeave) {
+        navigate(routePath)
+      } else {
+        // stay in editor...
+      }
+    }
+    else {
+      navigate(routePath);
+    }
+  }, [])
   const router = useMemo(() => {
     return routesOnSideBar.map((route, key) => {
-
       return (
-        <NavLink
-          to={route.path}
-          className={({ isActive }) => isActive ? 'active' : ''}
-          key={key}
-        >
-          {item(route.name, route.path)}
-        </NavLink>
-      );
+        <li key={key}
+          className={classes.item}>
+          <button
+            onClick={() => handleNavigation(route.path, editorUpdatedState)}
+            className={classes.button}
+          >
+            {item(route.name, route.path)}
+          </button>
+        </li>
+      )
     })
-  }, [routesOnSideBar, item])
+  }, [routesOnSideBar, item, editorUpdatedState])
 
   const links = useMemo(() => {
     return <List className={classes.list}>

@@ -127,6 +127,12 @@ const sidebarStyle = (theme) => ({
     listStyle: "none",
     position: "unset",
   },
+  button: {
+    backgroundColor: 'transparent',
+    outline: 0,
+    border: 0,
+    width: '100%',
+  },
   itemHide: {
     display: "none",
   },

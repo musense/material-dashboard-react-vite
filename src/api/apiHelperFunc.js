@@ -146,8 +146,8 @@ export function toBackendFormData(requestData) {
       }
       if (key === 'homeImagePath') {
         if (value === null || value === '') {
-          formData.append(key, new Blob([''], { type: 'text/plain' }))
           return
+          // formData.append(key, new Blob([''], { type: 'text/plain' }))
         }
         value !== null && formData.append('homeImagePath', new Blob([value], { type: 'text/plain' }))
         return

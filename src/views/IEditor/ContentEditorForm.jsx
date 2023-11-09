@@ -41,15 +41,12 @@ const ContentEditorForm = () => {
           onChange={e => onPropertyChange(e.target.value, 'title')}
         />
       </div>
+      {/* <div> */}
       <MuEditor
         value={content}
         setValue={onSlateEditorChange}
       />
-      {/* <SlateEditor
-        key={title}
-        slateValue={content}
-        setState={onSlateEditorChange}
-      /> */}
+      {/* </div> */}
     </form>
   );
 }

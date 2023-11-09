@@ -3,17 +3,17 @@ class MyUploadAdapter {
   constructor(loader) {
     // The file loader instance to use during the upload.
     this.loader = loader;
+    this.apiUrl = import.meta.env.VITE_SERVER_URL
   }
   // Starts the upload process.
   _initRequest() {
     console.log('_initRequest');
     const xhr = this.xhr = new XMLHttpRequest();
-
     // Note that your request may look different. It is up to you and your editor
     // integration to choose the right communication channel. This example uses
     // a POST request with JSON as a data structure but your configuration
     // could be different.
-    xhr.open('POST', '/upload', true);
+    xhr.open('POST', `${this.apiUrl}/editor/getNewImagePath`, true);
     xhr.responseType = 'json';
   }
   _initListeners(resolve, reject, file) {
@@ -41,8 +41,9 @@ class MyUploadAdapter {
       // at least the "default" URL, pointing to the image on the server.
       // This URL will be used to display the image in the content. Learn more in the
       // UploadAdapter#upload documentation.
+
       resolve({
-        default: response.url
+        default: response.imageUrl
       });
     });
 
@@ -51,6 +52,9 @@ class MyUploadAdapter {
     // user interface.
     if (xhr.upload) {
       xhr.upload.addEventListener('progress', evt => {
+        console.log("🚀 ------------------------------------------------------------------------------🚀")
+        console.log("🚀 ~ file: MyUploadAdapter.js:55 ~ MyUploadAdapter ~ _initListeners ~ evt:", evt)
+        console.log("🚀 ------------------------------------------------------------------------------🚀")
         if (evt.lengthComputable) {
           loader.uploadTotal = evt.total;
           loader.uploaded = evt.loaded;
@@ -62,9 +66,9 @@ class MyUploadAdapter {
     // Prepare the form data.
     const data = new FormData();
     console.log('_sendRequest', file);
-    data.append('upload', file);
-    data.append('group', 'ETC')
-    data.append('type', 'IMAGE')
+    data.append('imageBlob', file);
+    // data.append('group', 'ETC')
+    // data.append('type', 'IMAGE')
 
     // Important note: This is the right place to implement security mechanisms
     // like authentication and CSRF protection. For instance, you can use

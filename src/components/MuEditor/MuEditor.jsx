@@ -34,6 +34,14 @@ export default function MuEditor({ value, setValue }) {
       <MyScrollbar height={'calc(100% )'} >
         <CKEditor
           editor={Editor}
+          config={{
+            removePlugins: ['Style'],
+            ui: {
+              viewportOffset: {
+                right: 0,
+              }
+            }
+          }}
           data={value}
           onReady={editor => {
             // You can store the "editor" and use when it is needed.

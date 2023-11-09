@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 
 import RouterIndex from "./router";
 import './app.css'
+import '../ckeditor5/sample/styles.css'
 // const hist = createBrowserHistory();
 const store = configureStore();
 const root = ReactDOM.createRoot(document.getElementById("root"));

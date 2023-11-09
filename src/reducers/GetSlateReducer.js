@@ -6,12 +6,13 @@ import { createSelector } from 'reselect';
 const initialState = {
   contentForm: {
     title: '',
-    content: [
-      {
-        type: 'paragraph',
-        children: [{ text: '' }],
-      },
-    ],
+    content: '',
+    // content: [
+    //   {
+    //     type: 'paragraph',
+    //     children: [{ text: '' }],
+    //   },
+    // ],
   },
   detailForm: {
     webHeader: {
@@ -206,6 +207,9 @@ const getSlateReducer = (state = initialState, action) => {
 
 export default getSlateReducer
 
+
+const getSubmitState = state => state.getSlateReducer.submitState
+
 const getEditorForm = state => ({
   ...state.getSlateReducer.contentForm,
   ...state.getSlateReducer.detailForm,
@@ -240,5 +244,7 @@ const getEditorUpdated = createSelector(
 
 
 export {
-  getEditorUpdated
+  getSubmitState,
+  getEditorForm,
+  getEditorUpdated,
 }

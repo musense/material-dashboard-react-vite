@@ -1,14 +1,15 @@
 import React, { useCallback } from "react";
-import SlateEditor from '../../components/SlateEditor/SlateEditor';
+// import SlateEditor from '../../components/SlateEditor/SlateEditor';
 import { useDispatch, useSelector } from "react-redux";
 import * as GetSlateAction from '@actions/GetSlateAction';
+import MuEditor from "../../components/MuEditor/MuEditor";
 
 const ContentEditorForm = () => {
   const dispatch = useDispatch();
   const title = useSelector((state) => state.getSlateReducer.contentForm?.title);
   const content = useSelector((state) => state.getSlateReducer.contentForm?.content)
 
-
+  // const ckBodyWrapperRef = React.useRef(null);
   const onPropertyChange = useCallback((value, property) => {
     if (JSON.stringify(value) === JSON.stringify(content)) return
     dispatch({
@@ -40,11 +41,15 @@ const ContentEditorForm = () => {
           onChange={e => onPropertyChange(e.target.value, 'title')}
         />
       </div>
-      <SlateEditor
+      <MuEditor
+        value={content}
+        setValue={onSlateEditorChange}
+      />
+      {/* <SlateEditor
         key={title}
         slateValue={content}
         setState={onSlateEditorChange}
-      />
+      /> */}
     </form>
   );
 }

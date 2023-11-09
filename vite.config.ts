@@ -25,7 +25,8 @@ export default defineConfig({
     port: 80
   },
   preview: {
-    port: 80
+    port: 8080,
+    host: 'backstage.wilsonwan.com'
   },
 })
 

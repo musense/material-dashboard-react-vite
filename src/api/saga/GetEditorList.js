@@ -146,7 +146,7 @@ function* AddEditor(payload) {
       } else if (typeof requestFormData.get('contentImagePath') === 'string') {
         response = yield instance.post(`/draftEditor`, requestFormData);
       } else {
-        response = yield instance.post(`/editor`, requestFormData);
+        response = yield instance.post(`/draftEditor`, requestFormData);
       }
     }
 

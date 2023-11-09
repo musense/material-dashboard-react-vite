@@ -15,7 +15,8 @@ import sidebarStyle from '@assets/jss/material-dashboard-react/components/sideba
 import { useSelector } from "react-redux";
 import { getShowOnSideBarRoutes } from "../../reducers/GetConfigReducer.js";
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary.jsx';
-import { getEditorUpdated } from '../../reducers/GetSlateReducer.js';
+import { getEditorForm, getEditorUpdated, getSubmitState } from '../../reducers/GetSlateReducer.js';
+import useEditorSave from '../../hook/useEditorSave.js';
 
 const LazyLogoImage = /* @vite-ignore */React.lazy(() => import('./LogoImage'));
 
@@ -28,23 +29,42 @@ const Sidebar = ({ ...props }) => {
 
   const [createType, setCreateType] = useState('');
   const [pathName, setPathName] = useState('');
+
+  const submitState = useSelector(getEditorForm);
+  console.log("🚀 --------------------------------------------------------------🚀")
+  console.log("🚀 ~ file: Sidebar.jsx:36 ~ Sidebar ~ submitState:", submitState)
+  console.log("🚀 --------------------------------------------------------------🚀")
+  const editorUpdated = useSelector(state => getEditorUpdated(state, createType))
+  const [editorUpdatedState, setEditorUpdatedState] = useState(false);
+  const [editorId, setEditorId] = useState();
+  console.log("🚀 --------------------------------------------------------🚀")
+  console.log("🚀 ~ file: Sidebar.jsx:36 ~ Sidebar ~ editorId:", editorId)
+  console.log("🚀 --------------------------------------------------------🚀")
+
+  const {
+    onEditorSave,
+    onEditorUpdate
+  } = useEditorSave()
+
   useEffect(() => {
     if (location.pathname.includes('/editorList/new')) {
       setCreateType('add_new')
       setPathName(location.pathname)
+      setEditorId('')
+      setEditorUpdatedState(editorUpdated)
     } else if (location.pathname.includes('/editorList/update')) {
       setCreateType('update')
       setPathName(location.pathname)
+      setEditorId(location.pathname.slice(location.pathname.lastIndexOf('/') + 1))
+      setEditorUpdatedState(editorUpdated)
     } else {
+      setCreateType('')
       setPathName('')
+      setEditorId('')
+      setEditorUpdatedState(false)
     }
-  }, [location]);
+  }, [location, editorUpdated]);
 
-  const editorUpdated = useSelector(state => getEditorUpdated(state, createType))
-  const [editorUpdatedState, setEditorUpdatedState] = useState(false);
-  useEffect(() => {
-    setEditorUpdatedState(editorUpdated)
-  }, [editorUpdated]);
   const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
   console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)
   const activeRoute = useCallback((routeName) => {
@@ -75,32 +95,38 @@ const Sidebar = ({ ...props }) => {
     </ListItem>
   }, [activeRoute, classes, color])
 
-  const handleNavigation = useCallback((routePath, editorUpdatedState) => {
+  const handleNavigation = useCallback((routePath, editorUpdatedState, submitState) => {
     console.log("🚀 ------------------------------------------------------------------🚀")
     console.log("🚀 ~ file: Sidebar.jsx:62 ~ Sidebar ~ editorUpdatedState:", editorUpdatedState)
     console.log("🚀 ~ file: Sidebar.jsx:62 ~ handleNavigation ~ pathName:", pathName)
     console.log("🚀 ~ file: Sidebar.jsx:62 ~ handleNavigation ~ routePath:", routePath)
     console.log("🚀 -------------------------------------------------------------------🚀")
+
     if (pathName !== routePath) {
       if (!editorUpdatedState) return navigate(routePath)
-      const areYouSureYouWantToLeave = confirm('有未完成修改，確定要離開？');
-      if (areYouSureYouWantToLeave) {
+      const sureToLeave = confirm('有未完成修改，確定要離開？');
+      if (sureToLeave) {
+        if (pathName.includes('/editorList/new')) {
+          onEditorSave(submitState, true)
+        } else if (pathName.includes('/editorList/update')) {
+          onEditorUpdate(submitState, editorId, true)
+        }
         navigate(routePath)
       } else {
-        // stay in editor...
+        // stay and continue editing
       }
     }
     else {
       navigate(routePath);
     }
-  }, [pathName])
+  }, [pathName, editorId, onEditorSave])
   const router = useMemo(() => {
     return routesOnSideBar.map((route, key) => {
       return (
         <li key={key}
           className={classes.item}>
           <button
-            onClick={() => handleNavigation(route.path, editorUpdatedState)}
+            onClick={() => handleNavigation(route.path, editorUpdatedState, submitState)}
             className={classes.button}
           >
             {item(route.name, route.path)}
@@ -108,7 +134,7 @@ const Sidebar = ({ ...props }) => {
         </li>
       )
     })
-  }, [routesOnSideBar, item, editorUpdatedState])
+  }, [routesOnSideBar, item, editorUpdatedState, submitState])
 
   const links = useMemo(() => {
     return <List className={classes.list}>

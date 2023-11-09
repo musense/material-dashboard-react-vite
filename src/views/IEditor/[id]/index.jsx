@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import ContentEditorForm from "./../ContentEditorForm.jsx"
@@ -15,6 +15,7 @@ import useBeforeUnloadSave from '../../../hook/useBeforeUnloadSave.js';
 import { useLoaderData } from 'react-router-dom';
 import getErrorMessage from '@utils/getErrorMessage.js';
 import { getEditor } from '@reducers/GetEditorReducer'
+import { getSubmitState } from '../../../reducers/GetSlateReducer.js';
 
 function IEditor() {
 
@@ -22,7 +23,7 @@ function IEditor() {
   const { id } = useParams();
   const editor = useSelector(getEditor);
 
-  const submitState = useSelector((state) => state.getSlateReducer.submitState);
+  const submitState = useSelector(getSubmitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
   const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
   const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
@@ -49,7 +50,22 @@ function IEditor() {
 
 
   usePreview(previewID, isPreview)
-  const { onEditorSave } = useEditorSave(message, submitState, isPreview, id)
+  const {
+    onEditorUpdate,
+    onPreviewSave
+  } = useEditorSave()
+
+  useEffect(() => {
+    if (message !== 'check__OK!') return
+    if (isPreview) {
+      onPreviewSave(submitState)
+      return
+    }
+    if (id) {
+      onEditorUpdate(submitState, id)
+      return
+    }
+  }, [message, submitState, isPreview, id]);
   // useBeforeUnloadSave(onEditorSave)
 
   const {

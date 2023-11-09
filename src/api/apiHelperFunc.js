@@ -7,7 +7,7 @@ export function toFrontendData(responseData) {
       serialNumber: item.serialNumber,
       content: {
         title: item.title,
-        content: item.content
+        htmlContent: item.htmlContent
       },
       sorting: {
         isNews: {
@@ -61,7 +61,7 @@ export function toFrontendData(responseData) {
       serialNumber: responseData.serialNumber,
       content: {
         title: responseData.title,
-        content: responseData.content
+        htmlContent: responseData.htmlContent
       },
       sorting: {
         isNews: {
@@ -113,7 +113,7 @@ export function toBackendFormData(requestData) {
   const formData = new FormData()
 
   'title' in requestData && formData.append('title', JSON.stringify(requestData.title))
-  'content' in requestData && formData.append('content', JSON.stringify(requestData.content))
+  'htmlContent' in requestData && formData.append('htmlContent', JSON.stringify(requestData.htmlContent))
 
   if ('webHeader' in requestData) {
     Object.entries(requestData.webHeader).forEach(([key, value]) => {

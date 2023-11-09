@@ -6,13 +6,7 @@ import { createSelector } from 'reselect';
 const initialState = {
   contentForm: {
     title: '',
-    content: '',
-    // content: [
-    //   {
-    //     type: 'paragraph',
-    //     children: [{ text: '' }],
-    //   },
-    // ],
+    htmlContent: '',
   },
   detailForm: {
     webHeader: {
@@ -73,7 +67,7 @@ const getSlateReducer = (state = initialState, action) => {
       } = action.payload.allProps
       const contentForm = {
         title: props.content.title || '',
-        content: props.content.content || initialState.contentForm.content,
+        htmlContent: props.content.htmlContent || initialState.contentForm.htmlContent,
       }
       const detailForm = {
         webHeader: {

@@ -7,11 +7,11 @@ import MuEditor from "../../components/MuEditor/MuEditor";
 const ContentEditorForm = () => {
   const dispatch = useDispatch();
   const title = useSelector((state) => state.getSlateReducer.contentForm?.title);
-  const content = useSelector((state) => state.getSlateReducer.contentForm?.content)
+  const htmlContent = useSelector((state) => state.getSlateReducer.contentForm?.htmlContent)
 
   // const ckBodyWrapperRef = React.useRef(null);
   const onPropertyChange = useCallback((value, property) => {
-    if (JSON.stringify(value) === JSON.stringify(content)) return
+    if (JSON.stringify(value) === JSON.stringify(htmlContent)) return
     dispatch({
       type: GetSlateAction.SET_PROPERTY,
       payload: {
@@ -23,10 +23,10 @@ const ContentEditorForm = () => {
         }
       }
     })
-  }, [dispatch, content])
+  }, [dispatch, htmlContent])
 
   const onSlateEditorChange = useCallback((value) => {
-    onPropertyChange(value, 'content')
+    onPropertyChange(value, 'htmlContent')
   }, [onPropertyChange])
 
   return (
@@ -43,7 +43,7 @@ const ContentEditorForm = () => {
       </div>
       {/* <div> */}
       <MuEditor
-        value={content}
+        value={htmlContent}
         setValue={onSlateEditorChange}
       />
       {/* </div> */}

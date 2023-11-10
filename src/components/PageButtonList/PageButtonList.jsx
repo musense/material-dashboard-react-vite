@@ -1,23 +1,22 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Stack from "@mui/material/Stack";
 import Button from '@mui/material/Button';
 import { useDispatch } from "react-redux";
 
-const buttonProps = (page, currentPage) => ({
-  color: currentPage === page ? 'error' : 'info',
-  size: 'small',
-  variant: 'contained',
-  onClick: () => dispatch({
-    type: patchType,
-    payload: page
-  })
-})
-
 export default function PageButtonList({ totalPage, currentPage, patchType }) {
   const dispatch = useDispatch();
 
-  const pageList = Array.from({ length: totalPage }, (_, i) => i + 1);
+  const buttonProps = useCallback((page, currentPage) => ({
+    color: currentPage === page ? 'error' : 'info',
+    size: 'small',
+    variant: 'contained',
+    onClick: () => dispatch({
+      type: patchType,
+      payload: page
+    })
+  }), [patchType, dispatch])
 
+  const pageList = Array.from({ length: totalPage }, (_, i) => i + 1);
 
   return <Stack spacing={2} direction={'row'}>
     {pageList.map(page => {

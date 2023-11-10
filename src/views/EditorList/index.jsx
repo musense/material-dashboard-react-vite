@@ -64,7 +64,7 @@ function EditorList() {
   useEffect(() => {
     if (disableRoute !== '文章分類管理') {
       const classificationColumn = { name: "分類", patchKey: "categories.name", className: "flex-2", type: "string" }
-      headerMap.headerRowCount.splice(1, 0, classificationColumn)
+      headerMap.headerRowCount?.splice(1, 0, classificationColumn)
     }
   }, []);
 

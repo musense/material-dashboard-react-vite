@@ -14,6 +14,7 @@ class MyUploadAdapter {
     // a POST request with JSON as a data structure but your configuration
     // could be different.
     xhr.open('POST', `${this.apiUrl}/editor/getNewImagePath`, true);
+    xhr.withCredentials = true;
     xhr.responseType = 'json';
   }
   _initListeners(resolve, reject, file) {

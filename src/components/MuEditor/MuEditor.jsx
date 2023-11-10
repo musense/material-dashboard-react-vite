@@ -35,6 +35,15 @@ export default function MuEditor({ value, setValue }) {
         <CKEditor
           editor={Editor}
           config={{
+            toolbar: {
+              items: [
+                'bold', 'italic', 'underline', 'strikethrough', 'link', 'bulletedList', 'numberedList', 'outdent', 'indent', 'alignment', 'insertTable', '|',
+                'heading', 'style', '|',
+                'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', 'highlight', 'code', 'codeBlock', 'blockQuote', '|',
+                'imageUpload', 'imageInsert', 'mediaEmbed', '|',
+                'undo', 'redo', 'findAndReplace', 'showBlocks', 'htmlEmbed', 'sourceEditing', 'selectAll', 'removeFormat', 'superscript', 'subscript', 'restrictedEditingException', 'specialCharacters', 'horizontalLine'
+              ]
+            },
             removePlugins: ['Style'],
             ui: {
               viewportOffset: {

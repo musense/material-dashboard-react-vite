@@ -32,6 +32,18 @@ jobs:
           command: |
             ssh -o StrictHostKeyChecking=no $VM_USER@$PROD_VM_IP "cd /home/dino_wu/material-dashboard-react-vite/ && sudo git pull && sudo yarn install && sudo yarn build:prod:oogiri && sudo rm -r /var/www/dist/ && sudo mv dist /var/www/"
 
+  production_deploy_mu:
+    machine:
+      enabled: true
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - $MU_PROD_VM_SSH_FINGERPRINT
+      - run:
+          name: Deploy to GCP Compute Engine
+          command: |
+            ssh -o StrictHostKeyChecking=no $VM_USER@$MU_PROD_VM_IP "cd /home/dino_wu/material-dashboard-react-vite/ && sudo git pull && sudo yarn install && sudo yarn build:prod:mu && sudo rm -r /var/www/dist/ && sudo mv dist /var/www/"
+
 workflows:
   build-and-deploy:
     jobs:
@@ -48,3 +60,9 @@ workflows:
           filters:
             branches:
               only: main
+      - production_deploy_mu:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main-mu

@@ -18,7 +18,19 @@ jobs:
       - run:
           name: Deploy to GCP Compute Engine
           command: |
-            ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP "cd /home/dino_wu/material-dashboard-react-vite/ && sudo git pull && sudo yarn install && sudo yarn build:staging:oogiri && sudo rm -r /var/www/oogiriinfoBuild/ && sudo mv dist oogiriinfoBuild && sudo mv oogiriinfoBuild /var/www/"
+            ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP "cd /home/dino_wu/oogiri/material-dashboard-react-vite/ && sudo git pull && yarn install && sudo yarn build:staging:oogiri && sudo rm -r /var/www/oogiriinfoBuild/ && sudo mv dist oogiriinfoBuild && sudo mv oogiriinfoBuild /var/www/"
+
+  uat_deploy_musense:
+    machine:
+      enabled: true
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - $VM_SSH_FINGERPRINT
+      - run:
+          name: Deploy to GCP Compute Engine
+          command: |
+            ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP "cd /home/dino_wu/musense/material-dashboard-react-vite/ && sudo git pull && yarn install && sudo yarn build:staging:mu && sudo rm -r /var/www/musenseBuild/ && sudo mv dist musenseBuild && sudo mv musenseBuild /var/www/"
 
   production_deploy:
     machine:
@@ -32,18 +44,6 @@ jobs:
           command: |
             ssh -o StrictHostKeyChecking=no $VM_USER@$PROD_VM_IP "cd /home/dino_wu/material-dashboard-react-vite/ && sudo git pull && sudo yarn install && sudo yarn build:prod:oogiri && sudo rm -r /var/www/dist/ && sudo mv dist /var/www/"
 
-  production_deploy_mu:
-    machine:
-      enabled: true
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - $MU_PROD_VM_SSH_FINGERPRINT
-      - run:
-          name: Deploy to GCP Compute Engine
-          command: |
-            ssh -o StrictHostKeyChecking=no $VM_USER@$MU_PROD_VM_IP "cd /home/dino_wu/material-dashboard-react-vite/ && sudo git pull && sudo yarn install && sudo yarn build:prod:mu && sudo rm -r /var/www/dist/ && sudo mv dist /var/www/"
-
 workflows:
   build-and-deploy:
     jobs:
@@ -54,15 +54,15 @@ workflows:
           filters:
             branches:
               only: uat
+      - uat_deploy_musense:
+          requires:
+            - build
+          filters:
+            branches:
+              only: uat-mu
       - production_deploy:
           requires:
             - build
           filters:
             branches:
               only: main
-      - production_deploy_mu:
-          requires:
-            - build
-          filters:
-            branches:
-              only: main-mu

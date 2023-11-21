@@ -106,11 +106,11 @@ const Sidebar = ({ ...props }) => {
       if (!editorUpdatedState) return navigate(routePath)
       const sureToLeave = confirm('有未完成修改，確定要離開？');
       if (sureToLeave) {
-        if (pathName.includes('/editorList/new')) {
-          onEditorSave(submitState, true)
-        } else if (pathName.includes('/editorList/update')) {
-          onEditorUpdate(submitState, editorId, true)
-        }
+        // if (pathName.includes('/editorList/new')) {
+        //   onEditorSave(submitState, true)
+        // } else if (pathName.includes('/editorList/update')) {
+        //   onEditorUpdate(submitState, editorId, true)
+        // }
         navigate(routePath)
       } else {
         // stay and continue editing
@@ -119,6 +119,7 @@ const Sidebar = ({ ...props }) => {
     else {
       navigate(routePath);
     }
+    navigate(routePath);
   }, [pathName, editorId, onEditorSave])
   const router = useMemo(() => {
     return routesOnSideBar.map((route, key) => {

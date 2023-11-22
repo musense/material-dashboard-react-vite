@@ -66,15 +66,15 @@ const getSlateReducer = (state = initialState, action) => {
         ...props
       } = action.payload.allProps
       const contentForm = {
-        title: props.content.title || '',
+        title: props.content.title,
         htmlContent: props.content.htmlContent || initialState.contentForm.htmlContent,
       }
       const detailForm = {
         webHeader: {
-          headTitle: props.webHeader.headTitle || '',
-          headDescription: props.webHeader.headDescription || '',
-          headKeyword: props.webHeader.headKeyword || '',
-          manualUrl: '',
+          headTitle: props.webHeader.headTitle,
+          headDescription: props.webHeader.headDescription,
+          headKeyword: props.webHeader.headKeyword,
+          manualUrl: props.webHeader.manualUrl,
           sitemapUrl: props.sitemapUrl,
         },
         tags: props.tags || initialState.detailForm.tags,

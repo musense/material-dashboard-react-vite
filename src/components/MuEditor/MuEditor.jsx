@@ -4,6 +4,7 @@ import Editor from 'ckeditor5-custom-build/build/ckeditor'
 import MyUploadAdapter from './MyUploadAdapter'
 import MyScrollbar from '@components/MyScrollbar/MyScrollbar';
 import { css } from '@emotion/css'
+import MuEditorConfig from './MuEditorConfig.js'
 
 export default function MuEditor({ value, setValue }) {
 
@@ -34,23 +35,7 @@ export default function MuEditor({ value, setValue }) {
       <MyScrollbar height={'calc(100% )'} >
         <CKEditor
           editor={Editor}
-          config={{
-            toolbar: {
-              items: [
-                'bold', 'italic', 'underline', 'strikethrough', 'link', 'bulletedList', 'numberedList', 'outdent', 'indent', 'alignment', 'insertTable', '|',
-                'heading', 'style', '|',
-                'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', 'highlight', 'code', 'codeBlock', 'blockQuote', '|',
-                'imageUpload', 'imageInsert', 'mediaEmbed', '|',
-                'undo', 'redo', 'findAndReplace', 'showBlocks', 'htmlEmbed', 'sourceEditing', 'selectAll', 'removeFormat', 'superscript', 'subscript', 'restrictedEditingException', 'specialCharacters', 'horizontalLine'
-              ]
-            },
-            removePlugins: ['Style'],
-            ui: {
-              viewportOffset: {
-                right: 0,
-              }
-            }
-          }}
+          config={MuEditorConfig}
           data={value}
           onReady={editor => {
             // You can store the "editor" and use when it is needed.

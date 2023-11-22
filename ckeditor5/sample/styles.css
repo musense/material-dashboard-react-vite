@@ -497,6 +497,13 @@ footer {
   color: rgba(0, 0, 0, .4);
 }
 
+
+h4.h4_Custom {
+  text-align: initial;
+  font-size: 1.5em;
+  margin: 20px 0 10px;
+}
+
 /* --------- RWD --------------------------------------------------------------------------------------------------- */
 @media screen and (max-width: 800px) {
   :root {

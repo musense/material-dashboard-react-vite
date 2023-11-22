@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Deploy to GCP Compute Engine
           command: |
-            ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP "cd /home/dino_wu/oogiri/material-dashboard-react-vite/ && sudo git pull && yarn install && sudo yarn build:staging:oogiri && sudo rm -r /var/www/oogiriinfoBuild/ && sudo mv dist oogiriinfoBuild && sudo mv oogiriinfoBuild /var/www/"
+            ssh -o StrictHostKeyChecking=no $VM_USER@$VM_IP "cd /home/dino_wu/oogiri/material-dashboard-react-vite/ && sudo git pull && sudo yarn install && sudo yarn build:staging:oogiri && sudo rm -r /var/www/oogiriinfoBuild/ && sudo mv dist oogiriinfoBuild && sudo mv oogiriinfoBuild /var/www/"
 
   uat_deploy_musense:
     machine:

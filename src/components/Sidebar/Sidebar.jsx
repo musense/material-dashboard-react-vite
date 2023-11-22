@@ -119,7 +119,6 @@ const Sidebar = ({ ...props }) => {
     else {
       navigate(routePath);
     }
-    navigate(routePath);
   }, [pathName, editorId, onEditorSave])
   const router = useMemo(() => {
     return routesOnSideBar.map((route, key) => {

@@ -45,7 +45,13 @@ const pagesStyle = theme => ({
       left: "0",
       zIndex: "2"
     }
-  }
+  },
+  login: {
+    backgroundImage: "url('/src/assets/img/login.jpeg')",
+  },
+  register: {
+    backgroundImage: "url('/src/assets/img/register.jpeg')",
+  },
 });
 
 export default pagesStyle;

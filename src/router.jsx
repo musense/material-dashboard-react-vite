@@ -7,7 +7,7 @@ import EditorTypeList from "@views/EditorTypeList";
 import NewIEditor from "@views/IEditor";
 import IEditor from "@views/IEditor/[id]";
 import LoginPage from "@views/Pages/LoginPage";
-import RegisterPage from "@views/Pages/RegisterPage";
+// import RegisterPage from "@views/Pages/RegisterPage";
 import TagList from "@views/TagList";
 import BannerManager from "@views/BannerManager";
 import EditorUrlSetting from "@views/EditorUrlSetting";
@@ -37,7 +37,7 @@ function RouterIndex() {
           path: "/register",
           needAuth: true,
           name: "RegisterPage",
-          element: <RegisterPage />,
+          Component: React.lazy(() => import('./views/Pages/RegisterPage')),
         },
       ],
     },

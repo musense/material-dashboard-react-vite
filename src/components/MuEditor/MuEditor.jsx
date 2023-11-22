@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import Editor from 'ckeditor5-custom-build/build/ckeditor'
+import CustomEditor from 'ckeditor5-custom-build/build/ckeditor'
 import MyUploadAdapter from './MyUploadAdapter'
 import MyScrollbar from '@components/MyScrollbar/MyScrollbar';
 import { css } from '@emotion/css'
@@ -33,12 +33,18 @@ export default function MuEditor({ value, setValue }) {
     overflow: hidden;
     `}>
       <MyScrollbar height={'calc(100% )'} >
+        {/* <div id="editor" /> */}
         <CKEditor
-          editor={Editor}
+          editor={CustomEditor}
           config={MuEditorConfig}
           data={value}
           onReady={editor => {
             // You can store the "editor" and use when it is needed.
+            editor.model.document.on('click', (e, data) => {
+              if (data.domEvent.target.tagName === 'A') {
+                data.domEvent.target.setAttribute('target', '_blank');
+              }
+            })
             editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
               return new MyUploadAdapter(loader);
             };

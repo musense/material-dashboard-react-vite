@@ -24,6 +24,18 @@ const MuEditorConfig = {
       'undo', 'redo', 'findAndReplace', 'showBlocks', 'htmlEmbed', 'sourceEditing', 'selectAll', 'removeFormat', 'superscript', 'subscript', 'restrictedEditingException', 'specialCharacters', 'horizontalLine'
     ]
   },
+  link: {
+    addTargetToExternalLinks: true,
+    decorators: [
+      {
+        mode: 'manual',
+        label: '另開連結',
+        attributes: {
+          target: '_blank',
+        }
+      }
+    ]
+  },
   removePlugins: ['Style'],
   ui: {
     viewportOffset: {

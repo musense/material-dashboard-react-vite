@@ -14,6 +14,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import useRefreshStayCurrentPage from '@hook/useRefreshStayCurrentPage';
 import { useSelector } from "react-redux";
 import { getAuthRoutes } from "../reducers/GetConfigReducer.js";
+import Loading from '@components/Loading/Loading';
 
 const InnerAuthNavbar = React.memo(AuthNavbar)
 function Auth({ ...props }) {
@@ -54,7 +55,7 @@ function Auth({ ...props }) {
         <div
           className={`${classes.fullPage} ${classes[authType()]}`}
         >
-          <Suspense fallback={<h2>loading...</h2>}>
+          <Suspense fallback={<Loading />}>
             <Outlet />
           </Suspense>
         </div>

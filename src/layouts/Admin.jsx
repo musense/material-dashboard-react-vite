@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
 // creates a beautiful scrollbar
 // @mui/material components
@@ -19,6 +19,7 @@ import * as GetClassAction from "@actions/GetClassAction.js";
 import * as GetTagsAction from "@actions/GetTagsAction.js";
 import useResetEditorState from '../hook/useResetEditorState';
 import * as GetConfigAction from "@actions/GetConfigAction.js";
+import Loading from '@components/Loading/Loading';
 
 const myContainerStyle = {
   position: 'relative',
@@ -89,7 +90,9 @@ function Admin({ ...props }) {
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
           <div style={myContainerStyle} className={`${classes.content}`}>
             <div className={classes.container} style={{ overflow: 'hidden' }}>
-              <Outlet />
+              <Suspense fallback={<Loading />}>
+                <Outlet />
+              </Suspense>
             </div>
           </div>
           {/* <Footer /> */}

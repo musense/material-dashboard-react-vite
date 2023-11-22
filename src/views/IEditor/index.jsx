@@ -11,7 +11,7 @@ import useEditorModal from '@hook/useEditorModal.js';
 import useEditorSave from '@hook/useEditorSave.js';
 import useBeforeUnloadSave from '@hook/useBeforeUnloadSave.js';
 import getErrorMessage from '@utils/getErrorMessage.js';
-import { getSubmitState } from '../../reducers/GetSlateReducer.js';
+import { getSubmitState, getTempSitemapUrl } from '../../reducers/GetSlateReducer.js';
 
 function NewIEditor() {
 
@@ -27,6 +27,8 @@ function NewIEditor() {
   const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
 
+  const tempSitemapUrl = useSelector(getTempSitemapUrl);
+
   const {
     title,
     content,
@@ -35,7 +37,10 @@ function NewIEditor() {
   } = useModalResult({
     message,
     name: '文章',
-    data: editor,
+    data: {
+      ...editor,
+      tempSitemapUrl
+    },
     isEditor: true
   })
 

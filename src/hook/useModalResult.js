@@ -117,7 +117,7 @@ export default function useModalResult({
         setContent(`${name}新增成功！`)
         setSuccess(true)
         if (isEditor) {
-          setSitemapUrl(data.sitemapUrl)
+          setSitemapUrl(data.tempSitemapUrl)
         }
         return
       }
@@ -216,7 +216,7 @@ export default function useModalResult({
         setContent(`${name}更新成功！`)
         setSuccess(true)
         if (isEditor) {
-          setSitemapUrl(data.sitemapUrl)
+          setSitemapUrl(data.tempSitemapUrl)
         }
         return
       }

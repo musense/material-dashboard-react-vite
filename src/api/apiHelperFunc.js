@@ -157,6 +157,12 @@ export function toBackendFormData(requestData) {
   }
   if ('publishInfo' in requestData) {
     Object.entries(requestData.publishInfo).forEach(([key, value]) => {
+      if (key === 'scheduledAt') {
+        if (requestData.publishInfo['isScheduled'] === false) {
+          formData.append('scheduledAt', JSON.stringify(new Date()))
+          return
+        }
+      }
       formData.append(key, JSON.stringify(value))
     })
   }

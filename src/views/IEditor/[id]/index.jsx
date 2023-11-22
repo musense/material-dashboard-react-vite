@@ -5,7 +5,7 @@ import ContentEditorForm from "./../ContentEditorForm.jsx"
 import DetailForm from "../DetailForm/DetailForm.jsx"
 import MessageDialog from '../../../components/Modal/MessageDialog.jsx';
 
-import useModalResult from '@hook/useModalResult';
+import useModalResult from '../../../hook/useModalResult';
 import useSetEditorDefaultValue from '../../../hook/useSetEditorDefaultValue.js';
 import usePreview from '../../../hook/usePreview.js';
 import useEditorModal from '../../../hook/useEditorModal.js';
@@ -15,13 +15,15 @@ import useBeforeUnloadSave from '../../../hook/useBeforeUnloadSave.js';
 import { useLoaderData } from 'react-router-dom';
 import getErrorMessage from '@utils/getErrorMessage.js';
 import { getEditor } from '@reducers/GetEditorReducer'
-import { getSubmitState } from '../../../reducers/GetSlateReducer.js';
+import { getSubmitState, getTempSitemapUrl } from '../../../reducers/GetSlateReducer.js';
 
 function IEditor() {
 
   // const data = useLoaderData()
   const { id } = useParams();
   const editor = useSelector(getEditor);
+
+
 
   const submitState = useSelector(getSubmitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
@@ -30,6 +32,7 @@ function IEditor() {
   const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
 
+  const tempSitemapUrl = useSelector(getTempSitemapUrl);
 
   console.log("🚀 ~ file: index.jsx:26 ~ IEditor ~ submitState:", submitState)
 
@@ -42,13 +45,18 @@ function IEditor() {
   } = useModalResult({
     message,
     name: '文章',
-    data: editor,
+    data: {
+      ...editor,
+      tempSitemapUrl
+    },
     isEditor: true
   })
   useRequestEditorByID(id, editor)
   useSetEditorDefaultValue(editor)
 
-
+  console.log("🚀 ----------------------------------------------------------🚀")
+  console.log("🚀 ~ file: index.jsx:52 ~ IEditor ~ sitemapUrl:", sitemapUrl)
+  console.log("🚀 ----------------------------------------------------------🚀")
   usePreview(previewID, isPreview)
   const {
     onEditorUpdate,

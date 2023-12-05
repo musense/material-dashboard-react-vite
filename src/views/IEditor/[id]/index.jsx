@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import ContentEditorForm from "./../ContentEditorForm.jsx"
 import DetailForm from "../DetailForm/DetailForm.jsx"
@@ -22,7 +22,16 @@ function IEditor() {
   // const data = useLoaderData()
   const { id } = useParams();
   const editor = useSelector(getEditor);
+  console.log("🚀 ~ file: index.jsx:25 ~ IEditor ~ editor:", editor)
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const draft = searchParams.get('isDraft') === 'true';
+  console.log("🚀 ~ file: index.jsx:29 ~ IEditor ~ draft:", draft)
+  useEffect(() => {
+    setSearchParams({
+      isDraft: editor?.draft
+    })
+  }, [setSearchParams, editor]);
 
 
   const submitState = useSelector(getSubmitState);
@@ -51,7 +60,7 @@ function IEditor() {
     },
     isEditor: true
   })
-  useRequestEditorByID(id, editor)
+  useRequestEditorByID(id, draft, editor)
   useSetEditorDefaultValue(editor)
 
   console.log("🚀 ----------------------------------------------------------🚀")
@@ -73,9 +82,8 @@ function IEditor() {
       onEditorUpdate(submitState, id)
       return
     }
-  }, [message, submitState, isPreview, id]);
+  }, [message, isPreview, submitState, id, onPreviewSave, onEditorUpdate]);
   // useBeforeUnloadSave(onEditorSave)
-
   const {
     open,
     handleClose

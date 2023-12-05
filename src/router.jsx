@@ -17,11 +17,13 @@ import { RouterProvider } from "react-router-dom";
 import React from "react";
 import getRouterChildren from "./utils/getRouterChildren";
 
+
+
 function RouterIndex() {
 
   const dispatch = useDispatch();
 
-  const router = createBrowserRouter([
+  const route = [
     {
       path: "",
       name: "AuthPage",
@@ -101,14 +103,17 @@ function RouterIndex() {
         },
       ],
     }
-  ]);
+  ]
 
   dispatch({
     type: "SET_ROUTER",
     payload: {
-      router: getRouterChildren(router.routes, undefined)
+      router: getRouterChildren(route, undefined)
     }
   })
+
+  const router = createBrowserRouter(route);
+
   return <RouterProvider router={router} />
 }
 

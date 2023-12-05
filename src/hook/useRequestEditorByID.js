@@ -2,21 +2,22 @@ import React, { useCallback, useEffect } from "react";
 import *  as GetEditorAction from "@actions/GetEditorAction";
 import { useDispatch } from 'react-redux';
 
-export default function useRequestEditorByID(id, editor) {
+export default function useRequestEditorByID(id, draft, editor) {
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const requestEditorByID = useCallback((id) => {
-        dispatch({
-            type: GetEditorAction.REQUEST_EDITOR_BY_ID,
-            payload: {
-                data: id
-            },
-        });
-    }, [dispatch])
+  const requestEditorByID = useCallback((id, draft) => {
+    dispatch({
+      type: GetEditorAction.REQUEST_EDITOR_BY_ID,
+      payload: {
+        data: id,
+        draft: draft
+      },
+    });
+  }, [dispatch])
 
-    useEffect(() => {
-        if (editor) return
-        requestEditorByID(id)
-    }, [editor, id, requestEditorByID]);
+  useEffect(() => {
+    if (editor) return
+    requestEditorByID(id, draft)
+  }, [editor, id, draft, requestEditorByID]);
 }

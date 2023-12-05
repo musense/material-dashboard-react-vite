@@ -25,14 +25,14 @@ function IEditor() {
   console.log("🚀 ~ file: index.jsx:25 ~ IEditor ~ editor:", editor)
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const draft = searchParams.get('isDraft') === 'true';
+  const draft = searchParams.get('draft') === 'true';
   console.log("🚀 ~ file: index.jsx:29 ~ IEditor ~ draft:", draft)
+
   useEffect(() => {
     setSearchParams({
-      isDraft: editor?.draft
+      draft: editor?.draft || draft
     })
-  }, [setSearchParams, editor]);
-
+  }, [setSearchParams, draft, editor]);
 
   const submitState = useSelector(getSubmitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
@@ -48,7 +48,8 @@ function IEditor() {
   const {
     title,
     content,
-    // id,
+    editorID,
+    editorDraft,
     sitemapUrl,
     success
   } = useModalResult({
@@ -68,6 +69,7 @@ function IEditor() {
   console.log("🚀 ----------------------------------------------------------🚀")
   usePreview(previewID, isPreview)
   const {
+    onEditorSave,
     onEditorUpdate,
     onPreviewSave
   } = useEditorSave()
@@ -78,11 +80,15 @@ function IEditor() {
       onPreviewSave(submitState)
       return
     }
+    if (draft === true) {
+      onEditorSave(submitState, false, editor?.serialNumber)
+      return
+    }
     if (id) {
       onEditorUpdate(submitState, id)
       return
     }
-  }, [message, isPreview, submitState, id, onPreviewSave, onEditorUpdate]);
+  }, [message, isPreview, submitState, id, onPreviewSave, onEditorUpdate, draft, onEditorSave, editor]);
   // useBeforeUnloadSave(onEditorSave)
   const {
     open,
@@ -97,13 +103,14 @@ function IEditor() {
         </div>
         <div className={'right-side'}>
           <DetailForm
-            createType={'update'} />
+            createType={draft === true ? 'add_new' : 'update'} />
         </div>
       </div>
       <MessageDialog
         dialogTitle={title}
         dialogContent={content}
-        editorID={id}
+        editorID={editorID}
+        editorDraft={editorDraft}
         sitemapUrl={sitemapUrl}
         success={success}
         open={open}

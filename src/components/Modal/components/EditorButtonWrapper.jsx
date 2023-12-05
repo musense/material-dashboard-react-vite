@@ -2,30 +2,28 @@ import React, { useCallback } from 'react'
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as GetDialogAction from '@actions/GetDialogAction';
+import * as GetEditorAction from '@actions/GetEditorAction';
 
 export default function EditorButtonWrapper({
   success,
   dialogTitle,
   dialogContent,
   editorID,
+  editorDraft,
   sitemapUrl,
   setClose,
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const location = useLocation();
-  console.log("🚀 ~ file: EditorButtonWrapper.jsx:20 ~ location:", location)
-
   const navigateByAddingOrEditing = useCallback(() => {
-    if (location.pathname.includes('/new')) {
-      navigate(`/admin/editorList/update/${editorID}`, { replace: true })
-    } else {
-      navigate(0)
-    }
-  }, [navigate, location.pathname, editorID])
+    dispatch({
+      type: GetEditorAction.ADD_NEW_EDITOR
+    })
+    navigate(`/admin/editorList/update/${editorID}?draft=${editorDraft === true ? true : false}`, { replace: true })
+  }, [editorID, editorDraft, dispatch, navigate])
 
   const keepEditClose = useCallback(() => {
     if (success) {

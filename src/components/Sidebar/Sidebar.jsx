@@ -38,7 +38,7 @@ const Sidebar = ({ ...props }) => {
   const [editorId, setEditorId] = useState();
   console.log("🚀 ~ file: Sidebar.jsx:36 ~ Sidebar ~ editorId:", editorId)
 
-  const isDraft = useSelector((state) => state.getSlateReducer.isDraft)
+  const draft = useSelector((state) => state.getSlateReducer.draft)
   const {
     onEditorSave,
     onEditorUpdate
@@ -102,25 +102,30 @@ const Sidebar = ({ ...props }) => {
     if (pathName !== routePath) {
       if (!editorUpdatedState) return navigate(routePath)
       const sureToLeave = confirm('有未完成修改，確定要離開？');
-      if (sureToLeave) {
-        if (pathName.includes('/editorList/new')) {
-          onEditorSave(submitState, true)
-        } else if (pathName.includes('/editorList/update')) {
-          if (isDraft) {
-            onEditorUpdate(submitState, editorId, true)
-          } else {
-            onEditorSave(submitState, true)
-          }
+      if (!sureToLeave) return
+
+      if (pathName.includes('/editorList/new')) {
+        onEditorSave(submitState, true)
+        navigate(routePath)
+        return
+      }
+
+      console.log("🚀 ~ file: Sidebar.jsx:115 ~ handleNavigation ~ draft:", draft)
+      if (pathName.includes('/editorList/update')) {
+        if (draft) {
+          onEditorUpdate(submitState, editorId, true)
+        } else {
+          onEditorSave(submitState, false)
         }
         navigate(routePath)
-      } else {
-        // stay and continue editing
+        return
       }
+
     }
     else {
       navigate(routePath);
     }
-  }, [pathName, navigate, onEditorSave, isDraft, onEditorUpdate, editorId])
+  }, [pathName, navigate, onEditorSave, draft, onEditorUpdate, editorId])
 
   const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
   console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)

@@ -64,7 +64,12 @@ export function toFrontendData(responseData) {
   return returnObj(responseData)
 }
 
-export function toBackendFormData(requestData, isDraft = false) {
+export function toBackendFormData(
+  requestData,
+  { willBeDraft = false,
+    serialNumber = null
+  } = {}
+) {
   const formData = new FormData()
 
   if (checkKeyExists(requestData, 'title')) {
@@ -116,10 +121,17 @@ export function toBackendFormData(requestData, isDraft = false) {
     })
   }
 
-  appendTextFormData('draft', isDraft);
-  if (isDraft === false) {
+
+
+  if (willBeDraft === false) {
+    if (serialNumber) {
+      appendFormData('serialNumber', serialNumber);
+      // appendTextFormData('draft', false);
+    }
     appendPublishInfoToFormData(requestData);
   }
+  appendTextFormData('draft', willBeDraft);
+
 
   return formData
 
@@ -131,10 +143,8 @@ export function toBackendFormData(requestData, isDraft = false) {
           appendTextFormData(key, value);
         }
         if (key === 'scheduledAt') {
-          if (data.publishInfo['isScheduled'] === false) {
-            appendTextFormData('scheduledAt', { scheduledAt: null });
-            return;
-          }
+          if (data.publishInfo['isScheduled'] === false) return;
+
           appendTextFormData(key, value);
         }
       });

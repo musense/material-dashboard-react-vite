@@ -32,8 +32,8 @@ const DetailForm = ({ createType }) => {
   const isScheduled = useSelector((state) => state.getSlateReducer.detailForm?.publishInfo?.isScheduled);
   const scheduledAt = useSelector((state) => state.getSlateReducer.detailForm?.publishInfo?.scheduledAt);
   const status = useSelector(state => state.getSlateReducer.status)
-  const isDraft = useSelector((state) => state.getSlateReducer.isDraft)
-  console.log("🚀 ~ file: DetailForm.jsx:36 ~ DetailForm ~ isDraft:", isDraft)
+  const draft = useSelector((state) => state.getSlateReducer.draft)
+  console.log("🚀 ~ file: DetailForm.jsx:36 ~ DetailForm ~ draft:", draft)
 
   const onPropertyChange = useCallback((value, property, info) => {
     dispatch({

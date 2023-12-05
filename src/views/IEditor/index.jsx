@@ -22,7 +22,6 @@ function NewIEditor() {
   const submitState = useSelector(getSubmitState);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
   const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
-  const id = useSelector((state) => state.getEditorReducer._id);
   const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
@@ -32,6 +31,7 @@ function NewIEditor() {
   const {
     title,
     content,
+    editorID,
     sitemapUrl,
     success
   } = useModalResult({
@@ -63,7 +63,7 @@ function NewIEditor() {
       return
     }
     onEditorSave(submitState)
-  }, [message, submitState, isPreview]);
+  }, [message, submitState, isPreview, onEditorSave, onPreviewSave]);
   // useBeforeUnloadSave(onEditorSave)
 
   return (
@@ -80,7 +80,7 @@ function NewIEditor() {
       <MessageDialog
         dialogTitle={title}
         dialogContent={content}
-        editorID={id}
+        editorID={editorID}
         sitemapUrl={sitemapUrl}
         success={success}
         open={open}

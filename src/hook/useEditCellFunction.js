@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import * as GetDialogAction from '@actions/GetDialogAction';
 
 export default function useEditCellFunction({
-  isDraft,
+  draft,
   handleOpenDialog,
   onDelete: {
     id,
@@ -34,14 +34,14 @@ export default function useEditCellFunction({
     dispatch({
       type: GetDialogAction.ON_DELETE_EDITOR,
       payload: {
-        data: { id, isDraft },
+        data: { id, draft },
         contentData: name,
         message: 'delete one',
         confirm: true,
       },
     });
     handleOpenDialog && handleOpenDialog()
-  }, [handleOpenDialog, dispatch, id, name, isDraft])
+  }, [handleOpenDialog, dispatch, id, name, draft])
 
   const onEdit = useCallback(() => {
     console.log("🚀 ~ file: useEditCellFunction.js:50 ~ onEdit ~ editData:", editData)
@@ -49,11 +49,11 @@ export default function useEditCellFunction({
       type: editType,
       payload: {
         data: editData,
-        draft: isDraft
+        draft: draft
       },
     });
     callback && callback()
-  }, [dispatch, callback, editType, editData, isDraft])
+  }, [dispatch, callback, editType, editData, draft])
 
   return {
     onCopy,

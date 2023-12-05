@@ -3,6 +3,7 @@ import *  as GetEditorAction from "@actions/GetEditorAction";
 import { useDispatch } from 'react-redux';
 
 export default function useRequestEditorByID(id, draft, editor) {
+  console.log("🚀 ~ file: useRequestEditorByID.js:6 ~ useRequestEditorByID ~ willBeDraft:", draft)
 
   const dispatch = useDispatch();
 

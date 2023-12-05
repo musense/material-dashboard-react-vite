@@ -35,6 +35,7 @@ function* GetEditorTitleList(payload = 1) {
 // GET :_id
 function* GetEditorByID(payload) {
   const { data, draft } = payload
+  console.log("🚀 ~ file: GetEditorList.js:38 ~ function*GetEditorByID ~ draft:", draft)
   const draftQuery = draft ? `?draft=${draft ? 1 : 0}` : ''
   try {
 
@@ -106,11 +107,16 @@ function* SearchEditor(payload) {
 // POST
 function* AddEditor(payload) {
   try {
-    const { data, draft } = payload
+    const { data, willBeDraft, serialNumber } = payload
     let response
-    const requestFormData = toBackendFormData(data, draft)
+    const requestFormData = toBackendFormData(
+      data,
+      {
+        willBeDraft,
+        serialNumber
+      })
     // return
-    if (draft) {
+    if (willBeDraft) {
       //* 是草稿時執行以下程式
       if (typeof requestFormData.get('contentImagePath') === 'object') {
         response = yield formInstance.post(`/draftEditor`, requestFormData);
@@ -174,8 +180,9 @@ function* PreviewEditor(payload) {
 function* UpdateEditor(payload) {
   // return
   const { id, data, draft } = payload
+  console.log("🚀 ~ file: GetEditorList.js:183 ~ function*UpdateEditor ~ draft:", draft)
   try {
-    const requestFormData = toBackendFormData(data, draft)
+    const requestFormData = toBackendFormData(data, { willBeDraft: draft })
     const categories = requestFormData.get('categories')
     console.log("🚀 ~ file: GetEditorList.js:201 ~ function*UpdateEditor ~ categories:", categories)
     // return

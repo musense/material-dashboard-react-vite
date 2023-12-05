@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import { useDispatch } from 'react-redux';
 import * as GetSlateAction from "@actions/GetSlateAction";
 import * as GetEditorAction from "@actions/GetEditorAction";
@@ -6,13 +6,17 @@ import * as GetEditorAction from "@actions/GetEditorAction";
 export default function useEditorSave() {
   const dispatch = useDispatch();
 
-  const onEditorSave = useCallback((data, draft = false) => {
+  const onEditorSave = useCallback((data, willBeDraft = false, serialNumber = null) => {
+    console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ serialNumber:", serialNumber)
+    console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ willBeDraft:", willBeDraft)
+    console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ data:", data)
 
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
       payload: {
-        data: data,
-        draft: draft
+        data,
+        willBeDraft,
+        serialNumber
       },
     })
   }, [dispatch])

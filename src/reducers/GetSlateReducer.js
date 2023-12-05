@@ -35,7 +35,7 @@ const initialState = {
   updateInitialState: null,
   submitState: null,
   isPreview: false,
-  isDraft: false,
+  draft: false,
   previewID: null,
   errorMessage: null,
 }
@@ -94,15 +94,15 @@ const getSlateReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        contentForm: JSON.parse(JSON.stringify(contentForm)),
-        detailForm: JSON.parse(JSON.stringify(detailForm)),
+        contentForm: { ...contentForm },
+        detailForm: { ...detailForm },
         updateInitialState: {
-          contentForm: JSON.parse(JSON.stringify(contentForm)),
-          detailForm: JSON.parse(JSON.stringify(detailForm)),
+          contentForm: { ...contentForm },
+          detailForm: { ...detailForm },
         },
         showUrl: detailForm.media.contentImagePath,
         status: props.status,
-        isDraft: props.draft
+        draft: props.draft
       }
     }
     case GetSlateAction.RESET_FORM_VALUE: {
@@ -138,6 +138,7 @@ const getSlateReducer = (state = initialState, action) => {
     case GetSlateAction.CHECK_BEFORE_SUBMIT: {
       const isPreview = action.payload.isPreview
       const submitState = JSON.parse(JSON.stringify({ ...state.contentForm, ...state.detailForm }))
+      console.log("🚀 ~ file: GetSlateReducer.js:141 ~ getSlateReducer ~ submitState:", submitState)
       let errorMessage,
         cachedInitialState,
         trimmedState

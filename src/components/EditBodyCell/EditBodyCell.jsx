@@ -5,7 +5,7 @@ import IconCell from "./IconCell";
 import useEditCellFunction from "./../../hook/useEditCellFunction"
 
 export default function EditBodyCell({
-  isDraft,
+  draft,
   copyText,
   id,
   name,
@@ -22,7 +22,7 @@ export default function EditBodyCell({
     onDelete,
     onEdit
   } = useEditCellFunction({
-    isDraft,
+    draft,
     onDelete: {
       id,
       name,

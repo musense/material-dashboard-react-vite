@@ -10,6 +10,8 @@ export default function useModalResult({
   const [content, setContent] = useState(null);
   const [success, setSuccess] = useState(null);
   const [sitemapUrl, setSitemapUrl] = useState(null);
+  const [editorID, setEditorID] = useState(null);
+  const [editorDraft, setEditorDraft] = useState(null);
 
   useEffect(() => {
     if (!message) return
@@ -117,6 +119,8 @@ export default function useModalResult({
         setContent(`${name}新增成功！`)
         setSuccess(true)
         if (isEditor) {
+          setEditorID(data._id)
+          setEditorDraft(data.draft)
           setSitemapUrl(data.tempSitemapUrl)
         }
         return
@@ -332,6 +336,8 @@ export default function useModalResult({
       setContent(null)
       setSuccess(null)
       setSitemapUrl(null)
+      setEditorID(null)
+      setEditorDraft(null)
     }
   }, [message, name, data, isEditor]);
 
@@ -339,6 +345,8 @@ export default function useModalResult({
     title,
     content,
     success,
-    sitemapUrl
+    sitemapUrl,
+    editorID,
+    editorDraft
   };
 }

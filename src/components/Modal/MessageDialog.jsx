@@ -23,6 +23,7 @@ export default function MessageDialog({
   dialogContent,
   success = null,
   editorID = null,
+  editorDraft = null,
   sitemapUrl = null,
   confirm = null,
   data = null,
@@ -56,6 +57,7 @@ export default function MessageDialog({
             dialogTitle={dialogTitle}
             dialogContent={dialogContent}
             editorID={editorID}
+            editorDraft={editorDraft}
             sitemapUrl={sitemapUrl}
             setClose={handleClose}
           />

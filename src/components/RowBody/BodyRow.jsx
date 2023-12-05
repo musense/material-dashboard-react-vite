@@ -202,7 +202,7 @@ export default function BodyRow({
 
 
           return <InnerEditBodyCell
-            isDraft={item.draft}
+            draft={item.draft}
             key={index}
             copyText={copyText}
             id={item._id}

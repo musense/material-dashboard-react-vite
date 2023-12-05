@@ -11,13 +11,13 @@ export default function useDeleteSelectedRow(messageDialogReturnValue, {
 
   useEffect(() => {
     if (!messageDialogReturnValue) return;
-    const { id, isDraft } = messageDialogReturnValue
-    console.log("🚀 ~ file: useDeleteSelectedRow.js:21 ~ useEffect ~ isDraft:", isDraft)
+    const { id, draft } = messageDialogReturnValue
+    console.log("🚀 ~ file: useDeleteSelectedRow.js:21 ~ useEffect ~ draft:", draft)
     dispatch({
       type: deleteType,
       payload: {
-        id: isDraft ? id : [id],
-        draft: isDraft
+        id: draft ? id : [id],
+        draft: draft
       }
     });
     dispatch({

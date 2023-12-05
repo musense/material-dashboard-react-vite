@@ -22,12 +22,21 @@ const headerMap = {
       className: "flex-2 image-container"
     },
     { name: "標題", patchKey: "content.title", className: "flex-3 left-wrap", type: "stringl5lines" },
-    { name: "瀏覽數", patchKey: "pageView", type: "number" },
+    {
+      name: "瀏覽數",
+      patchKey: "pageView",
+      checkKey: 'draft',
+      type: "number-",
+      className: {
+        [true]: 'no-value',
+        [false]: 'show-value'
+      }
+    },
     {
       name: "狀態",
       patchKey: "status",
       checkKey: ["isPublished", "isScheduled"],
-      showKeys: ["publishDate", "scheduleTime"],
+      showKeys: ["publishDate", "scheduleDate"],
       className: "flex-2",
       type: "stringdp"
     },
@@ -36,7 +45,7 @@ const headerMap = {
       type: "__edit_cell__",
       copyText: "webHeader.customUrl",
       deleteText: "content.title",
-      editData: "_id",
+      editData: '_id',
       editType: GetEditorAction.REQUEST_EDITOR_BY_ID,
       className: "flex-2"
     }

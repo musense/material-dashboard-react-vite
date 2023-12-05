@@ -5,6 +5,7 @@ import IconCell from "./IconCell";
 import useEditCellFunction from "./../../hook/useEditCellFunction"
 
 export default function EditBodyCell({
+  isDraft,
   copyText,
   id,
   name,
@@ -21,6 +22,7 @@ export default function EditBodyCell({
     onDelete,
     onEdit
   } = useEditCellFunction({
+    isDraft,
     onDelete: {
       id,
       name,
@@ -28,7 +30,7 @@ export default function EditBodyCell({
     onEdit: {
       editType,
       editData: editData,
-      callback: callback
+      callback: callback,
     }
   }
   )

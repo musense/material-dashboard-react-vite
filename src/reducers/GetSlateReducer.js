@@ -30,6 +30,7 @@ const initialState = {
       scheduledAt: ''
     }
   },
+  status: '',
   showUrl: '',
   updateInitialState: null,
   submitState: null,
@@ -87,7 +88,7 @@ const getSlateReducer = (state = initialState, action) => {
         publishInfo: {
           hidden: props.hidden,
           isScheduled: props.isScheduled,
-          scheduledAt: props.scheduleTime
+          scheduledAt: props.scheduleDate
         }
       }
 
@@ -99,7 +100,9 @@ const getSlateReducer = (state = initialState, action) => {
           contentForm: JSON.parse(JSON.stringify(contentForm)),
           detailForm: JSON.parse(JSON.stringify(detailForm)),
         },
-        showUrl: detailForm.media.contentImagePath
+        showUrl: detailForm.media.contentImagePath,
+        status: props.status,
+        isDraft: props.draft
       }
     }
     case GetSlateAction.RESET_FORM_VALUE: {
@@ -164,10 +167,10 @@ const getSlateReducer = (state = initialState, action) => {
 
         if (createType === "add_new") {
           cachedInitialState = JSON.parse(JSON.stringify({ ...initialState.contentForm, ...initialState.detailForm }))
-          trimmedState = recurseCheckAndDelete(submitState, cachedInitialState, createType)
+          trimmedState = recurseCheckAndDelete(submitState, cachedInitialState)
         } else if (createType === "update") {
           cachedInitialState = JSON.parse(JSON.stringify({ ...state.updateInitialState.contentForm, ...state.updateInitialState.detailForm }))
-          trimmedState = recurseCheckAndDelete(submitState, cachedInitialState, createType)
+          trimmedState = recurseCheckAndDelete(submitState, cachedInitialState)
           errorMessage = generateErrorMessage(trimmedState)
         } else {
           throw new Error('invalid createType')
@@ -236,11 +239,15 @@ const getEditorUpdated = createSelector(
     const cachedInitialState = createType === 'add_new'
       ? { ...initialState.contentForm, ...initialState.detailForm }
       : { ...updateInitialForm }
-    const trimmedState = recurseCheckAndDelete(form, cachedInitialState, createType)
-    // console.log("🚀 --------------------------------------------------------------🚀")
-    // console.log("🚀 ~ file: GetSlateReducer.js:222 ~ trimmedState:", trimmedState)
+    const trimmedState = recurseCheckAndDelete(form, cachedInitialState)
+    Object.keys(trimmedState).forEach(key => {
+      if (key === 'publishInfo') {
+        console.log("🚀 ~ file: GetSlateReducer.js:222 ~ hi")
+        delete trimmedState.publishInfo
+      }
+    })
+    console.log("🚀 ~ file: GetSlateReducer.js:222 ~ trimmedState:", trimmedState)
     console.log("🚀 ~ file: GetSlateReducer.js:222 ~ Object.keys(trimmedState).length:", Object.keys(trimmedState).length)
-    // console.log("🚀 --------------------------------------------------------------🚀")
 
     return Object.keys(trimmedState).length > 0 ? true : false
   }

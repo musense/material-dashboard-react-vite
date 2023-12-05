@@ -25,6 +25,7 @@ import {
   getEditorErrorMessage,
   getSelectedPatchKey
 } from '@reducers/GetEditorReducer'
+import { getDialogConfirm, getDialogContentData, getDialogData, getDialogMessage, getDialogMessageDialogReturnValue } from '../../reducers/GetDialogReducer';
 
 const InnerEditorListButtonList = React.memo(EditorListButtonList);
 const InnerEditorSearchForm = React.memo(EditorSearchForm);
@@ -44,11 +45,13 @@ export default function EditorListBody({ headerMap }) {
 
   console.log("🚀 ~ file: EditorListBody.jsx:34 ~ EditorListBody ~ showList:", showList)
 
-  const contentData = useSelector((state) => state.getDialogReducer.contentData);
-  const data = useSelector((state) => state.getDialogReducer.data);
-  const confirm = useSelector((state) => state.getDialogReducer.confirm);
-  const messageDialogReturnValue = useSelector((state) => state.getDialogReducer.messageDialogReturnValue);
-  const dialogMessage = useSelector((state) => state.getDialogReducer.message);
+  const contentData = useSelector(getDialogContentData);
+  const modalConfirmData = useSelector(getDialogData);
+  const confirm = useSelector(getDialogConfirm);
+  const messageDialogReturnValue = useSelector(getDialogMessageDialogReturnValue);
+  const dialogMessage = useSelector(getDialogMessage);
+  console.log("🚀 ~ file: EditorListBody.jsx:54 ~ EditorListBody ~ modalConfirmData:", modalConfirmData)
+  console.log("🚀 ~ file: EditorListBody.jsx:54 ~ EditorListBody ~ messageDialogReturnValue:", messageDialogReturnValue)
 
   const errorMessage = getErrorMessage(dialogMessage, serverMessage)
   console.log("🚀 ~ file: EditorListBody.jsx:45 ~ EditorListBody ~ errorMessage:", errorMessage)
@@ -66,7 +69,7 @@ export default function EditorListBody({ headerMap }) {
   }, [navigateCheckArray, errorMessage, navigate, editor]);
 
   useDeleteSelectedRow(messageDialogReturnValue, {
-    deleteType: GetEditorAction.BUNCH_DELETE_EDITOR
+    deleteType: GetEditorAction.BUNCH_DELETE_EDITOR,
   });
 
   const {
@@ -129,7 +132,7 @@ export default function EditorListBody({ headerMap }) {
       open={openDialog}
       setClose={handleCloseDialog}
       confirm={confirm}
-      data={data}
+      data={modalConfirmData}
     />
   </CardBody>;
 }

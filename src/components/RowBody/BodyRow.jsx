@@ -160,7 +160,7 @@ export default function BodyRow({
         case "number-": {
           return <BodyCell key={index} className={configItem.className[item[configItem.checkKey]]}>
             {
-              item[configItem.checkKey]
+              configItem.className[item[configItem.checkKey]] === 'show-value'
                 ? Number(cellContent)
                 : <span>-</span>
             }
@@ -198,10 +198,11 @@ export default function BodyRow({
             deleteText = item[splitDeleteText[0]][splitDeleteText[1]]
           }
 
-          if (configItem.editData) {
-            editData = item[configItem.editData]
-          }
+          editData = item[configItem.editData]
+
+
           return <InnerEditBodyCell
+            isDraft={item.draft}
             key={index}
             copyText={copyText}
             id={item._id}

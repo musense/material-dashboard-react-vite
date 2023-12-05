@@ -250,12 +250,14 @@ input {
 
 
 
-.view-list-form .is-popular-tag {
+/* .view-list-form .is-popular-tag { */
+.view-list-form .show-value {
   font-weight: bolder;
   color: red;
 }
 
-.view-list-form .not-popular-tag {
+/* .view-list-form .not-popular-tag { */
+.view-list-form .no-value {
   font-weight: bolder;
   color: green;
 }

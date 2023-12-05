@@ -1,15 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export default function useSetDateTimeDispatch(dispatch, date, time) {
 
-    useEffect(() => {
+  const dateTime = useMemo(() => {
+    const getTime = (dayObject) => `${dayObject['$H']}:${dayObject['$m']}`
+    const getDate = (dayObject) => `${dayObject['$y']}/${dayObject['$M'] + 1}/${dayObject['$D']}`
 
-        const getDate = (dayObject) => `${dayObject['$y']}/${dayObject['$M'] + 1}/${dayObject['$D']}`
-        const getTime = (dayObject) => `${dayObject['$H']}:${dayObject['$m']}`
+    return `${getDate(date)} ${getTime(time)}`
+  }, [date, time])
 
-        const dateTime = `${getDate(date)} ${getTime(time)}`
-        // if (defaultValue === null) return
-        // if (!dateTime) return
-        dispatch(dateTime)
-    }, [dispatch, date, time])
+  useEffect(() => {
+    dispatch(dateTime)
+  }, [dispatch, dateTime])
 }

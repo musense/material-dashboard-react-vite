@@ -1,7 +1,7 @@
 import React, { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Drawer from '@mui/material/Drawer';
@@ -15,10 +15,11 @@ import sidebarStyle from '@assets/jss/material-dashboard-react/components/sideba
 import { useSelector } from "react-redux";
 import { getShowOnSideBarRoutes } from "../../reducers/GetConfigReducer.js";
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary.jsx';
-import { getEditorForm, getEditorUpdated, getSubmitState } from '../../reducers/GetSlateReducer.js';
+import { getEditorForm, getEditorUpdated } from '../../reducers/GetSlateReducer.js';
 import useEditorSave from '../../hook/useEditorSave.js';
 
-const LazyLogoImage = /* @vite-ignore */React.lazy(() => import('./LogoImage'));
+// eslint-disable-next-line react-refresh/only-export-components
+const LazyLogoImage = React.lazy(() => import('./LogoImage'));
 
 // eslint-disable-next-line react-refresh/only-export-components
 const Sidebar = ({ ...props }) => {
@@ -31,16 +32,13 @@ const Sidebar = ({ ...props }) => {
   const [pathName, setPathName] = useState('');
 
   const submitState = useSelector(getEditorForm);
-  console.log("🚀 --------------------------------------------------------------🚀")
   console.log("🚀 ~ file: Sidebar.jsx:36 ~ Sidebar ~ submitState:", submitState)
-  console.log("🚀 --------------------------------------------------------------🚀")
   const editorUpdated = useSelector(state => getEditorUpdated(state, createType))
   const [editorUpdatedState, setEditorUpdatedState] = useState(false);
   const [editorId, setEditorId] = useState();
-  console.log("🚀 --------------------------------------------------------🚀")
   console.log("🚀 ~ file: Sidebar.jsx:36 ~ Sidebar ~ editorId:", editorId)
-  console.log("🚀 --------------------------------------------------------🚀")
 
+  const isDraft = useSelector((state) => state.getSlateReducer.isDraft)
   const {
     onEditorSave,
     onEditorUpdate
@@ -65,11 +63,6 @@ const Sidebar = ({ ...props }) => {
     }
   }, [location, editorUpdated]);
 
-  const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
-  console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)
-  const activeRoute = useCallback((routeName) => {
-    return location.pathname === routeName;
-  }, [location.pathname])
   const {
     classes,
     color,
@@ -79,7 +72,11 @@ const Sidebar = ({ ...props }) => {
   } = props;
   console.log("🚀 ~ file: Sidebar.jsx:38 ~ Sidebar ~ classes:", classes)
 
-  const item = useCallback((routeName, routePath) => {
+  const activeRoute = useCallback((routeName) => {
+    return location.pathname === routeName;
+  }, [location.pathname])
+
+  const listItemBuilder = useCallback((routeName, routePath) => {
     return <ListItem button
       className={classes.itemLink + classNames({
         [' ' + classes[color]]: activeRoute(routePath),
@@ -93,7 +90,7 @@ const Sidebar = ({ ...props }) => {
         }))}
         disableTypography={true} />
     </ListItem>
-  }, [activeRoute, classes, color])
+  }, [classes, activeRoute, color])
 
   const handleNavigation = useCallback((routePath, editorUpdatedState, submitState) => {
     console.log("🚀 ------------------------------------------------------------------🚀")
@@ -106,11 +103,15 @@ const Sidebar = ({ ...props }) => {
       if (!editorUpdatedState) return navigate(routePath)
       const sureToLeave = confirm('有未完成修改，確定要離開？');
       if (sureToLeave) {
-        // if (pathName.includes('/editorList/new')) {
-        //   onEditorSave(submitState, true)
-        // } else if (pathName.includes('/editorList/update')) {
-        //   onEditorUpdate(submitState, editorId, true)
-        // }
+        if (pathName.includes('/editorList/new')) {
+          onEditorSave(submitState, true)
+        } else if (pathName.includes('/editorList/update')) {
+          if (isDraft) {
+            onEditorUpdate(submitState, editorId, true)
+          } else {
+            onEditorSave(submitState, true)
+          }
+        }
         navigate(routePath)
       } else {
         // stay and continue editing
@@ -119,28 +120,28 @@ const Sidebar = ({ ...props }) => {
     else {
       navigate(routePath);
     }
-  }, [pathName, editorId, onEditorSave])
-  const router = useMemo(() => {
-    return routesOnSideBar.map((route, key) => {
-      return (
-        <li key={key}
-          className={classes.item}>
-          <button
-            onClick={() => handleNavigation(route.path, editorUpdatedState, submitState)}
-            className={classes.button}
-          >
-            {item(route.name, route.path)}
-          </button>
-        </li>
-      )
-    })
-  }, [routesOnSideBar, item, editorUpdatedState, submitState])
+  }, [pathName, navigate, onEditorSave, isDraft, onEditorUpdate, editorId])
 
-  const links = useMemo(() => {
+  const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
+  console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)
+
+  const router = useMemo(() => {
     return <List className={classes.list}>
-      {router}
+      {routesOnSideBar.map((route, key) => {
+        return (
+          <li key={key}
+            className={classes.item}>
+            <button
+              onClick={() => handleNavigation(route.path, editorUpdatedState, submitState)}
+              className={classes.button}
+            >
+              {listItemBuilder(route.name, route.path)}
+            </button>
+          </li>
+        )
+      })}
     </List>
-  }, [classes.list, router])
+  }, [classes, routesOnSideBar, listItemBuilder, handleNavigation, editorUpdatedState, submitState])
 
   const brand = useMemo(() => {
     return <div className={classes.logo}>
@@ -154,8 +155,7 @@ const Sidebar = ({ ...props }) => {
         </div>
       </a>
     </div>
-  }, [classes.img, classes.logo, classes.logoImage, classes.logoLink, mainSiteUrl])
-
+  }, [classes, mainSiteUrl])
 
   const drawer = useMemo(() => {
     return <Drawer
@@ -169,47 +169,16 @@ const Sidebar = ({ ...props }) => {
       onClose={handleDrawerToggle}
     >
       {brand}
-      <div className={classes.sidebarWrapper}>{links}</div>
+      <div className={classes.sidebarWrapper}>{router}</div>
       {image !== undefined ? (
         <div
           className={classes.background}
           style={{ backgroundImage: 'url(' + image + ')' }} />
       ) : null}
     </Drawer>;
-  }, [brand, classes.background, classes.drawerPaper, classes.sidebarWrapper, handleDrawerToggle, image, links, open])
+  }, [classes, brand, handleDrawerToggle, image, open, router])
 
-
-  return (
-    <div>
-      {/* <Drawer
-        variant='temporary'
-        anchor={'right'}
-        open={props.open}
-        classes={{
-          paper: classNames(classes.drawerPaper),
-        }}
-        onClose={props.handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
-        sx={{ display: { md: 'none', xs: 'block' } }}
-      >
-        {brand}
-        <div className={classes.sidebarWrapper}>
-          <AdminNavbarLinks />
-          {links}
-        </div>
-        {image !== undefined ? (
-          <div
-            className={classes.background}
-            style={{ backgroundImage: 'url(' + image + ')' }}
-          />
-        ) : null}
-      </Drawer> */}
-
-      {drawer}
-    </div>
-  );
+  return drawer
 };
 
 Sidebar.propTypes = {

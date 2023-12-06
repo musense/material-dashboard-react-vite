@@ -33,6 +33,7 @@ export default function useEditorSave() {
   }, [dispatch])
 
   const onPreviewSave = useCallback((data) => {
+    console.log("🚀 ~ file: useEditorSave.js:36 ~ onPreviewSave ~ data:", data)
     dispatch({
       type: GetSlateAction.PREVIEW_EDITOR,
       payload: {

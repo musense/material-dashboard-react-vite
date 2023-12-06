@@ -51,11 +51,12 @@ export default function MuEditor({ value, setValue }) {
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
+            setValue(data)
           }}
           onBlur={(event, editor) => {
             const data = editor.getData();
-            console.log('Blur.', { editor, data });
-            setValue(data)
+            // console.log('Blur.', { editor, data });
+            // setValue(data)
           }}
           onFocus={(event, editor) => {
             console.log('Focus.', editor);

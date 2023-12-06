@@ -29,7 +29,7 @@ const Sidebar = ({ ...props }) => {
   const navigate = useNavigate();
 
   const [createType, setCreateType] = useState('');
-  const [pathName, setPathName] = useState('');
+  const [editPathName, setEditPathName] = useState('');
 
   const submitState = useSelector(getEditorForm);
   console.log("🚀 ~ file: Sidebar.jsx:36 ~ Sidebar ~ submitState:", submitState)
@@ -47,17 +47,17 @@ const Sidebar = ({ ...props }) => {
   useEffect(() => {
     if (location.pathname.includes('/editorList/new')) {
       setCreateType('add_new')
-      setPathName(location.pathname)
+      setEditPathName(location.pathname)
       setEditorId('')
       setEditorUpdatedState(editorUpdated)
     } else if (location.pathname.includes('/editorList/update')) {
       setCreateType('update')
-      setPathName(location.pathname)
+      setEditPathName(location.pathname)
       setEditorId(location.pathname.slice(location.pathname.lastIndexOf('/') + 1))
       setEditorUpdatedState(editorUpdated)
     } else {
       setCreateType('')
-      setPathName('')
+      setEditPathName('')
       setEditorId('')
       setEditorUpdatedState(false)
     }
@@ -93,39 +93,29 @@ const Sidebar = ({ ...props }) => {
   }, [classes, activeRoute, color])
 
   const handleNavigation = useCallback((routePath, editorUpdatedState, submitState) => {
-    console.log("🚀 ------------------------------------------------------------------🚀")
-    console.log("🚀 ~ file: Sidebar.jsx:62 ~ Sidebar ~ editorUpdatedState:", editorUpdatedState)
-    console.log("🚀 ~ file: Sidebar.jsx:62 ~ handleNavigation ~ pathName:", pathName)
-    console.log("🚀 ~ file: Sidebar.jsx:62 ~ handleNavigation ~ routePath:", routePath)
-    console.log("🚀 -------------------------------------------------------------------🚀")
 
-    if (pathName !== routePath) {
-      if (!editorUpdatedState) return navigate(routePath)
-      const sureToLeave = confirm('有未完成修改，確定要離開？');
-      if (!sureToLeave) return
+    if (editPathName === routePath) return navigate(routePath);
 
-      if (pathName.includes('/editorList/new')) {
-        onEditorSave(submitState, true)
-        navigate(routePath)
-        return
-      }
+    if (!editorUpdatedState) return navigate(routePath)
 
-      console.log("🚀 ~ file: Sidebar.jsx:115 ~ handleNavigation ~ draft:", draft)
-      if (pathName.includes('/editorList/update')) {
-        if (draft) {
-          onEditorUpdate(submitState, editorId, true)
-        } else {
-          onEditorSave(submitState, false)
-        }
-        navigate(routePath)
-        return
-      }
+    const sureToLeave = confirm('有未完成修改，確定要離開？');
+    if (!sureToLeave) return
 
+    if (editPathName.includes('/editorList/new')) {
+      onEditorSave(submitState, true)
+      navigate(routePath)
+      return
     }
-    else {
-      navigate(routePath);
+
+    if (editPathName.includes('/editorList/update')) {
+      if (draft) {
+        onEditorUpdate(submitState, editorId, true)
+      }
+      navigate(routePath)
+      return
     }
-  }, [pathName, navigate, onEditorSave, draft, onEditorUpdate, editorId])
+
+  }, [editPathName, navigate, onEditorSave, draft, onEditorUpdate, editorId])
 
   const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
   console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)

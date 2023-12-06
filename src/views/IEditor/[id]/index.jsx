@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import ContentEditorForm from "./../ContentEditorForm.jsx"
@@ -11,11 +11,11 @@ import usePreview from '../../../hook/usePreview.js';
 import useEditorModal from '../../../hook/useEditorModal.js';
 import useEditorSave from '../../../hook/useEditorSave.js';
 import useRequestEditorByID from '../../../hook/useRequestEditorByID.js';
-import useBeforeUnloadSave from '../../../hook/useBeforeUnloadSave.js';
+import useUnloadSave from '../../../hook/useUnloadSave.js';
 import { useLoaderData } from 'react-router-dom';
 import getErrorMessage from '@utils/getErrorMessage.js';
 import { getEditor } from '@reducers/GetEditorReducer'
-import { getSubmitState, getTempSitemapUrl } from '../../../reducers/GetSlateReducer.js';
+import { getEditorForm, getTempSitemapUrl, getEditorUpdated } from '../../../reducers/GetSlateReducer.js';
 
 function IEditor() {
 
@@ -34,14 +34,27 @@ function IEditor() {
     })
   }, [setSearchParams, draft, editor]);
 
-  const submitState = useSelector(getSubmitState);
+  const submitState = useSelector(getEditorForm);
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
   const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
   const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
 
+  const editorUpdated = useSelector(state => getEditorUpdated(state, 'update'))
   const tempSitemapUrl = useSelector(getTempSitemapUrl);
+
+  const [modalData, setModalData] = useState(null);
+  useEffect(() => {
+    if (!editor) return
+
+    setModalData({
+      ...editor,
+      tempSitemapUrl
+    })
+  }, [editor, tempSitemapUrl]);
+
+  console.log("🚀 ~ file: index.jsx:45 ~ IEditor ~ editorUpdated:", editorUpdated)
 
   console.log("🚀 ~ file: index.jsx:26 ~ IEditor ~ submitState:", submitState)
 
@@ -55,10 +68,7 @@ function IEditor() {
   } = useModalResult({
     message,
     name: '文章',
-    data: {
-      ...editor,
-      tempSitemapUrl
-    },
+    data: modalData,
     isEditor: true
   })
   useRequestEditorByID(id, draft, editor)
@@ -74,6 +84,13 @@ function IEditor() {
     onPreviewSave
   } = useEditorSave()
 
+  useUnloadSave({
+    onEditorSave,
+    submitState,
+    draft,
+    editorUpdated
+  })
+
   useEffect(() => {
     if (message !== 'check__OK!') return
     if (isPreview) {
@@ -84,12 +101,22 @@ function IEditor() {
       onEditorSave(submitState, false, editor?.serialNumber)
       return
     }
+
+    // if (id) {
+    //   onEditorUpdate(submitState, id)
+    //   return
+    // }
+  }, [message, isPreview, submitState, id, onPreviewSave, onEditorUpdate, draft, onEditorSave, editor]);
+
+  useEffect(() => {
+    if (message !== 'check__OK!') return
+    console.log("🚀 ~ file: index.jsx:107 ~ useEffect ~ submitState:", submitState)
+    console.log("🚀 ~ file: index.jsx:107 ~ useEffect ~ id:", id)
     if (id) {
       onEditorUpdate(submitState, id)
       return
     }
-  }, [message, isPreview, submitState, id, onPreviewSave, onEditorUpdate, draft, onEditorSave, editor]);
-  // useBeforeUnloadSave(onEditorSave)
+  }, [id, message, onEditorUpdate, submitState]);
   const {
     open,
     handleClose

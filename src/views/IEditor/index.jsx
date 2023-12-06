@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ContentEditorForm from "./ContentEditorForm.jsx"
 import DetailForm from "./DetailForm/DetailForm.jsx"
@@ -9,9 +9,9 @@ import useSetEditorDefaultValue from '@hook/useSetEditorDefaultValue.js';
 import usePreview from '@hook/usePreview.js';
 import useEditorModal from '@hook/useEditorModal.js';
 import useEditorSave from '@hook/useEditorSave.js';
-import useBeforeUnloadSave from '@hook/useBeforeUnloadSave.js';
+import useUnloadSave from '@hook/useUnloadSave.js';
 import getErrorMessage from '@utils/getErrorMessage.js';
-import { getSubmitState, getTempSitemapUrl } from '../../reducers/GetSlateReducer.js';
+import { getEditorForm, getTempSitemapUrl, getEditorUpdated } from '../../reducers/GetSlateReducer.js';
 
 function NewIEditor() {
 
@@ -19,14 +19,26 @@ function NewIEditor() {
 
   const editor = useSelector((state) => state.getEditorReducer.editor);
 
-  const submitState = useSelector(getSubmitState);
+  const submitState = useSelector(getEditorForm);
+  console.log("🚀 ~ file: index.jsx:23 ~ NewIEditor ~ submitState:", submitState)
+
   const isPreview = useSelector((state) => state.getSlateReducer.isPreview);
   const returnMessage = useSelector((state) => state.getSlateReducer.errorMessage);
   const errorMessage = useSelector((state) => state.getEditorReducer.errorMessage);
   const previewID = useSelector((state) => state.getSlateReducer.previewID);
   const message = getErrorMessage(errorMessage, returnMessage)
-
+  const editorUpdated = useSelector(state => getEditorUpdated(state, 'add_new'))
   const tempSitemapUrl = useSelector(getTempSitemapUrl);
+
+  const [modalData, setModalData] = useState(null);
+  useEffect(() => {
+    if (!editor) return
+
+    setModalData({
+      ...editor,
+      tempSitemapUrl
+    })
+  }, [editor, tempSitemapUrl]);
 
   const {
     title,
@@ -37,10 +49,7 @@ function NewIEditor() {
   } = useModalResult({
     message,
     name: '文章',
-    data: {
-      ...editor,
-      tempSitemapUrl
-    },
+    data: modalData,
     isEditor: true
   })
 
@@ -48,13 +57,20 @@ function NewIEditor() {
     open,
     handleClose
   } = useEditorModal(title)
-
+  console.log("🚀 ~ file: index.jsx:23 ~ NewIEditor ~ submitState:", submitState)
   usePreview(previewID, isPreview)
   // useEditorSave(message, submitState, isPreview)
   const {
     onEditorSave,
     onPreviewSave
   } = useEditorSave()
+
+  useUnloadSave({
+    onEditorSave,
+    submitState,
+    draft: true,
+    editorUpdated
+  })
 
   useEffect(() => {
     if (message !== 'check__OK!') return
@@ -64,7 +80,7 @@ function NewIEditor() {
     }
     onEditorSave(submitState)
   }, [message, submitState, isPreview, onEditorSave, onPreviewSave]);
-  // useBeforeUnloadSave(onEditorSave)
+  // useUnloadSave(onEditorSave)
 
   return (
     <div className={'container'}>

@@ -81,6 +81,8 @@ export function toBackendFormData(
   if (checkKeyExists(requestData, 'webHeader')) {
     Object.entries(requestData.webHeader).forEach(([key, value]) => {
       if (key === 'sitemapUrl') return;
+      if (key === 'manualUrl' && !value) return
+
       appendTextFormData(key, value);
     })
   }

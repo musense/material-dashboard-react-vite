@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import *  as GetEditorAction from "@actions/GetEditorAction";
 import { useDispatch } from 'react-redux';
 

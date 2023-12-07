@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getEditorUpdated } from "../../../reducers/GetSlateReducer";
 import { useSearchParams } from "react-router-dom";
 
-export default function useUnloadSave(createType) {
+export default function useUnloadSave({ createType }) {
   const { onEditorSave } = useEditorSave()
   const { serverEditorForm, editorForm } = useEditorForm();
   const editorUpdated = useSelector(state => getEditorUpdated(state, createType))

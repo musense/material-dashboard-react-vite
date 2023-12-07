@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import * as GetSlateAction from "@actions/GetSlateAction";
+import useEditorForm from "../views/IEditor/hook/useEditorForm";
 
-export default function useSetEditorDefaultValue(editor = null) {
+export default function useSetEditorDefaultValue() {
   const dispatch = useDispatch();
+  const { serverEditorForm } = useEditorForm()
 
   useEffect(() => {
-    if (!editor) {
+    if (!serverEditorForm) {
       dispatch({
         type: GetSlateAction.RESET_FORM_VALUE,
       })
@@ -15,9 +17,9 @@ export default function useSetEditorDefaultValue(editor = null) {
     dispatch({
       type: GetSlateAction.SET_DEFAULT_FORM_VALUE,
       payload: {
-        allProps: editor
+        allProps: serverEditorForm
       },
     })
-  }, [dispatch, editor]);
+  }, [dispatch, serverEditorForm]);
 
 }

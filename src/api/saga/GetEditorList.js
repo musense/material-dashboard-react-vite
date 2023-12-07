@@ -153,7 +153,9 @@ function* AddEditor(payload) {
 // POST
 function* PreviewEditor(payload) {
   try {
-    const requestFormData = toBackendFormData(payload.data)
+    const { data } = payload
+    console.log("🚀 ~ file: GetEditorList.js:157 ~ function*PreviewEditor ~ data:", data)
+    const requestFormData = toBackendFormData(data)
     // return
     let response
     if (typeof requestFormData.get('contentImagePath') === 'object') {

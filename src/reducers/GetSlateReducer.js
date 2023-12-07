@@ -30,6 +30,7 @@ const initialState = {
       scheduledAt: ''
     }
   },
+  serialNumber: null,
   status: '',
   showUrl: '',
   updateInitialState: null,
@@ -102,7 +103,8 @@ const getSlateReducer = (state = initialState, action) => {
         },
         showUrl: detailForm.media.contentImagePath,
         status: props.status,
-        draft: props.draft
+        draft: props.draft,
+        serialNumber: props.serialNumber,
       }
     }
     case GetSlateAction.RESET_FORM_VALUE: {
@@ -243,7 +245,6 @@ const getEditorUpdated = createSelector(
     const trimmedState = recurseCheckAndDelete(form, cachedInitialState)
     Object.keys(trimmedState).forEach(key => {
       if (key === 'publishInfo') {
-        console.log("🚀 ~ file: GetSlateReducer.js:222 ~ hi")
         delete trimmedState.publishInfo
       }
     })
@@ -254,10 +255,12 @@ const getEditorUpdated = createSelector(
   }
 )
 
+const getIsPreview = state => state.getSlateReducer.isPreview
 
 export {
   getSubmitState,
   getEditorForm,
   getEditorUpdated,
   getTempSitemapUrl,
+  getIsPreview
 }

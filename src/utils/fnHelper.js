@@ -39,10 +39,6 @@ function isImage(key) {
 
 
 function checkValueEqual(value, submitState, key) {
-  console.log("🚀 ~ file: fnHelper.js:42 ~ checkValueEqual ~ value:", value)
-  console.log("🚀 ~ file: fnHelper.js:42 ~ checkValueEqual ~ submitState[key]:", submitState[key])
-  console.log("🚀 ~ file: fnHelper.js:42 ~ checkValueEqual ~ JSON.stringify(value) === JSON.stringify(submitState[key]):", JSON.stringify(value) === JSON.stringify(submitState[key]));
-
   return JSON.stringify(value) === JSON.stringify(submitState[key]);
 }
 

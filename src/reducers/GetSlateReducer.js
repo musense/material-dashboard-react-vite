@@ -218,11 +218,22 @@ const getTempSitemapUrl = createSelector(
     return `${pageSiteUrl}/p_${manualUrl}.html`
   }
 )
+const getSerialNumber = state => state.getSlateReducer.serialNumber
 const getSubmitState = state => state.getSlateReducer.submitState
 
-const getEditorForm = state => ({
+const getSubmitForm = createSelector(
+  [getSubmitState, getSerialNumber],
+  (submitState, serialNumber) => {
+    return {
+      ...submitState,
+      serialNumber: serialNumber
+    }
+  }
+)
+
+const getSlateForm = state => ({
   ...state.getSlateReducer.contentForm,
-  ...state.getSlateReducer.detailForm,
+  ...state.getSlateReducer.detailForm
 })
 
 const getUpdateInitialForm = state => ({
@@ -231,7 +242,7 @@ const getUpdateInitialForm = state => ({
 })
 
 const getEditorUpdated = createSelector(
-  [getEditorForm, getUpdateInitialForm, (state, createType) => (createType)],
+  [getSlateForm, getUpdateInitialForm, (state, createType) => (createType)],
   (form, updateInitialForm, createType) => {
     if (createType === '') return false
     // console.log("🚀 ----------------------------------------------🚀")
@@ -256,11 +267,11 @@ const getEditorUpdated = createSelector(
 )
 
 const getIsPreview = state => state.getSlateReducer.isPreview
-
 export {
   getSubmitState,
-  getEditorForm,
+  getSubmitForm,
+  getSlateForm,
   getEditorUpdated,
   getTempSitemapUrl,
-  getIsPreview
+  getIsPreview,
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import useSetEditorDefaultValue from '@hook/useSetEditorDefaultValue.js';
-import useUnloadSave from './hook/useUnloadSave.js';
+import useSetEditorDefaultValue from './hook/useSetEditorDefaultValue';
 import usePreviewPage from './hook/usePreviewPage';
 import useSavePage from './hook/useSavePage';
-import EditorPage from './EditorPage.jsx';
+import useUnloadSave from './hook/useUnloadSave';
+import EditorPage from './EditorPage';
 
 function NewIEditor() {
 

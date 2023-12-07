@@ -15,7 +15,7 @@ import sidebarStyle from '@assets/jss/material-dashboard-react/components/sideba
 import { useSelector } from "react-redux";
 import { getShowOnSideBarRoutes } from "../../reducers/GetConfigReducer.js";
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary.jsx';
-import { getEditorForm, getEditorUpdated } from '../../reducers/GetSlateReducer.js';
+import { getSlateForm, getEditorUpdated } from '../../reducers/GetSlateReducer.js';
 import useEditorSave from '../../hook/useEditorSave.js';
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -31,7 +31,7 @@ const Sidebar = ({ ...props }) => {
   const [createType, setCreateType] = useState('');
   const [editPathName, setEditPathName] = useState('');
 
-  const submitState = useSelector(getEditorForm);
+  const submitState = useSelector(getSlateForm);
   console.log("🚀 ~ file: Sidebar.jsx:36 ~ Sidebar ~ submitState:", submitState)
   const editorUpdated = useSelector(state => getEditorUpdated(state, createType))
   const [editorUpdatedState, setEditorUpdatedState] = useState(false);

@@ -1,16 +1,18 @@
 import { useSelector } from "react-redux";
 import { getEditor } from "../../../reducers/GetEditorReducer";
-import { getEditorForm, getSubmitState } from "../../../reducers/GetSlateReducer";
+import { getSlateForm, getSubmitForm, getSubmitState } from "../../../reducers/GetSlateReducer";
 
 export default function useEditorForm() {
 
   const serverEditorForm = useSelector(getEditor);
   const submitForm = useSelector(getSubmitState);
-  const editorForm = useSelector(getEditorForm);
+  const slateForm = useSelector(getSlateForm);
+  const submitWithSerialNumber = useSelector(getSubmitForm);
 
   return {
     serverEditorForm,
     submitForm,
-    editorForm
+    slateForm,
+    submitWithSerialNumber
   }
 }

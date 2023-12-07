@@ -1,12 +1,11 @@
 import React from 'react';
-import useSetEditorDefaultValue from '../../../hook/useSetEditorDefaultValue.js';
-import useUnloadSave from '../hook/useUnloadSave.js';
-import usePreviewPage from '../hook/usePreviewPage.js';
-import useSavePage from '../hook/useSavePage.js';
-import useSearchParamsPage from '../hook/useSearchParamsPage.js';
-import EditorPage from '../EditorPage.jsx';
-import useUpdatePage from '../hook/useUpdatePage.js';
-import useRequestEditorPage from '../hook/useRequestEditorPage.js';
+import useSearchParamsPage from '../hook/useSearchParamsPage';
+import useRequestEditorPage from '../hook/useRequestEditorPage';
+import useSetEditorDefaultValue from '../hook/useSetEditorDefaultValue';
+import usePreviewPage from '../hook/usePreviewPage';
+import useUpdatePage from '../hook/useUpdatePage';
+import useUnloadSave from '../hook/useUnloadSave';
+import EditorPage from '../EditorPage';
 
 function IEditor() {
 
@@ -18,9 +17,8 @@ function IEditor() {
   useRequestEditorPage({ id, draft })
   useSetEditorDefaultValue()
   usePreviewPage()
-  useSavePage({ draft })
-  useUpdatePage({ id })
-  useUnloadSave({ createType: 'update' })
+  useUpdatePage({ id, draft })
+  useUnloadSave({ createType: 'update', draft })
 
   return <EditorPage createType={draft === true ? 'add_new' : 'update'} />
 }

@@ -16,7 +16,7 @@ export default function usePreviewPage() {
     if (message !== 'check__OK!') return
     if (isPreview) {
       onPreviewSave(submitForm)
-      // onEditorSave(editorForm, true)
+      // onEditorSave(slateForm, true)
       return
     }
   }, [message, submitForm, isPreview, onPreviewSave]);

@@ -3,18 +3,15 @@ import useEditorSave from "../../../hook/useEditorSave";
 import useEditorForm from "./useEditorForm";
 import useErrorMessage from "../../../hook/useErrorMessage";
 
-export default function useSavePage({ draft = false } = {}) {
+export default function useSavePage() {
   const { onEditorSave } = useEditorSave()
-  const { submitForm, editorForm } = useEditorForm();
+  const { submitForm } = useEditorForm();
+
   const message = useErrorMessage();
   useEffect(() => {
     if (message !== 'check__OK!') return
 
-    if (draft) {
-      onEditorSave(editorForm, false, editorForm.serialNumber)
-      return
-    }
     onEditorSave(submitForm)
-  }, [editorForm, draft, message, onEditorSave, submitForm]);
+  }, [message, onEditorSave, submitForm]);
 
 }

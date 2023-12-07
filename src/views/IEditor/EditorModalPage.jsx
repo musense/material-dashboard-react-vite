@@ -1,3 +1,4 @@
+import React, { useMemo } from "react";
 import useErrorMessage from "../../hook/useErrorMessage";
 import { useSelector } from "react-redux";
 import { getTempSitemapUrl } from "../../reducers/GetSlateReducer";
@@ -13,39 +14,44 @@ export default function EditorModalPage() {
   const modalRoot = useModalRootRef()
 
   const { serverEditorForm } = useEditorForm();
-  const message = useErrorMessage();
+  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ EditorModalPage ~ serverEditorForm:", serverEditorForm)
+  const errorMessage = useErrorMessage();
+  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ EditorModalPage ~ errorMessage:", errorMessage)
   const tempSitemapUrl = useSelector(getTempSitemapUrl);
-  console.log("🚀 ~ file: index.jsx:35 ~ NewIEditor ~ tempSitemapUrl:", tempSitemapUrl)
 
-  const {
-    title,
-    content,
-    editorID,
-    sitemapUrl,
-    success
-  } = useModalResult({
-    message,
-    name: '文章',
-    data: {
+  const modalData = useMemo(() => {
+    return {
       ...serverEditorForm,
-      tempSitemapUrl
-    },
+      tempSitemapUrl,
+    }
+  }, [tempSitemapUrl, serverEditorForm])
+  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ modalData ~ modalData:", modalData)
+
+  const modalResults = useModalResult({
+    message: errorMessage,
+    name: '文章',
+    data: modalData,
     isEditor: true
   })
+  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ EditorModalPage ~ modalResults:", modalResults)
+
   const {
     open,
     handleClose
-  } = useEditorModal(title)
+  } = useEditorModal(modalResults.title)
 
   return modalRoot && createPortal(
     <MessageDialog
-      dialogTitle={title}
-      dialogContent={content}
-      editorID={editorID}
-      sitemapUrl={sitemapUrl}
-      success={success}
+      dialogTitle={modalResults.title}
+      dialogContent={modalResults.content}
+      editorID={modalResults.editorID}
+      editorDraft={modalResults.editorDraft}
+      sitemapUrl={modalResults.sitemapUrl}
+      success={modalResults.success}
       open={open}
       setClose={handleClose}
       editor={true} />,
     modalRoot)
 }
+
+

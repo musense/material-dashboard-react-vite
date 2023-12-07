@@ -6,8 +6,7 @@ import * as GetEditorAction from "@actions/GetEditorAction";
 export default function useEditorSave() {
   const dispatch = useDispatch();
 
-  const onEditorSave = useCallback((data, willBeDraft = false, serialNumber = null) => {
-    console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ serialNumber:", serialNumber)
+  const onEditorSave = useCallback((data, willBeDraft = false) => {
     console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ willBeDraft:", willBeDraft)
     console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ data:", data)
 
@@ -16,7 +15,7 @@ export default function useEditorSave() {
       payload: {
         data,
         willBeDraft,
-        serialNumber
+        serialNumber: data.serialNumber
       },
     })
   }, [dispatch])

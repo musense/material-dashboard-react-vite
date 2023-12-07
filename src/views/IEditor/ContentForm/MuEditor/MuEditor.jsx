@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import CustomEditor from 'ckeditor5-custom-build/build/ckeditor'
-import MyUploadAdapter from './MyUploadAdapter'
+import MyUploadAdapter from './MyUploadAdapter.js'
 import MyScrollbar from '@components/MyScrollbar/MyScrollbar';
 import { css } from '@emotion/css'
 import MuEditorConfig from './MuEditorConfig.js'

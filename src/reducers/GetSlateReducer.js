@@ -209,7 +209,7 @@ export default getSlateReducer
 
 const pageSiteUrl = import.meta.env.VITE_PAGE_URL
 
-const getManualUrl = state => state.getSlateReducer.detailForm.webHeader.manualUrl
+const getManualUrl = state => state?.getSlateReducer.detailForm.webHeader.manualUrl
 
 const getTempSitemapUrl = createSelector(
   [getManualUrl],

@@ -32,16 +32,18 @@ export default function useEditorSave() {
   * const editorData = { serialNumber: 123, / * 其他數據 * / };
   * onEditorSave(editorData, true);
   */
-  const onEditorSave = useCallback((data, willBeDraft = false) => {
-    console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ willBeDraft:", willBeDraft)
+  const onEditorSave = useCallback((data, willBeDraft = false, __NO_PAYLOAD_BACK__ = false) => {
     console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ data:", data)
+    console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ willBeDraft:", willBeDraft)
+    console.log("🚀 ~ file: useEditorSave.js:10 ~ onEditorSave ~ __NO_PAYLOAD_BACK__:", __NO_PAYLOAD_BACK__)
 
     dispatch({
       type: GetEditorAction.ADD_EDITOR,
       payload: {
         data,
         willBeDraft,
-        serialNumber: data.serialNumber
+        serialNumber: data.serialNumber,
+        __NO_PAYLOAD_BACK__
       },
     })
   }, [dispatch])
@@ -59,13 +61,14 @@ export default function useEditorSave() {
  * const updatedData = { / * 新的數據 * / };
  * onEditorUpdate(updatedData, 'editor123', true);
  */
-  const onEditorUpdate = useCallback((data, id = null, draft = false) => {
+  const onEditorUpdate = useCallback((data, id = null, draft = false, __NO_PAYLOAD_BACK__ = false) => {
     dispatch({
       type: GetEditorAction.UPDATE_EDITOR,
       payload: {
         id: id,
         data: data,
-        draft: draft
+        draft: draft,
+        __NO_PAYLOAD_BACK__
       },
     })
   }, [dispatch])

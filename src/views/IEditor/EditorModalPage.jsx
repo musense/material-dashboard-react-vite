@@ -1,30 +1,19 @@
-import React, { useMemo } from "react";
+import React from "react";
 import useErrorMessage from "../../hook/useErrorMessage";
-import { useSelector } from "react-redux";
-import { getTempSitemapUrl } from "../../reducers/GetSlateReducer";
 import useModalResult from "../../hook/useModalResult";
-import useEditorForm from "./hook/useEditorForm";
 import useEditorModal from "./hook/useEditorModal";
 import useModalRootRef from "../../hook/useModalRootRef";
 import MessageDialog from "../../components/Modal/MessageDialog";
 import { createPortal } from "react-dom";
+import useModalData from "./hook/useModalData";
 
 export default function EditorModalPage() {
 
   const modalRoot = useModalRootRef()
 
-  const { serverEditorForm } = useEditorForm();
-  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ EditorModalPage ~ serverEditorForm:", serverEditorForm)
+  const modalData = useModalData()
   const errorMessage = useErrorMessage();
-  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ EditorModalPage ~ errorMessage:", errorMessage)
-  const tempSitemapUrl = useSelector(getTempSitemapUrl);
 
-  const modalData = useMemo(() => {
-    return {
-      ...serverEditorForm,
-      tempSitemapUrl,
-    }
-  }, [tempSitemapUrl, serverEditorForm])
   console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ modalData ~ modalData:", modalData)
 
   const modalResults = useModalResult({
@@ -33,7 +22,7 @@ export default function EditorModalPage() {
     data: modalData,
     isEditor: true
   })
-  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ EditorModalPage ~ modalResults:", modalResults)
+  console.log("🚀 ~ file: EditorModalPage.jsx:20 ~ EditorModalPage ~ modalResults:", modalResults)
 
   const {
     open,

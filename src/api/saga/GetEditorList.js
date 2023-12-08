@@ -107,7 +107,7 @@ function* SearchEditor(payload) {
 // POST
 function* AddEditor(payload) {
   try {
-    const { data, willBeDraft, serialNumber } = payload
+    const { data, willBeDraft, serialNumber, __NO_PAYLOAD_BACK__ } = payload
     let response
     const requestFormData = toBackendFormData(
       data,
@@ -142,13 +142,19 @@ function* AddEditor(payload) {
     }
     const mappedEditorData = toFrontendData(editor)
 
-    yield put({
-      type: GetEditorAction.ADD_EDITOR_SUCCESS,
-      payload: {
-        _id: mappedEditorData._id,
-        editor: mappedEditorData,
-      }
-    })
+    if (__NO_PAYLOAD_BACK__) {
+      yield put({
+        type: GetEditorAction.ADD_EDITOR_SUCCESS__NO_PAYLOAD_BACK__,
+      })
+    } else {
+      yield put({
+        type: GetEditorAction.ADD_EDITOR_SUCCESS,
+        payload: {
+          _id: mappedEditorData._id,
+          editor: mappedEditorData,
+        }
+      })
+    }
 
   } catch (error) {
     yield getErrorMessage(error, GetEditorAction.ADD_EDITOR_FAIL)
@@ -186,7 +192,7 @@ function* PreviewEditor(payload) {
 // PATCH
 function* UpdateEditor(payload) {
   // return
-  const { id, data, draft } = payload
+  const { id, data, draft, __NO_PAYLOAD_BACK__ } = payload
   console.log("🚀 ~ file: GetEditorList.js:183 ~ function*UpdateEditor ~ draft:", draft)
   try {
     const requestFormData = toBackendFormData(data, { willBeDraft: draft })
@@ -210,12 +216,19 @@ function* UpdateEditor(payload) {
     }
 
     const { message } = yield response.data;
-    yield put({
-      type: GetEditorAction.UPDATE_EDITOR_SUCCESS,
-      payload: {
-        message
-      }
-    })
+    if (__NO_PAYLOAD_BACK__) {
+      yield put({
+        type: GetEditorAction.UPDATE_EDITOR_SUCCESS__NO_PAYLOAD_BACK__,
+      })
+    } else {
+      yield put({
+        type: GetEditorAction.UPDATE_EDITOR_SUCCESS,
+        payload: {
+          message
+        }
+      })
+    }
+
   } catch (error) {
     yield getErrorMessage(error, GetEditorAction.UPDATE_EDITOR_FAIL)
   }

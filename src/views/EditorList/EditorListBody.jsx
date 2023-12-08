@@ -26,6 +26,7 @@ import {
   getSelectedPatchKey
 } from '@reducers/GetEditorReducer'
 import { getDialogConfirm, getDialogContentData, getDialogData, getDialogMessage, getDialogMessageDialogReturnValue } from '../../reducers/GetDialogReducer';
+import useEditorForm from '../IEditor/hook/useEditorForm';
 
 const InnerEditorListButtonList = React.memo(EditorListButtonList);
 const InnerEditorSearchForm = React.memo(EditorSearchForm);
@@ -34,8 +35,9 @@ const InnerRowHeader = React.memo(RowHeader);
 // const InnerRowBody = React.memo(RowBody);
 export default function EditorListBody({ headerMap }) {
   const navigate = useNavigate();
-  const editor = useSelector(getEditor)
-  console.log("🚀 ~ file: EditorListBody.jsx:32 ~ EditorListBody ~ editor:", editor)
+
+  const { serverEditorForm } = useEditorForm()
+  console.log("🚀 ~ file: EditorListBody.jsx:32 ~ EditorListBody ~ serverEditorForm:", serverEditorForm)
   const showList = useSelector(getEditorShowList);
   const currentPage = useSelector(getCurrentPage);
   const totalPage = useSelector(getTotalPage);
@@ -56,17 +58,18 @@ export default function EditorListBody({ headerMap }) {
   const errorMessage = getErrorMessage(dialogMessage, serverMessage)
   console.log("🚀 ~ file: EditorListBody.jsx:45 ~ EditorListBody ~ errorMessage:", errorMessage)
 
-  const navigateCheckArray = useMemo(() => {
-    return ['User is verified', 'get successfully']
-  }, [])
+  const _id = useMemo(() => {
+    if (!serverEditorForm) return undefined
+
+    return serverEditorForm._id
+  }, [serverEditorForm])
+
   useEffect(() => {
-    if (errorMessage === navigateCheckArray[0]) navigateCheckArray.shift()
-  }, [navigateCheckArray, errorMessage]);
-  useEffect(() => {
-    if (navigateCheckArray.length === 0) {
-      editor?._id && navigate(`/admin/editorList/update/${editor?._id}`)
-    }
-  }, [navigateCheckArray, errorMessage, navigate, editor]);
+    if (!_id) return
+    console.log("🚀 ~ file: EditorListBody.jsx:76 ~ EditorListBody ~ _id:", _id)
+    navigate(`/admin/editorList/update/${_id}`)
+
+  }, [navigate, _id]);
 
   useDeleteSelectedRow(messageDialogReturnValue, {
     deleteType: GetEditorAction.BUNCH_DELETE_EDITOR,

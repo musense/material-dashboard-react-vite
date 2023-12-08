@@ -33,9 +33,14 @@ const getEditorReducer = (state = initialState, action) => {
     case GetEditorAction.ADD_EDITOR_SUCCESS:
       return {
         ...state,
-        _id: action.payload._id,
-        editor: action.payload.editor,
+        _id: action.payload?._id,
+        editor: action.payload?.editor,
         errorMessage: errorMessage.addSuccess
+      }
+    case GetEditorAction.ADD_EDITOR_SUCCESS__NO_PAYLOAD_BACK__:
+      return {
+        ...state,
+        errorMessage: 'add OK, but no payload back'
       }
     case GetEditorAction.AUTH_USER_SUCCESS:
       return {
@@ -111,6 +116,11 @@ const getEditorReducer = (state = initialState, action) => {
         ...state,
         errorMessage: errorMessage.updateSuccess
       }
+    case GetEditorAction.UPDATE_EDITOR_SUCCESS__NO_PAYLOAD_BACK__:
+      return {
+        ...state,
+        errorMessage: 'update OK, but no payload back'
+      }
     case GetEditorAction.SET_ERROR_MESSAGE:
       return {
         ...state,
@@ -144,7 +154,7 @@ const getEditorReducer = (state = initialState, action) => {
 
 export default getEditorReducer
 
-const getEditor = state => state.getEditorReducer.editor
+const getEditor = state => state?.getEditorReducer.editor
 
 const getEditorList = state => state.getEditorReducer.titleList && [...state.getEditorReducer.titleList]
 const getCurrentPage = state => state.getEditorReducer.currentPage

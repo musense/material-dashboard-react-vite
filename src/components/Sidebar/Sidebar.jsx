@@ -12,12 +12,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Icon from '@views/Icons/Icon'
 // core components
 import sidebarStyle from '@assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getShowOnSideBarRoutes } from "../../reducers/GetConfigReducer.js";
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary.jsx';
 import { getSlateForm, getEditorUpdated } from '../../reducers/GetSlateReducer.js';
 import useEditorSave from '../../hook/useEditorSave.js';
-
+import * as GetEditorAction from '../../actions/GetEditorAction';
 // eslint-disable-next-line react-refresh/only-export-components
 const LazyLogoImage = React.lazy(() => import('./LogoImage'));
 
@@ -27,9 +27,10 @@ const Sidebar = ({ ...props }) => {
   const mainSiteUrl = import.meta.env.VITE_MAIN_URL
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [createType, setCreateType] = useState('');
-  const [editPathName, setEditPathName] = useState('');
+  const [editorRoute, setEditPathName] = useState('');
 
   const submitState = useSelector(getSlateForm);
   console.log("🚀 ~ file: Sidebar.jsx:36 ~ Sidebar ~ submitState:", submitState)
@@ -94,28 +95,37 @@ const Sidebar = ({ ...props }) => {
 
   const handleNavigation = useCallback((routePath, editorUpdatedState, submitState) => {
 
-    if (editPathName === routePath) return navigate(routePath);
+    console.log("🚀 ~ file: Sidebar.jsx:100 ~ handleNavigation ~ editorRoute:", editorRoute)
+    console.log("🚀 ~ file: Sidebar.jsx:100 ~ handleNavigation ~ routePath:", routePath)
 
+    const testIndex = ['/editorList/new', '/editorList/update']
+      .findIndex(route => editorRoute.includes(route))
+    console.log("🚀 ~ file: Sidebar.jsx:100 ~ handleNavigation ~ testIndex:", testIndex)
+
+    // not either routes
+    if (testIndex === -1) return navigate(routePath);
+    dispatch({ type: GetEditorAction.ADD_NEW_EDITOR })
+    console.log("🚀 ~ file: Sidebar.jsx:100 ~ handleNavigation ~ editorUpdatedState:", editorUpdatedState)
     if (!editorUpdatedState) return navigate(routePath)
 
     const sureToLeave = confirm('有未完成修改，確定要離開？');
     if (!sureToLeave) return
 
-    if (editPathName.includes('/editorList/new')) {
-      onEditorSave(submitState, true)
-      navigate(routePath)
-      return
+    // '/editorList/new'
+    if (testIndex === 0) {
+      onEditorSave(submitState, true, true)
     }
 
-    if (editPathName.includes('/editorList/update')) {
+    // '/editorList/update'
+    if (testIndex === 1) {
       if (draft) {
-        onEditorUpdate(submitState, editorId, true)
+        onEditorUpdate(submitState, editorId, true, true)
       }
-      navigate(routePath)
-      return
     }
 
-  }, [editPathName, navigate, onEditorSave, draft, onEditorUpdate, editorId])
+
+    navigate(routePath)
+  }, [editorRoute, navigate, dispatch, onEditorSave, draft, onEditorUpdate, editorId])
 
   const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
   console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)

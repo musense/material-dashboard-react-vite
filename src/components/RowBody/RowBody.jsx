@@ -15,9 +15,7 @@ export default function RowBody({
   height = null,
   setStatus = null,
 }) {
-  console.log("🚀 ------------------------------------------------------------🚀")
   console.log("🚀 ~ file: Rowbody.jsx:18 ~ selectedIdArray:", selectedIdArray)
-  console.log("🚀 ------------------------------------------------------------🚀")
 
   const headerRow = headerConfig.headerRow
   return (

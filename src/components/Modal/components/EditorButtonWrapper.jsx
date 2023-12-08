@@ -19,8 +19,6 @@ export default function EditorButtonWrapper({
   const navigate = useNavigate();
 
   const navigateByAddingOrEditing = useCallback(() => {
-    console.log("🚀 ~ file: EditorButtonWrapper.jsx:24 ~ editorID:", editorID)
-    console.log("🚀 ~ file: EditorButtonWrapper.jsx:24 ~ editorDraft:", editorDraft)
     if (editorID === null || editorDraft === null) {
       navigate(0)
       return

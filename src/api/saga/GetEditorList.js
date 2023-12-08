@@ -134,7 +134,12 @@ function* AddEditor(payload) {
       }
     }
 
-    const editor = yield response.data;
+    let editor;
+    if (willBeDraft) {
+      editor = yield response.data.newDraft;
+    } else {
+      editor = yield response.data;
+    }
     const mappedEditorData = toFrontendData(editor)
 
     yield put({

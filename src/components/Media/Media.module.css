@@ -77,6 +77,8 @@ input[name='film-checkbox'] {
   background-color: transparent;
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  border: 1px solid black;
+  border-radius: 4px;
 }
 
 .preview-image-wrapper::before {

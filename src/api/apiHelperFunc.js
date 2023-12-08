@@ -2,6 +2,7 @@ import { put } from 'redux-saga/effects';
 import { isArray } from '../utils/fnHelper';
 
 export function toFrontendData(responseData) {
+  console.log("🚀 ~ file: apiHelperFunc.js:5 ~ toFrontendData ~ responseData:", responseData)
 
   const returnObj = (serverObj) => {
     return {

@@ -25,9 +25,7 @@ function* GetEditorLinks(payload) {
 
     const response = yield instance.get(`/editorLink`);
     const responseData = yield response.data.data;
-    console.log("🚀 ------------------------------------------------------------------------------------🚀")
     console.log("🚀 ~ file: GetEditorUrl.js:28 ~ function*GetEditorLinks ~ responseData:", responseData)
-    console.log("🚀 ------------------------------------------------------------------------------------🚀")
 
     yield put({
       type: GetEditorUrlAction.REQUEST_EDITOR_URL_SUCCESS,
@@ -71,9 +69,7 @@ function* EditorUrlCheck(payload) {
     const response = yield instance.post(`/editorLink/checkLink`, data);
 
     const responseData = yield response.data.results;
-    console.log("🚀 ------------------------------------------------------------------------------------🚀")
     console.log("🚀 ~ file: GetEditorUrl.js:74 ~ function*EditorUrlCheck ~ responseData:", responseData)
-    console.log("🚀 ------------------------------------------------------------------------------------🚀")
 
     yield put({
       type: GetEditorUrlAction.CHECK_EDITOR_URL_SUCCESS,
@@ -107,9 +103,7 @@ function* UpdateEditorUrl(payload) {
       }
     })
   } catch (error) {
-    console.log("🚀 ------------------------------------------------------------------------🚀")
     console.log("🚀 ~ file: GetEditorUrl.js:104 ~ function*UpdateEditorUrl ~ error:", error)
-    console.log("🚀 ------------------------------------------------------------------------🚀")
     yield getErrorMessage(error, GetEditorUrlAction.UPDATE_EDITOR_URL_FAIL)
   }
 }

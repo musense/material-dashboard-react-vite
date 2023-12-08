@@ -1,5 +1,5 @@
 import React from "react";
-import ContentEditorForm from "./ContentEditorForm.jsx"
+import ContentEditorForm from "./ContentForm/ContentEditorForm.jsx"
 import DetailForm from "./DetailForm/DetailForm.jsx"
 import EditorModalPage from './EditorModalPage.jsx';
 

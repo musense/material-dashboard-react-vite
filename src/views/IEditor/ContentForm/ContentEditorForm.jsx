@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as GetSlateAction from '@actions/GetSlateAction';
-import MuEditor from "./ContentForm/MuEditor/MuEditor";
-import ContentTitle from "./ContentForm/ContentTitle";
+import MuEditor from "./MuEditor/MuEditor";
+import ContentTitle from "./ContentTitle";
 
 const ContentEditorForm = () => {
   const dispatch = useDispatch();

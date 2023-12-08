@@ -4,6 +4,7 @@ import useRequestEditorPage from '../hook/useRequestEditorPage';
 import useSetEditorDefaultValue from '../hook/useSetEditorDefaultValue';
 import usePreviewPage from '../hook/usePreviewPage';
 import useUpdatePage from '../hook/useUpdatePage';
+import useSaveDraftPage from '../hook/useSaveDraftPage';
 import useUnloadSave from '../hook/useUnloadSave';
 import EditorPage from '../EditorPage';
 
@@ -18,6 +19,7 @@ function IEditor() {
   useSetEditorDefaultValue()
   usePreviewPage()
   useUpdatePage({ id, draft })
+  useSaveDraftPage({ draft })
   useUnloadSave({ createType: 'update', draft })
 
   return <EditorPage createType={draft === true ? 'add_new' : 'update'} />

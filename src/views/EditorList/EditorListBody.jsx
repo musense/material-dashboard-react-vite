@@ -82,6 +82,7 @@ export default function EditorListBody({ headerMap }) {
     data: contentData,
   })
 
+  console.log("🚀 ~ file: EditorListBody.jsx:77 ~ EditorListBody ~ title:", title)
   const {
     open,
     handleOpen,

@@ -267,6 +267,7 @@ const getEditorUpdated = createSelector(
 )
 
 const getIsPreview = state => state.getSlateReducer.isPreview
+const getPreviewID = state => state.getSlateReducer.previewID
 export {
   getSubmitState,
   getSubmitForm,
@@ -274,4 +275,5 @@ export {
   getEditorUpdated,
   getTempSitemapUrl,
   getIsPreview,
+  getPreviewID,
 }

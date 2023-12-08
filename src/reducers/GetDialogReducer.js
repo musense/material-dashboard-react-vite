@@ -43,6 +43,11 @@ const getDialogReducer = (state = initialState, action) => {
       return {
         ...initialState
       }
+    case "RESET_MODAL_STATUS": {
+      return {
+        ...initialState,
+      }
+    }
     case "RESET_STATE_DATA": {
       return {
         ...initialState,

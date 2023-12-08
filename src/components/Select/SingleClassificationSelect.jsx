@@ -1,6 +1,7 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useMemo } from 'react';
 import Selector from './base/Selector';
+import useClassificationSelectData from './customHook/useClassificationSelectData';
+import useNormalize from './customHook/useNormalize';
 
 export default function SingleClassificationSelect({
   creatable,
@@ -9,9 +10,11 @@ export default function SingleClassificationSelect({
   height = null,
   setState = null
 }) {
+  console.log("🚀 ~ file: SingleClassificationSelect.jsx:12 ~ defaultSelected:", defaultSelected)
 
-  const classOptions = useSelector((state) => state.getClassReducer.editorClassList);
-
+  const classOptions = useClassificationSelectData()
+  const defaultOption = useNormalize(defaultSelected)
+  console.log("🚀 ~ file: SingleClassificationSelect.jsx:19 ~ defaultOption:", defaultOption)
   return (
     <Selector
       creatable={creatable}
@@ -19,7 +22,7 @@ export default function SingleClassificationSelect({
       controlWidth={width}
       controlHeight={height}
       setState={setState}
-      defaultSelected={defaultSelected}
+      defaultSelected={defaultOption}
     />
   );
 }

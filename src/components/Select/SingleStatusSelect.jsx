@@ -1,7 +1,7 @@
 import React from 'react';
-
-import { useSelector } from 'react-redux';
 import Selector from './base/Selector';
+import useNormalize from './customHook/useNormalize';
+import useStatusSelectData from './customHook/useStatusSelectData';
 
 //* classRef: parent form get selected value
 export default function SingleStatusSelect({
@@ -12,13 +12,8 @@ export default function SingleStatusSelect({
   setState
 }) {
 
-  const statusOptions = [
-    { _id: 0, name: '全部' },
-    { _id: 1, name: '草稿' },
-    { _id: 2, name: '已排程' },
-    { _id: 3, name: '隱藏文章' },
-    { _id: 4, name: '已發布' },
-  ]
+  const statusOptions = useStatusSelectData();
+  const defaultOption = useNormalize(defaultSelected)
 
   return (
     <Selector
@@ -27,7 +22,7 @@ export default function SingleStatusSelect({
       controlWidth={width}
       controlHeight={height}
       setState={setState}
-      defaultSelected={defaultSelected}
+      defaultSelected={defaultOption}
     />
   );
 }

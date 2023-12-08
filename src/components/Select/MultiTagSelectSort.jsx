@@ -1,6 +1,8 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import Selector from './base/Selector';
+import useTagSelectData from './customHook/useTagSelectData';
+import useNormalize from './customHook/useNormalize';
+import useFormatGroupLabel from './customHook/useFormatGroupLabel';
 
 export default function MultiTagSelectSort({
   defaultSelected,
@@ -9,16 +11,20 @@ export default function MultiTagSelectSort({
   setState = null
 }) {
 
-  const tagOptions = useSelector((state) => state.getTagsReducer.tagList);
+  const { groupOptions } = useTagSelectData()
+
+  const defaultOption = useNormalize(defaultSelected)
+  const formatGroupLabel = useFormatGroupLabel()
 
   return (
     <Selector
       isMulti
       creatable={creatable}
-      options={tagOptions}
+      options={groupOptions}
       controlWidth={width}
       setState={setState}
-      defaultSelected={defaultSelected}
+      defaultSelected={defaultOption}
+      formatGroupLabel={formatGroupLabel}
       name="標籤"
     />
   );

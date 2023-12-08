@@ -8,6 +8,7 @@ import Media from "../../../components/Media/Media";
 import PublishInfo from "./PublishInfo";
 import DetailFormButtonList from "./DetailFormButtonList";
 import MyScrollbar from "@components/MyScrollbar/MyScrollbar";
+import { isArray } from "../../../utils/fnHelper";
 
 
 const DetailForm = ({ createType }) => {
@@ -49,6 +50,25 @@ const DetailForm = ({ createType }) => {
     })
   }, [dispatch])
 
+  const onSelectPropertyChange = useCallback((value, property, info) => {
+    const transformValue = value.map(v => ({
+      _id: v.value,
+      name: v.label
+    }))
+
+    dispatch({
+      type: GetSlateAction.SET_PROPERTY,
+      payload: {
+        allProps: {
+          form: 'detailForm',
+          info: info,
+          property: property,
+          value: transformValue
+        }
+      }
+    })
+  }, [dispatch])
+
   const onShowUrlChange = useCallback((value) => {
     dispatch({
       type: GetSlateAction.SET_SHOW_URL,
@@ -70,10 +90,10 @@ const DetailForm = ({ createType }) => {
           customUrl={customUrl} />
         <Tags
           tags={tags}
-          onPropertyChange={onPropertyChange} />
+          onPropertyChange={onSelectPropertyChange} />
         {disableRoute !== '文章分類管理' && <Classification
-          categories={categories[0]}
-          onPropertyChange={onPropertyChange} />}
+          categories={categories}
+          onPropertyChange={onSelectPropertyChange} />}
         <Media
           onPropertyChange={onPropertyChange}
           onShowUrlChange={onShowUrlChange}

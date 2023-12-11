@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import useEditorSave from "../../../hook/useEditorSave";
-import useEditorForm from "./useEditorForm";
 import useErrorMessage from "../../../hook/useErrorMessage";
 import useIsPreview from "./useIsPreview";
+import useSubmitForm from "./useSubmitForm";
 
 export default function useSavePage() {
   const isPreview = useIsPreview()
   const { onEditorSave } = useEditorSave()
-  const { submitForm } = useEditorForm();
+  const submitForm = useSubmitForm();
 
   const message = useErrorMessage();
   useEffect(() => {

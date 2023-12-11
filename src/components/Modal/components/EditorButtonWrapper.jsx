@@ -23,11 +23,8 @@ export default function EditorButtonWrapper({
       navigate(0)
       return
     }
-    dispatch({
-      type: GetEditorAction.ADD_NEW_EDITOR
-    })
     navigate(`/admin/editorList/update/${editorID}?draft=${editorDraft === true ? true : false}`, { replace: true })
-  }, [editorID, editorDraft, dispatch, navigate])
+  }, [editorID, editorDraft, navigate])
 
   const keepEditClose = useCallback(() => {
     if (success) {

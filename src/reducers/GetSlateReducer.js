@@ -231,10 +231,20 @@ const getSubmitForm = createSelector(
   }
 )
 
-const getSlateForm = state => ({
-  ...state.getSlateReducer.contentForm,
-  ...state.getSlateReducer.detailForm
-})
+const getContentForm = state => state.getSlateReducer.contentForm
+const getDetailForm = state => state.getSlateReducer.detailForm
+
+const getSlateForm = createSelector(
+  [getContentForm, getDetailForm],
+  (contentForm, detailForm) => {
+    console.log("🚀 ~ file: GetSlateReducer.js:240 ~ contentForm:", contentForm)
+    console.log("🚀 ~ file: GetSlateReducer.js:240 ~ detailForm:", detailForm)
+    return {
+      ...contentForm,
+      ...detailForm
+    }
+  }
+)
 
 const getUpdateInitialForm = state => ({
   ...(state.getSlateReducer.updateInitialState && state.getSlateReducer.updateInitialState.contentForm),

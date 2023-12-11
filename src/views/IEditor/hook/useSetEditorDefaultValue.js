@@ -5,15 +5,11 @@ import useEditorForm from "./useEditorForm";
 
 export default function useSetEditorDefaultValue() {
   const dispatch = useDispatch();
-  const { serverEditorForm } = useEditorForm()
+  const serverEditorForm = useEditorForm()
 
   useEffect(() => {
-    if (!serverEditorForm) {
-      dispatch({
-        type: GetSlateAction.RESET_FORM_VALUE,
-      })
-      return
-    }
+    if (!serverEditorForm) return
+
     dispatch({
       type: GetSlateAction.SET_DEFAULT_FORM_VALUE,
       payload: {

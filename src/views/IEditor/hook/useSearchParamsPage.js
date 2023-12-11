@@ -1,11 +1,10 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getEditor } from "../../../reducers/GetEditorReducer";
+import useEditorForm from "./useEditorForm";
 
 export default function useSearchParamsPage() {
 
-  const serverEditorForm = useSelector(getEditor)
+  const serverEditorForm = useEditorForm();
 
   const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();

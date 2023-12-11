@@ -38,7 +38,7 @@ function Admin({ ...props }) {
   const location = useLocation()
   const dispatch = new useDispatch();
 
-  useResetEditorState(location.pathname)
+  // useResetEditorState(location.pathname)
 
   const handleDrawerToggle = useCallback(() => {
     dispatch({ type: GetConfigAction.TOGGLE_SIDEBAR_OPEN });

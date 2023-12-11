@@ -3,7 +3,7 @@ import useEditorForm from "./useEditorForm";
 
 export default function useRequestEditorPage({ id, draft }) {
 
-  const { serverEditorForm } = useEditorForm();
+  const serverEditorForm = useEditorForm();
 
   useRequestEditorByID(id, draft, serverEditorForm)
 }

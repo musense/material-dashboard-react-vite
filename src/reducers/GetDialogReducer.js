@@ -1,7 +1,4 @@
-import { createSelector } from 'reselect';
 import * as GetDialogAction from '../actions/GetDialogAction';
-import { getEditor } from './GetEditorReducer';
-import { getTempSitemapUrl } from './GetSlateReducer';
 
 const initialState = {
   contentData: null,
@@ -68,13 +65,6 @@ const getDialogData = state => state.getDialogReducer.data;
 const getDialogConfirm = state => state.getDialogReducer.confirm;
 const getDialogMessageDialogReturnValue = state => state.getDialogReducer.messageDialogReturnValue;
 const getDialogMessage = state => state.getDialogReducer.message;
-const getModalData = createSelector(
-  [getEditor, getTempSitemapUrl],
-  (editor, tempSitemapUrl) => ({
-    ...editor,
-    tempSitemapUrl
-  })
-)
 
 export {
   getDialogContentData,
@@ -82,5 +72,4 @@ export {
   getDialogConfirm,
   getDialogMessageDialogReturnValue,
   getDialogMessage,
-  getModalData,
 }

@@ -3,6 +3,7 @@ import * as GetEditorAction from '../actions/GetEditorAction';
 import * as GetSlateAction from '../actions/GetSlateAction';
 import { errorMessage } from './errorMessage';
 import getSortedList from '@utils/getSortedList';
+import { getTempSitemapUrl } from './GetSlateReducer';
 
 const initialState = {
   sortingMap: {
@@ -24,7 +25,7 @@ const initialState = {
 }
 const getEditorReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GetEditorAction.ADD_NEW_EDITOR: {
+    case GetEditorAction.RESET_EDITOR: {
       return {
         ...state,
         editor: null
@@ -173,6 +174,18 @@ const getEditorShowList = createSelector(
     return titleList?.slice(start, end)
   })
 
+const getModalData = createSelector(
+  [getEditor, getTempSitemapUrl],
+  (editor, tempSitemapUrl) => {
+    console.log("🚀 ~ file: GetEditorReducer.js:180 ~ editor:", editor)
+    return {
+      ...editor,
+      tempSitemapUrl
+    }
+  }
+
+)
+
 export {
   getEditor,
   getCurrentPage,
@@ -181,4 +194,5 @@ export {
   getSelectedPatchKey,
   getEditorErrorMessage,
   getEditorShowList,
+  getModalData,
 }

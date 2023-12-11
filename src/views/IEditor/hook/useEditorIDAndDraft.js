@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
-import { getEditor } from "../../../reducers/GetEditorReducer";
+import useEditorForm from "./useEditorForm";
 
 export default function useEditorIDAndDraft() {
-  const serverEditorForm = useSelector(getEditor)
+  const serverEditorForm = useEditorForm()
   return {
     id: serverEditorForm?.id,
     draft: serverEditorForm?.draft

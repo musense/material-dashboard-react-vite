@@ -1,17 +1,20 @@
 import { useEffect } from "react";
 import useEditorSave from "../../../hook/useEditorSave";
-import useEditorForm from "./useEditorForm";
 import useErrorMessage from "../../../hook/useErrorMessage";
+import useIsPreview from "./useIsPreview";
+import useSubmitForm from "./useSubmitForm";
 
 export default function useSaveDraftPage({ draft = false }) {
-  const { submitWithSerialNumber } = useEditorForm();
+  const isPreview = useIsPreview()
+  const submitForm = useSubmitForm();
   const { onEditorSave } = useEditorSave()
   const message = useErrorMessage();
 
   useEffect(() => {
+    if (isPreview) return
     if (message !== 'check__OK!') return
     if (!draft) return
 
-    onEditorSave(submitWithSerialNumber, false)
-  }, [message, draft, onEditorSave, submitWithSerialNumber]);
+    onEditorSave(submitForm, false)
+  }, [isPreview, message, draft, onEditorSave, submitForm]);
 }

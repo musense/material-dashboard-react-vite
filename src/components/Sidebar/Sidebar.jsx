@@ -12,12 +12,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Icon from '@views/Icons/Icon'
 // core components
 import sidebarStyle from '@assets/jss/material-dashboard-react/components/sidebarStyle.jsx';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getShowOnSideBarRoutes } from "../../reducers/GetConfigReducer.js";
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary.jsx';
 import { getSlateForm, getEditorUpdated } from '../../reducers/GetSlateReducer.js';
 import useEditorSave from '../../hook/useEditorSave.js';
-import * as GetEditorAction from '../../actions/GetEditorAction';
+import useResetPage from '../../views/IEditor/hook/useResetPage.js';
 // eslint-disable-next-line react-refresh/only-export-components
 const LazyLogoImage = React.lazy(() => import('./LogoImage'));
 
@@ -27,7 +27,6 @@ const Sidebar = ({ ...props }) => {
   const mainSiteUrl = import.meta.env.VITE_MAIN_URL
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [createType, setCreateType] = useState('');
   const [editorRoute, setEditPathName] = useState('');
@@ -93,20 +92,22 @@ const Sidebar = ({ ...props }) => {
     </ListItem>
   }, [classes, activeRoute, color])
 
-  const handleNavigation = useCallback((routePath, editorUpdatedState, submitState) => {
+  const handleResetPage = useResetPage()
 
-    console.log("🚀 ~ file: Sidebar.jsx:100 ~ handleNavigation ~ editorRoute:", editorRoute)
-    console.log("🚀 ~ file: Sidebar.jsx:100 ~ handleNavigation ~ routePath:", routePath)
-
-    const testIndex = ['/editorList/new', '/editorList/update']
+  const testIndex = useMemo(() => {
+    return ['/editorList/new', '/editorList/update']
       .findIndex(route => editorRoute.includes(route))
-    console.log("🚀 ~ file: Sidebar.jsx:100 ~ handleNavigation ~ testIndex:", testIndex)
+  }, [editorRoute])
+  const handleNavigation = useCallback((routePath, editorUpdatedState, submitState) => {
+    if (testIndex === -1) {
+      handleResetPage()
+      return navigate(routePath);
+    }
 
-    // not either routes
-    if (testIndex === -1) return navigate(routePath);
-    dispatch({ type: GetEditorAction.ADD_NEW_EDITOR })
-    console.log("🚀 ~ file: Sidebar.jsx:100 ~ handleNavigation ~ editorUpdatedState:", editorUpdatedState)
-    if (!editorUpdatedState) return navigate(routePath)
+    if (!editorUpdatedState) {
+      handleResetPage()
+      return navigate(routePath)
+    }
 
     const sureToLeave = confirm('有未完成修改，確定要離開？');
     if (!sureToLeave) return
@@ -123,9 +124,9 @@ const Sidebar = ({ ...props }) => {
       }
     }
 
-
-    navigate(routePath)
-  }, [editorRoute, navigate, dispatch, onEditorSave, draft, onEditorUpdate, editorId])
+    handleResetPage()
+    return navigate(routePath)
+  }, [testIndex, handleResetPage, navigate, onEditorSave, draft, onEditorUpdate, editorId])
 
   const routesOnSideBar = useSelector(getShowOnSideBarRoutes);
   console.log("🚀 ~ file: Sidebar.jsx:22 ~ Sidebar ~ routesOnSideBar:", routesOnSideBar)

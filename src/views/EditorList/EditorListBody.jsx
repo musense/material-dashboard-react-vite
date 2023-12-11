@@ -17,7 +17,6 @@ import getErrorMessage from '@utils/getErrorMessage';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  getEditor,
   getTotalPage,
   getCurrentPage,
   getTotalCount,
@@ -36,7 +35,7 @@ const InnerRowHeader = React.memo(RowHeader);
 export default function EditorListBody({ headerMap }) {
   const navigate = useNavigate();
 
-  const { serverEditorForm } = useEditorForm()
+  const serverEditorForm = useEditorForm()
   console.log("🚀 ~ file: EditorListBody.jsx:32 ~ EditorListBody ~ serverEditorForm:", serverEditorForm)
   const showList = useSelector(getEditorShowList);
   const currentPage = useSelector(getCurrentPage);

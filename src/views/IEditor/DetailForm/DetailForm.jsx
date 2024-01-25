@@ -50,24 +50,46 @@ const DetailForm = ({ createType }) => {
     })
   }, [dispatch])
 
-  const onSelectPropertyChange = useCallback((value, property, info) => {
-    const transformValue = value.map(v => ({
-      _id: v.value,
-      name: v.label
-    }))
-
+  const onTagSelectChange = useCallback((tags) => {
     dispatch({
       type: GetSlateAction.SET_PROPERTY,
       payload: {
         allProps: {
           form: 'detailForm',
-          info: info,
-          property: property,
-          value: transformValue
+          info: null,
+          property: 'tags',
+          value: tags
         }
       }
     })
   }, [dispatch])
+
+  const onCategorySelectChange = useCallback((category) => {
+    dispatch({
+      type: GetSlateAction.SET_PROPERTY,
+      payload: {
+        allProps: {
+          form: 'detailForm',
+          info: null,
+          property: 'categories',
+          value: category
+        }
+      }
+    })
+  }, [dispatch])
+  // const onSelectPropertyChange = useCallback((value, property, info) => {
+  //     dispatch({
+  //     type: GetSlateAction.SET_PROPERTY,
+  //     payload: {
+  //       allProps: {
+  //         form: 'detailForm',
+  //         info: null,
+  //         property: tags,
+  //         value: value
+  //       }
+  //     }
+  //   })
+  // }, [dispatch])
 
   const onShowUrlChange = useCallback((value) => {
     dispatch({
@@ -90,10 +112,10 @@ const DetailForm = ({ createType }) => {
           customUrl={customUrl} />
         <Tags
           tags={tags}
-          onPropertyChange={onSelectPropertyChange} />
+          onPropertyChange={onPropertyChange} />
         {disableRoute !== '文章分類管理' && <Classification
           categories={categories}
-          onPropertyChange={onSelectPropertyChange} />}
+          onPropertyChange={onPropertyChange} />}
         <Media
           onPropertyChange={onPropertyChange}
           onShowUrlChange={onShowUrlChange}

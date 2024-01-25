@@ -16,7 +16,6 @@ import { useSelector } from "react-redux";
 import { getAuthRoutes } from "../reducers/GetConfigReducer.js";
 import Loading from '@components/Loading/Loading';
 
-const InnerAuthNavbar = React.memo(AuthNavbar)
 function Auth({ ...props }) {
   useRefreshStayCurrentPage()
   const {
@@ -50,7 +49,7 @@ function Auth({ ...props }) {
   }, [location.pathname]);
   return (
     <div>
-      <InnerAuthNavbar brandText={getActiveRoute(authRoutes)} {...rest} />
+      <AuthNavbar brandText={getActiveRoute(authRoutes)} {...rest} />
       <div className={classes.wrapper}>
         <div
           className={`${classes.fullPage} ${classes[authType()]}`}
@@ -67,5 +66,7 @@ function Auth({ ...props }) {
 Auth.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
+Auth.displayName = 'Auth';
 
 export default withStyles(pagesStyle)(Auth);

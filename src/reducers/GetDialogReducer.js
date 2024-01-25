@@ -25,6 +25,14 @@ const getDialogReducer = (state = initialState, action) => {
         message: action.payload.message,
         confirm: action.payload.confirm,
       }
+    case GetDialogAction.ON_EDITOR_STORAGE_VALUE_EXISTED:
+      return {
+        ...state,
+        data: action.payload.data,
+        contentData: action.payload.contentData,
+        message: action.payload.message,
+        confirm: action.payload.confirm,
+      }
     case GetDialogAction.ON_MODAL_CLOSE:
       return {
         ...state,

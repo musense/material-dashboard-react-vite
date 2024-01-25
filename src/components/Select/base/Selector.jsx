@@ -62,7 +62,7 @@ const Selector = ({
     selectProps = {
       ...props,
     }
-    select = <Select {...selectProps} />
+    select = <Select isClearable {...selectProps} />
   }
 
   return select

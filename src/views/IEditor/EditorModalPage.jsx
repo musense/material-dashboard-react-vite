@@ -11,10 +11,19 @@ export default function EditorModalPage() {
 
   const modalRoot = useModalRootRef()
 
-  const modalData = useModalData()
+  const {
+    modalData,
+    modalConfirmData,
+    confirm,
+    messageDialogReturnValue,
+  } = useModalData()
+
   const errorMessage = useErrorMessage();
 
+  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ modalData ~ confirm:", confirm)
   console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ modalData ~ modalData:", modalData)
+  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ modalData ~ modalConfirmData:", modalConfirmData)
+  console.log("🚀 ~ file: EditorModalPage.jsx:17 ~ modalData ~ messageDialogReturnValue:", messageDialogReturnValue)
 
   const modalResults = useModalResult({
     message: errorMessage,
@@ -39,7 +48,10 @@ export default function EditorModalPage() {
       success={modalResults.success}
       open={open}
       setClose={handleClose}
-      editor={true} />,
+      editor={true}
+      confirm={confirm}
+      modalCloseReturnValue={modalConfirmData}
+    />,
     modalRoot)
 }
 

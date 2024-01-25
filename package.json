@@ -43,6 +43,7 @@
     "image-extensions": "^1.1.0",
     "interweave": "^12.8.0",
     "is-url": "^1.2.4",
+    "lodash": "^4.17.21",
     "memoize-one": "6.0.0",
     "prop-types": "15.7.1",
     "react": "^18.2.0",

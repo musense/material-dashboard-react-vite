@@ -4,12 +4,17 @@ import usePreviewPage from './hook/usePreviewPage';
 import useSavePage from './hook/useSavePage';
 import useUnloadSaveDraftPage from './hook/useUnloadSaveDraftPage';
 import EditorPage from './EditorPage';
+import useTempEditorValue from './hook/useTempEditorValue';
 
 function NewIEditor() {
 
-  useSetEditorDefaultValue()
-  usePreviewPage()
-  useSavePage()
+  const {
+    storageValue,
+    removeStorageValue
+  } = useTempEditorValue();
+  useSetEditorDefaultValue(storageValue)
+  usePreviewPage(removeStorageValue)
+  useSavePage(removeStorageValue)
   useUnloadSaveDraftPage({ createType: 'add_new' })
 
 

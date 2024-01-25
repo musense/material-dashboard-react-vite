@@ -7,7 +7,7 @@ import useEditorUpdated from "./useEditorUpdated";
 export default function useUnloadUpdateDraftPage({ id, draft }) {
   const { onEditorUpdate } = useEditorSave()
   const slateForm = useSlateForm();
-  const editorUpdated = useEditorUpdated('updated')
+  const editorUpdated = useEditorUpdated()
 
   const handleResetPage = useResetPage()
 

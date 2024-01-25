@@ -1,5 +1,6 @@
 import * as GetSlateAction from './../actions/GetSlateAction';
-import recurseCheckAndDelete from '../utils/recurseCheckAndDelete';
+import isFormModified from '../utils/recurseCheckAndDelete';
+// import recurseCheckAndDelete from '../utils/recurseCheckAndDelete';
 import generateErrorMessage from '../utils/generateErrorMessage';
 import { createSelector } from 'reselect';
 
@@ -17,8 +18,7 @@ const initialState = {
       sitemapUrl: '',
     },
     tags: null,
-    // initialValue須給array
-    categories: [],
+    categories: null,
     media: {
       contentImagePath: '',
       homeImagePath: '',
@@ -170,10 +170,10 @@ const getSlateReducer = (state = initialState, action) => {
 
         if (createType === "add_new") {
           cachedInitialState = JSON.parse(JSON.stringify({ ...initialState.contentForm, ...initialState.detailForm }))
-          trimmedState = recurseCheckAndDelete(submitState, cachedInitialState)
+          trimmedState = isFormModified(cachedInitialState, submitState)
         } else if (createType === "update") {
           cachedInitialState = JSON.parse(JSON.stringify({ ...state.updateInitialState.contentForm, ...state.updateInitialState.detailForm }))
-          trimmedState = recurseCheckAndDelete(submitState, cachedInitialState)
+          trimmedState = isFormModified(cachedInitialState, submitState)
           errorMessage = generateErrorMessage(trimmedState)
         } else {
           throw new Error('invalid createType')
@@ -232,52 +232,59 @@ const getSubmitForm = createSelector(
 )
 
 const getContentForm = state => state.getSlateReducer.contentForm
-const getDetailForm = state => state.getSlateReducer.detailForm
+
+const getWebHeader = state => state.getSlateReducer.detailForm.webHeader
+const getTags = state => state.getSlateReducer.detailForm.tags
+const getCategories = state => state.getSlateReducer.detailForm.categories
+const getMedia = state => state.getSlateReducer.detailForm.media
+const getPublishInfo = state => state.getSlateReducer.detailForm.publishInfo
 
 const getSlateForm = createSelector(
-  [getContentForm, getDetailForm],
-  (contentForm, detailForm) => {
-    console.log("🚀 ~ file: GetSlateReducer.js:240 ~ contentForm:", contentForm)
-    console.log("🚀 ~ file: GetSlateReducer.js:240 ~ detailForm:", detailForm)
+  [getContentForm, getWebHeader, getTags, getCategories, getMedia, getPublishInfo],
+  (contentForm, webHeader, tags, categories, media, publishInfo) => {
+
     return {
-      ...contentForm,
-      ...detailForm
+      contentForm,
+      detailForm: {
+        webHeader,
+        tags,
+        categories,
+        media,
+        publishInfo
+      }
     }
   }
 )
+console.log("🚀 ~ file: GetSlateReducer.js:264 ~ getSlateForm:", getSlateForm)
 
 const getUpdateInitialForm = state => ({
-  ...(state.getSlateReducer.updateInitialState && state.getSlateReducer.updateInitialState.contentForm),
-  ...(state.getSlateReducer.updateInitialState && state.getSlateReducer.updateInitialState.detailForm)
+  ...(state.getSlateReducer.updateInitialState && { contentForm: state.getSlateReducer.updateInitialState.contentForm }),
+  ...(state.getSlateReducer.updateInitialState && { detailForm: state.getSlateReducer.updateInitialState.detailForm })
 })
 
 const getEditorUpdated = createSelector(
   [getSlateForm, getUpdateInitialForm, (state, createType) => (createType)],
-  (form, updateInitialForm, createType) => {
-    if (createType === '') return false
-    // console.log("🚀 ----------------------------------------------🚀")
-    // console.log("🚀 ~ file: GetSlateReducer.js:222 ~ form:", form)
-    // console.log("🚀 ~ file: GetSlateReducer.js:222 ~ updateInitialForm:", updateInitialForm)
-    // console.log("🚀 ~ file: GetSlateReducer.js:222 ~ createType:", createType)
-    // console.log("🚀 ----------------------------------------------------------🚀")
+  (slateForm, updateInitialForm, createType) => {
+    if (createType === '') return undefined
     const cachedInitialState = createType === 'add_new'
-      ? { ...initialState.contentForm, ...initialState.detailForm }
+      ? { contentForm: initialState.contentForm, detailForm: initialState.detailForm }
       : { ...updateInitialForm }
-    const trimmedState = recurseCheckAndDelete(form, cachedInitialState)
-    Object.keys(trimmedState).forEach(key => {
-      if (key === 'publishInfo') {
-        delete trimmedState.publishInfo
-      }
-    })
-    console.log("🚀 ~ file: GetSlateReducer.js:222 ~ trimmedState:", trimmedState)
-    console.log("🚀 ~ file: GetSlateReducer.js:222 ~ Object.keys(trimmedState).length:", Object.keys(trimmedState).length)
+    const isModified = isFormModified(cachedInitialState, slateForm)
+    // Object.keys(trimmedState).forEach(key => {
+    //   if (key === 'publishInfo') {
+    //     delete trimmedState.publishInfo
+    //   }
+    // })
+    console.log("🚀 ~ file: GetSlateReducer.js:222 ~ isModified:", isModified)
 
-    return Object.keys(trimmedState).length > 0 ? true : false
+    return isModified
   }
 )
 
 const getIsPreview = state => state.getSlateReducer.isPreview
 const getPreviewID = state => state.getSlateReducer.previewID
+
+const getSlateErrorMessage = state => state.getSlateReducer.errorMessage
 export {
   getSubmitState,
   getSubmitForm,
@@ -286,4 +293,11 @@ export {
   getTempSitemapUrl,
   getIsPreview,
   getPreviewID,
+  getSlateErrorMessage,
+  getContentForm,
+  getWebHeader,
+  getTags,
+  getCategories,
+  getMedia,
+  getPublishInfo,
 }

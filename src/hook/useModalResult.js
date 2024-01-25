@@ -6,6 +6,7 @@ export default function useModalResult({
   data = undefined,
   isEditor = false
 }) {
+  console.log("🚀 ~ file: useModalResult.js:9 ~ message:", message)
   const modalResultsRef = useRef({
     title: null,
     content: null,
@@ -400,6 +401,14 @@ export default function useModalResult({
         modalResultsRef.current = {
           title: 'Error',
           content: '網址錯誤！',
+          success: false
+        }
+      }
+        break
+      case 'temp editor existed': {
+        modalResultsRef.current = {
+          title: 'Warning',
+          content: '有未完成草稿，要繼續編輯嗎？',
           success: false
         }
       }

@@ -27,6 +27,7 @@ export default function MessageDialog({
   sitemapUrl = null,
   confirm = null,
   data = null,
+  modalCloseReturnValue = null,
   editor = null,
   width = null,
 }) {
@@ -65,6 +66,7 @@ export default function MessageDialog({
             confirm={confirm}
             dialogContent={dialogContent}
             data={data}
+            modalCloseReturnValue={modalCloseReturnValue}
             setClose={setClose}
           />
         }

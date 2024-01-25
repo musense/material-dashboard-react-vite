@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 import useSearchParamsPage from "./useSearchParamsPage";
 import useSubmitForm from "./useSubmitForm";
 
-export default function usePreviewPage() {
+export default function usePreviewPage(removeStorageValue = null) {
   const isPreview = useIsPreview()
   const previewID = useSelector(getPreviewID);
   const message = useErrorMessage();
@@ -26,6 +26,7 @@ export default function usePreviewPage() {
 
     console.log("🚀 ~ file: usePreviewPage.js:19 ~ useEffect ~ submitForm:", submitForm)
     onPreviewSave(submitForm)
+    removeStorageValue && removeStorageValue()
     if (location.pathname.includes('/admin/editorList/new')) {
       onEditorSave(submitForm, true)
       return
@@ -34,6 +35,6 @@ export default function usePreviewPage() {
       onEditorUpdate(submitForm, id, true)
       return
     }
-  }, [message, submitForm, isPreview, onPreviewSave, location, onEditorSave, onEditorUpdate, id, draft]);
+  }, [message, submitForm, isPreview, onPreviewSave, location, onEditorSave, onEditorUpdate, id, draft, removeStorageValue]);
 
 }

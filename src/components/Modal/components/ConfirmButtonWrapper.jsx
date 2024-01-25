@@ -9,16 +9,18 @@ export default function ConfirmButtonWrapper({
   confirm,
   dialogContent,
   data,
+  modalCloseReturnValue,
   setClose,
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const onModalClose = useCallback((value) => {
-    console.log("🚀 ~ file: ConfirmButtonWrapper.jsx:17 ~ onModalClose ~ value:", value)
+  const onModalClose = useCallback((data, modalCloseReturnValue) => {
+    console.log("🚀 ~ file: ConfirmButtonWrapper.jsx:17 ~ onModalClose ~ data:", data)
+    console.log("🚀 ~ file: ConfirmButtonWrapper.jsx:17 ~ onModalClose ~ returnValue:", modalCloseReturnValue)
     dispatch({
       type: GetDialogAction.ON_MODAL_CLOSE,
       payload: {
-        messageDialogReturnValue: value
+        messageDialogReturnValue: data ?? modalCloseReturnValue,
       }
     })
   }, [dispatch])
@@ -39,14 +41,14 @@ export default function ConfirmButtonWrapper({
     onEditorDenied(dialogContent)
   }, [setClose, onModalClose, onEditorDenied])
 
-  const handleCloseOK = useCallback((data) => {
+  const handleCloseOK = useCallback((data, modalCloseReturnValue) => {
     setClose()
-    onModalClose(data)
+    onModalClose(data, modalCloseReturnValue)
   }, [setClose, onModalClose])
 
   const ConFirmButton = <DialogActions>
     <Button onClick={() => handleClose(dialogContent)}>算了</Button>
-    <Button onClick={() => handleCloseOK(data)} autoFocus>好</Button>
+    <Button onClick={() => handleCloseOK(data, modalCloseReturnValue)} autoFocus>好</Button>
   </DialogActions>;
 
   const NormalCloseButton = <DialogActions>
